@@ -27,7 +27,7 @@ export default class Login extends Component {
                     <Input secureTextEntry={true}/>
                   </Item>
                 </Form>
-                <Button block>
+                <Button block onPress={() => this.props.navigation.navigate('Menu')}>
                   <Text>Login</Text>
                 </Button>
             </Content>
