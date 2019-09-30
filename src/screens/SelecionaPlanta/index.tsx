@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Header, Left, Body, Title, Right, Icon, Subtitle, Form, Picker, Item, Label } from 'native-base';
+import HeaderNav from '../../components/HeaderNav';
 
 export default class SelecionaPlanta extends Component {
   state = {
@@ -26,7 +27,10 @@ export default class SelecionaPlanta extends Component {
   }
 
   selectEmpresa = empresaSelecionada => {
-    this.setState({ empresaSelecionada });
+    this.setState({ 
+      empresaSelecionada,
+      plantaSelecionada: null
+    });
   }
 
   selectPlanta = plantaSelecionada => {
@@ -45,23 +49,9 @@ export default class SelecionaPlanta extends Component {
   render() {
     return (
       <Container>
-        <Header>
-          <Left>
-            <Button hasText transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Planta</Title>
-          </Body>
-          <Right>
-            <Button hasText transparent>
-              <Text>Cancelar</Text>
-            </Button>
-          </Right>
-        </Header>
 
-        <Content padder>
+        <HeaderNav title="Planta"/>
+        <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
           <Form>
             <Item>
               <Label>Empresa</Label>
@@ -104,6 +94,9 @@ export default class SelecionaPlanta extends Component {
               </Picker>
             </Item>
           </Form>
+          <Button block onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
+            <Text>Iniciar manutenção</Text>
+          </Button>
         </Content>
       </Container>
     );
