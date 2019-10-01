@@ -1,6 +1,6 @@
 import React from "react";
 import { Root } from "native-base";
-import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 import Login from './screens/Login/Login';
@@ -26,6 +26,6 @@ const AuthStack = createStackNavigator(
 const AppContainer = createAppContainer(AuthStack);
 
 export default () =>
-  <Root>
+  <Root> 
     <AppContainer />
 </Root>;

@@ -1,9 +1,45 @@
 import React, { Component } from 'react';
 import { Image, View } from 'react-native';
 import { Container, Label, Form, Button, Input, Item, Icon, Content, Text } from 'native-base';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-export default class Login extends Component {
+import { Auth, LoginData } from '../../store/ducks/auth/types'
+import * as AuthActions from '../../store/ducks/auth/actions'
+import { ApplicationState } from '../../store'
+
+interface StateProps {
+  auth: Auth
+}
+
+interface DispatchProps {
+  authRequest(data: LoginData): void
+}
+
+type Props = StateProps & DispatchProps
+
+interface State {
+  user: string
+  password: string
+}
+class Login extends Component<Props, State> {
+
+  state = {
+    user: 'admin@grupotesseract.com.br',
+    password: '12344321'
+  }
+
+  authLogin() {
+    const { authRequest } = this.props;
+    const { user, password } = this.state; 
+
+    authRequest({ user, password });
+    this.props.navigation.navigate('Menu');
+  }
+
   render() {
+    console.log("AUTH", this.props.auth)
+    const { user, password } = this.state;
     return (
         <Container>
             <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
@@ -20,14 +56,14 @@ export default class Login extends Component {
                   </View>
                   <Item floatingLabel>
                     <Label>Usuário</Label>
-                    <Input />
+                    <Input value={user} onChangeText={(user) => this.setState({user})}/>
                   </Item>
                   <Item floatingLabel>
                     <Label>Senha</Label>
-                    <Input secureTextEntry={true}/>
+                    <Input value={password} secureTextEntry={true} onChangeText={(password) => this.setState({password})}/>
                   </Item>
                 </Form>
-                <Button block onPress={() => this.props.navigation.navigate('Menu')}>
+                <Button block onPress={() => this.authLogin()}>
                   <Text>Login</Text>
                 </Button>
             </Content>
@@ -35,3 +71,12 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  auth: state.auth.data
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(AuthActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
