@@ -38,7 +38,6 @@ class Login extends Component<Props, State> {
   }
 
   render() {
-    console.log("AUTH", this.props.auth)
     const { user, password } = this.state;
     return (
       <KeyboardAvoidingView 

@@ -8,7 +8,7 @@ export default class ConfirmarPeriodoManutencao extends Component {
     return (
       <Container>
         
-        <HeaderNav title="Período"/>
+        <HeaderNav title="Período Manutenção"/>
 
         <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
           <Text>

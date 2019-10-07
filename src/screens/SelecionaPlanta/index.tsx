@@ -50,7 +50,7 @@ export default class SelecionaPlanta extends Component {
     return (
       <Container>
 
-        <HeaderNav title="Planta"/>
+        <HeaderNav title="Selecionar Planta"/>
         <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
           <Form>
             <Item>
