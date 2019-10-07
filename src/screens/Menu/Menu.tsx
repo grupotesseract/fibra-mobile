@@ -23,7 +23,7 @@ export default class Menu extends Component {
                   style={style.btnStyle}
                   >
                   <Icon name="cube"/>
-                  <Text>Entrada de materias</Text>
+                  <Text>Colaboradores</Text>
                 </Button>
             </Content>
         </Container>
