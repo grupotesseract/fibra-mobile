@@ -4,11 +4,10 @@ import { withNavigation } from 'react-navigation';
 
 class HeaderNav extends React.Component {
     render() {
-        return <View style={{backgroundColor: '#1010a0', paddingTop: 26}}>
+        return <View style={{backgroundColor: '#101090', paddingTop: 26}}>
             <Header>
                 <Left>
                     <Button hasText transparent onPress={() => {
-                        console.log(this.props)
                         this.props.navigation.goBack()
                         }}>
                         <Icon name='arrow-back' />

@@ -52,7 +52,7 @@ export default class LiberarDocumento extends Component {
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
             </View>
           </View>
-          <Button block onPress={() => this.props.navigation.navigate({routeName: 'LiberarDocumento'})}>
+          <Button block onPress={() => this.props.navigation.navigate({routeName: 'MenuVistoria'})}>
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
