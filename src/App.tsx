@@ -13,6 +13,8 @@ import Estoque from "./screens/Estoque/Estoque";
 import EntradaMateriais from "./screens/EntradaMateriais/EntradaMateriais";
 import ManutencaoIluminacao from "./screens/ManutencaoIluminacao/ManutencaoIluminacao";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
+import { ManutencaoItem } from "./screens/ManutencaoIluminacao/ManutencaoItem";
+import FotosItem from "./screens/FotosItem/FotosItem";
 
 const AuthStack = createStackNavigator(
   { 
@@ -22,6 +24,8 @@ const AuthStack = createStackNavigator(
     Estoque: { screen: Estoque }, 
     EntradaMateriais: { screen: EntradaMateriais }, 
     ManutencaoIluminacao: { screen: ManutencaoIluminacao },
+    ManutencaoItem: { screen: ManutencaoItem },
+    FotosItem: { screen: FotosItem },
     ComentariosGerais: { screen: ComentariosGerais },
     SelecionaPlanta: { screen: SelecionaPlanta }, 
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao }, 
@@ -29,7 +33,7 @@ const AuthStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: "Login",
+    initialRouteName: "ManutencaoIluminacao",
   }
 );
 

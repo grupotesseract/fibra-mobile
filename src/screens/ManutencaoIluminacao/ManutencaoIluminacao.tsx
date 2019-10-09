@@ -2,31 +2,38 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text, List, ListItem, Left, Right, Icon, Grid, Row, Badge } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, View } from 'react-native';
+import { withNavigation } from 'react-navigation';
 
 const itens = [
     {
         id:1,
-        nome: 'Item 1 - Hall de entrada'
+        nome: 'Item 1 - Hall de entrada',
+        status: 'pendente',
     },
     {
         id:2,
-        nome: 'Item 2 - Salão do maquinário principal'
+        nome: 'Item 2 - Salão do maquinário principal',
+        status: 'pendente',
     },
     {
         id:3,
-        nome: 'Item 3 - Banheiro do salão'
+        nome: 'Item 3 - Banheiro do salão',
+        status: 'pendente',
     },
     {
         id:4,
-        nome: 'Item 4 - Atendimento ao cliente'
+        nome: 'Item 4 - Atendimento ao cliente',
+        status: 'pendente',
     },
     {
         id:5,
-        nome: 'Item 5 - Salão do maquinário'
+        nome: 'Item 5 - Salão do maquinário',
+        status: 'pendente',
     },
     {
         id:13,
-        nome: 'Item 3 - Banheiro do salão'
+        nome: 'Item 3 - Banheiro do salão',
+        status: 'pendente',
     },
     {
         id:14,
@@ -49,7 +56,26 @@ const itens = [
         nome: 'Item 5 - Salão do maquinário'
     },
 ]
-export default class ManutencaoIluminacao extends Component {
+
+function status2Badge(status) {
+    switch(status) {
+        case 'concluido':
+            return <Badge success>
+                <Text>&nbsp;&nbsp;</Text>
+            </Badge>
+        case 'iniciado':
+            return <Badge warning>
+                <Text>&nbsp;&nbsp;</Text>
+            </Badge>
+        case 'pendente':
+        default:
+            return <Badge primary>
+                <Text>&nbsp;&nbsp;</Text>
+            </Badge>
+            
+    }
+}
+class ManutencaoIluminacao extends Component {
     state = {
         itens
     }
@@ -63,14 +89,12 @@ export default class ManutencaoIluminacao extends Component {
                         <List>
                             {
                                 this.state.itens.map(item => {
-                                    return <ListItem key={item.id}>
+                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id }})}>
                                             <Left>
                                                 <Text>{ item.nome }</Text>
                                             </Left>
                                             <Right>
-                                                <Badge success>
-                                                    <Text>ok</Text>
-                                                </Badge>
+                                                { status2Badge(item.status) }
                                             </Right>
                                         </ListItem>
                                 })
@@ -111,3 +135,5 @@ const style = {
         flexDirection: "column"
     }
 }
+
+export default withNavigation(ManutencaoIluminacao);
