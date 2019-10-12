@@ -28,7 +28,7 @@
       "bundleIdentifier": "com.tesseract.fibramobile",
       "buildNumber": "1.0",
       "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to scan QRCodes on promotional tickets."
+        "NSCameraUsageDescription": "This app uses the camera to scan QRCodes to identify rooms (itens)."
       }
     },
     "android": {
