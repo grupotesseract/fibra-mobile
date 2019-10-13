@@ -33,7 +33,7 @@ const AuthStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: "FotosItem",
+    initialRouteName: "Login",
   }
 );
 
