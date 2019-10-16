@@ -8,7 +8,7 @@ export default class Menu extends Component {
         <Container>
             <Content padder>
                 <Image 
-                  style={{ width: 300, height: 87 }}
+                  style={{ width: 300, height: 87, marginTop: 10 }}
                   resizeMode="contain"
                   source={require('../../../assets/fibraheader.png')}/>
                 <Button

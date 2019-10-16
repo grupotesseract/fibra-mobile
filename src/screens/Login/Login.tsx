@@ -44,7 +44,7 @@ class Login extends Component<Props, State> {
         behavior="padding"
         style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
         <Image
-          style={{ width: 300, height: 87 }}
+          style={{ width: 300, height: 87, marginTop: 10 }}
           resizeMode="contain"
           source={require('../../../assets/fibraheader.png')} />
         <Form>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text, Header, Left, Body, Title, Right, Icon, Subtitle, Form, Picker, Item, Label } from 'native-base';
+import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 
 export default class SelecionaPlanta extends Component {
@@ -47,6 +47,7 @@ export default class SelecionaPlanta extends Component {
   }
 
   render() {
+    const { empresaSelecionada } = this.state;
     return (
       <Container>
 
@@ -61,9 +62,14 @@ export default class SelecionaPlanta extends Component {
                 iosHeader="Selecione uma empresa"
                 iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
-                selectedValue={this.state.empresaSelecionada}
+                selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
+                <Picker.Item
+                  label="Selecione uma empresa"
+                  value={null}
+                  key={0}
+                />
                 { this.state.empresas.map(empresa => 
                   <Picker.Item
                     label={empresa.nome}
@@ -84,7 +90,7 @@ export default class SelecionaPlanta extends Component {
                 selectedValue={this.state.plantaSelecionada}
                 onValueChange={(value) => this.selectPlanta(value)}
               >
-                { this.getPlantasFromEmpresa(this.state.empresaSelecionada).map(planta => 
+                { this.getPlantasFromEmpresa(empresaSelecionada).map(planta => 
                   <Picker.Item
                     label={planta.nome}
                     value={planta.id}
@@ -94,7 +100,10 @@ export default class SelecionaPlanta extends Component {
               </Picker>
             </Item>
           </Form>
-          <Button block onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
+          <Button 
+            block 
+            disabled={(empresaSelecionada === null)}
+            onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
