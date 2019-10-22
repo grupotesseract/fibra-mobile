@@ -81,6 +81,7 @@ export default class Estoque extends Component {
                                                 <Text>Tipo: {material.tipo}</Text>
                                                 <Text>Potência: {material.potencia}</Text>
                                                 <Text>Tensão: {material.tensao}</Text>
+                                                <Text>Base: {material.base}</Text>
                                             </Body>
                                         </CardItem>
                                         <CardItem footer bordered>
