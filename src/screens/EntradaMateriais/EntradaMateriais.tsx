@@ -10,6 +10,7 @@ const materiais = [
         nome: 'Fluorescente FL',
         tensao: '227V',
         potencia: '150W',
+        base: 'E27',
         quantidade: '20'
     },
     {
@@ -18,6 +19,7 @@ const materiais = [
         nome: 'Fluorescente FL',
         tensao: '110V',
         potencia: '150W',
+        base: 'MR11',
         quantidade: ''
     },
     {
@@ -26,6 +28,7 @@ const materiais = [
         nome: 'Fluorescente FL',
         tensao: '227V',
         potencia: '50W',
+        base: 'MR16',
         quantidade: ''
     },
     {
@@ -34,6 +37,7 @@ const materiais = [
         nome: 'Fluorescente FL',
         tensao: '227V',
         potencia: '150W',
+        base: null,
         quantidade: null
     }
 ]
@@ -77,6 +81,7 @@ export default class EntradaMateriais extends Component {
                                                 <Text>Tipo: {material.tipo}</Text>
                                                 <Text>Potência: {material.potencia}</Text>
                                                 <Text>Tensão: {material.tensao}</Text>
+                                                <Text>Base: {material.base}</Text>
                                             </Body>
                                         </CardItem>
                                         <CardItem footer bordered>
