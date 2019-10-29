@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Content, Card, CardItem, Body, Text, Item, Label, Input, Button, View, Icon } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
 
 const materiais = [
     {
@@ -11,7 +12,7 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: '20'
+        quantidade: 0
     },
     {
         id:2,
@@ -20,7 +21,7 @@ const materiais = [
         tensao: '110V',
         potencia: '150W',
         base: 'MR11',
-        quantidade: ''
+        quantidade: 0
     },
     {
         id:3,
@@ -29,7 +30,7 @@ const materiais = [
         tensao: '227V',
         potencia: '50W',
         base: 'MR16',
-        quantidade: ''
+        quantidade: 0
     },
     {
         id:4,
@@ -38,13 +39,15 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: null,
-        quantidade: null
+        quantidade: 0
     }
 ]
 
 
 export function ManutencaoItem(props) {
     const {id} = props.navigation.state.params;
+
+    
 
     return (
         <Container>
@@ -70,8 +73,13 @@ export function ManutencaoItem(props) {
                                 </CardItem>
                                 <CardItem footer bordered>
                                     <Item style={{ borderBottomColor: 'transparent' }}>
-                                        <Label>Quantidade trocada:</Label>
-                                        <Input keyboardType="numeric" />
+                                        <Label>Qtde. Substituída:</Label>
+                                        <NumericInput
+                                            minValue={0}
+                                            editable={false}
+                                            rounded={true}
+                                            value={material.quantidade} 
+                                            onChange={quantidade => material.quantidade = quantidade} />
                                     </Item>
                                 </CardItem>
                             </Card>
