@@ -47,8 +47,6 @@ const materiais = [
 export function ManutencaoItem(props) {
     const {id} = props.navigation.state.params;
 
-    
-
     return (
         <Container>
             <HeaderNav title={"Manutenção Item #"+id} />

@@ -46,8 +46,7 @@ export default class LiberarDocumento extends Component {
                 keyboardType="numeric"/>
               <Text style={{ fontSize: 30, textAlignVertical: 'center'}}>:</Text>
               <Input 
-                style={{ fontSize: 35 }}
-                
+                style={{ fontSize: 35 }}                
                 value={minuto < 10 ? '0'+minuto.toString() : minuto.toString()}
                 keyboardType="numeric"/>
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
