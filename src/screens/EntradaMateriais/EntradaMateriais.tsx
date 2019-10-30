@@ -12,7 +12,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: 20
+        quantidade: 20,
+        quantidadeConfirmada: false
     },
     {
         id:2,
@@ -21,7 +22,8 @@ const materiais = [
         tensao: '110V',
         potencia: '150W',
         base: 'MR11',
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     },
     {
         id:3,
@@ -30,7 +32,8 @@ const materiais = [
         tensao: '227V',
         potencia: '50W',
         base: 'MR16',
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     },
     {
         id:4,
@@ -39,7 +42,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: null,
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     }
 ]
 export default class EntradaMateriais extends Component {
@@ -62,8 +66,18 @@ export default class EntradaMateriais extends Component {
         this.setState({materiais: novosMateriais})
     }
 
-    onPressBotaoOK = (idMaterial) => {
-        console.log(idMaterial);
+    onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
+        const { materiais } = this.state;
+        const novosMateriais = materiais.map( material => {
+            if(material.id !== idMaterial) {
+                return material;
+            }
+            return {
+                ...material,
+                quantidadeConfirmada: !quantidadeConfirmada
+            }
+        })
+        this.setState({materiais: novosMateriais})
     }
 
     render() {
@@ -93,19 +107,20 @@ export default class EntradaMateriais extends Component {
                                             <Item style={{borderBottomColor: 'transparent'}}>
 
                                             <Label>Quantidade</Label>
-                                            <NumericInput
+                                            <NumericInput                                                
                                                 minValue={0}
-                                                editable={false}
+                                                step={+!material.quantidadeConfirmada}
+                                                editable={false}                                                
                                                 rounded={true}
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
                                             
                                             <Button
-                                                key={'botao'+material.id}
                                                 style={{marginLeft: 10}} 
                                                 rounded={true} 
-                                                warning={true}
-                                                onPress={() => this.onPressBotaoOK(material.id)}
+                                                warning={!material.quantidadeConfirmada}
+                                                success={material.quantidadeConfirmada}
+                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)}
                                             >
                                                 <Text>OK</Text>
                                             </Button>
