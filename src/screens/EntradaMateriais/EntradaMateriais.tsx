@@ -133,9 +133,9 @@ export default class EntradaMateriais extends Component {
                             block
                             onPress={() => this.props.navigation.navigate('MenuVistoria')}
                             style={style.btnStyle}
-                            disabled={!this.state.materiais.reduce( (tudoPreenchido, material) => {
-                                return tudoPreenchido 
-                                        && material.quantidade  !== null
+                            disabled={!this.state.materiais.reduce( (tudoConfirmado, material) => {
+                                return tudoConfirmado 
+                                        && material.quantidadeConfirmada
                             }, true)}
                         >
                             <Text>Concluído</Text>
