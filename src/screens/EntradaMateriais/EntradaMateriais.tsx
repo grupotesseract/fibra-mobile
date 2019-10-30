@@ -12,7 +12,7 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: 20,
+        quantidade: 0,
         quantidadeConfirmada: false
     },
     {
@@ -120,8 +120,7 @@ export default class EntradaMateriais extends Component {
                                                 rounded={true} 
                                                 warning={!material.quantidadeConfirmada}
                                                 success={material.quantidadeConfirmada}
-                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)}
-                                            >
+                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
                                                 <Text>OK</Text>
                                             </Button>
                                             </Item>
