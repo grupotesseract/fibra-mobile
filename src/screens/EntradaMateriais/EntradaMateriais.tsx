@@ -62,6 +62,10 @@ export default class EntradaMateriais extends Component {
         this.setState({materiais: novosMateriais})
     }
 
+    onPressBotaoOK = (idMaterial) => {
+        console.log(idMaterial);
+    }
+
     render() {
         return (
             <Container>
@@ -96,7 +100,13 @@ export default class EntradaMateriais extends Component {
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
                                             
-                                            <Button style={{marginLeft: 10}} rounded={true} warning={true}>
+                                            <Button
+                                                key={'botao'+material.id}
+                                                style={{marginLeft: 10}} 
+                                                rounded={true} 
+                                                warning={true}
+                                                onPress={() => this.onPressBotaoOK(material.id)}
+                                            >
                                                 <Text>OK</Text>
                                             </Button>
                                             </Item>
