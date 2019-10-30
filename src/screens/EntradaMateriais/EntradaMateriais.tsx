@@ -65,7 +65,7 @@ export default class EntradaMateriais extends Component {
     render() {
         return (
             <Container>
-                <HeaderNav title="Entrada Materiais" />
+                <HeaderNav title="Entrada de Materiais" />
                 <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
                     <KeyboardAvoidingView
                         behavior="height"
@@ -88,13 +88,17 @@ export default class EntradaMateriais extends Component {
                                         <CardItem footer bordered>
                                             <Item style={{borderBottomColor: 'transparent'}}>
 
-                                            <Label>Qtde. Entrada de Material:</Label>
+                                            <Label>Quantidade</Label>
                                             <NumericInput
                                                 minValue={0}
                                                 editable={false}
                                                 rounded={true}
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                            
+                                            <Button style={{marginLeft: 10}} rounded={true} warning={true}>
+                                                <Text>OK</Text>
+                                            </Button>
                                             </Item>
                                         </CardItem>
                                     </Card>
