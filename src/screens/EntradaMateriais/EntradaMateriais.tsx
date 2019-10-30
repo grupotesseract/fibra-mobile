@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Icon, Content, Button, Text, Fab, Card, CardItem, Body, Input, Item, Label } from 'native-base';
+import { Container, Icon, Content, Button, Text, Fab, Card, CardItem, Body, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import NumericInput from 'react-native-numeric-input';
 
 const materiais = [
     {
@@ -11,7 +12,7 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: '20'
+        quantidade: 20
     },
     {
         id:2,
@@ -20,7 +21,7 @@ const materiais = [
         tensao: '110V',
         potencia: '150W',
         base: 'MR11',
-        quantidade: ''
+        quantidade: 0
     },
     {
         id:3,
@@ -29,7 +30,7 @@ const materiais = [
         tensao: '227V',
         potencia: '50W',
         base: 'MR16',
-        quantidade: ''
+        quantidade: 0
     },
     {
         id:4,
@@ -38,7 +39,7 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: null,
-        quantidade: null
+        quantidade: 0
     }
 ]
 export default class EntradaMateriais extends Component {
@@ -87,11 +88,13 @@ export default class EntradaMateriais extends Component {
                                         <CardItem footer bordered>
                                             <Item style={{borderBottomColor: 'transparent'}}>
 
-                                            <Label>Quantidade p/ Estoque:</Label>
-                                            <Input
+                                            <Label>Qtde. Entrada de Material:</Label>
+                                            <NumericInput
+                                                minValue={0}
+                                                editable={false}
+                                                rounded={true}
                                                 value={material.quantidade}
-                                                onChangeText={quantidade => this.onChangeQuantidade(material.id, quantidade)}
-                                                keyboardType="numeric" />
+                                                onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
                                             </Item>
                                         </CardItem>
                                     </Card>
@@ -104,7 +107,6 @@ export default class EntradaMateriais extends Component {
                             disabled={!this.state.materiais.reduce( (tudoPreenchido, material) => {
                                 return tudoPreenchido 
                                         && material.quantidade  !== null
-                                        && material.quantidade  !== ''
                             }, true)}
                         >
                             <Text>Concluído</Text>

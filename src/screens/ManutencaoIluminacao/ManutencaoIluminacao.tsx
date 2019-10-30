@@ -154,6 +154,7 @@ class ManutencaoIluminacao extends Component {
                         <View style={{alignItems: 'center'}}>
                             <Text>CONCLUIR</Text>
                             <Text>MANUTENÇÃO</Text>
+                            <Text>FINAL</Text>
                         </View>
                     </Button>
                 </View>

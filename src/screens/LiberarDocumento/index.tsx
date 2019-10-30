@@ -42,12 +42,12 @@ export default class LiberarDocumento extends Component {
             <View style={{flex: 1,flexDirection: 'row', alignContent: 'center', alignSelf: 'center', width: 150}}>
               <Input 
                 style={{ fontSize: 35 }}
-                value={hora.toString()}
+                value={hora < 10 ? '0'+hora.toString() : hora.toString()}
                 keyboardType="numeric"/>
               <Text style={{ fontSize: 30, textAlignVertical: 'center'}}>:</Text>
               <Input 
-                style={{ fontSize: 35 }}
-                value={minuto.toString()}
+                style={{ fontSize: 35 }}                
+                value={minuto < 10 ? '0'+minuto.toString() : minuto.toString()}
                 keyboardType="numeric"/>
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
             </View>
