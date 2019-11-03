@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
+import { bindActionCreators, Dispatch } from 'redux';
+import * as EmpresasActions from '../../store/ducks/empresas/actions'
+import { connect } from 'react-redux';
+import { EmpresasState } from '../../store/ducks/empresas/types';
+import { ApplicationState } from '../../store'
 
-export default class SelecionaPlanta extends Component {
+interface StateProps {
+  empresas: EmpresasState
+}
+
+interface DispatchProps {
+  empresasUpdate(): void
+}
+
+type Props = StateProps & DispatchProps
+
+interface State {
+  empresaSelecionada: number
+  plantaSelecionada: number
+}
+
+class SelecionaPlanta extends Component<Props, State> {
   state = {
     empresaSelecionada: null,
     plantaSelecionada: null,
@@ -38,16 +58,36 @@ export default class SelecionaPlanta extends Component {
   }
 
   getPlantasFromEmpresa = idEmpresa => {
-    const { empresas } = this.state
-    const empresa = empresas.find(empresa => empresa.id === idEmpresa);
+    const { empresas } = this.props
+    const { listaEmpresas } = empresas;
+    if(!listaEmpresas || !listaEmpresas.length) {
+      return [];
+    }
+    const empresa = listaEmpresas.find(empresa => empresa.id === idEmpresa);
     if(!empresa) {
       return [];
     }
     return empresa.plantas;
   }
+  
+  componentDidMount() {
+    const { empresasUpdate } = this.props;
+    empresasUpdate();
+  }
 
   render() {
     const { empresaSelecionada } = this.state;
+    const { empresas } = this.props;
+    const { listaEmpresas } = empresas;
+    const listaFiltrada = listaEmpresas.map(empresa => ({
+      id: empresa.id,
+      nome: empresa.nome,
+      plantas: empresa.plantas.map(planta => ({
+        id: planta.id,
+        nome: planta.nome
+      }))
+    }))
+    return <Container></Container>
     return (
       <Container>
 
@@ -70,7 +110,9 @@ export default class SelecionaPlanta extends Component {
                   value={null}
                   key={0}
                 />
-                { this.state.empresas.map(empresa => 
+                { listaEmpresas && 
+                  listaEmpresas.length && 
+                  listaEmpresas.map(empresa => 
                   <Picker.Item
                     label={empresa.nome}
                     value={empresa.id}
@@ -111,3 +153,12 @@ export default class SelecionaPlanta extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  empresas: state.empresas
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(EmpresasActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)

@@ -5,7 +5,7 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
-import SelecionaPlanta from './screens/SelecionaPlanta';
+import SelecionaPlanta from './screens/SelecionaPlanta/SelecionarPlanta';
 import ConfirmarPeriodoManutencao from './screens/ConfirmarPeriodoManutencao';
 import LiberarDocumento from './screens/LiberarDocumento';
 import MenuVistoria from "./screens/MenuVistoria/MenuVistoria";

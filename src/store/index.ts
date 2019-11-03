@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga'
 import { AuthState } from './ducks/auth/types'
 import rootReducer from './ducks/rootReducer';
 import rootSaga from './ducks/rootSaga'
+import { EmpresasState } from './ducks/empresas/types';
 
 const persistConfig = {
     key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 export interface ApplicationState {
-    auth: AuthState
+    auth: AuthState,
+    empresas: EmpresasState
 }
 
 const sagaMiddleware = createSagaMiddleware();
