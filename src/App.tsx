@@ -13,7 +13,7 @@ import Estoque from "./screens/Estoque/Estoque";
 import EntradaMateriais from "./screens/EntradaMateriais/EntradaMateriais";
 import ManutencaoIluminacao from "./screens/ManutencaoIluminacao/ManutencaoIluminacao";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
-import { ManutencaoItem } from "./screens/ManutencaoIluminacao/ManutencaoItem";
+import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import FotosItem from "./screens/FotosItem/FotosItem";
 
 const AuthStack = createStackNavigator(

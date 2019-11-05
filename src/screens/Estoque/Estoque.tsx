@@ -12,7 +12,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: 20
+        quantidade: 20,
+        quantidadeConfirmada: false
     },
     {
         id:2,
@@ -21,7 +22,8 @@ const materiais = [
         tensao: '110V',
         potencia: '150W',
         base: 'MR11',
-        quantidade: 15
+        quantidade: 15,
+        quantidadeConfirmada: false
     },
     {
         id:3,
@@ -30,7 +32,8 @@ const materiais = [
         tensao: '227V',
         potencia: '50W',
         base: 'MR16',
-        quantidade: 18
+        quantidade: 18,
+        quantidadeConfirmada: false
     },
     {
         id:4,
@@ -39,7 +42,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: null,
-        quantidade: 0
+        quantidade: 100,
+        quantidadeConfirmada: false
     }
 ]
 export default class Estoque extends Component {
@@ -62,7 +66,22 @@ export default class Estoque extends Component {
         this.setState({materiais: novosMateriais})
     }
 
+    onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
+        const { materiais } = this.state;
+        const novosMateriais = materiais.map( material => {
+            if(material.id !== idMaterial) {
+                return material;
+            }
+            return {
+                ...material,
+                quantidadeConfirmada: !quantidadeConfirmada
+            }
+        })
+        this.setState({materiais: novosMateriais})
+    }
+
     render() {
+        const { materiais } = this.state;
         return (
             <Container>
                 <HeaderNav title="Estoque Materiais" />
@@ -72,7 +91,7 @@ export default class Estoque extends Component {
                     >
                         <ScrollView>
                             {
-                                this.state.materiais.map(material => {
+                                materiais.map(material => {
                                     return <Card key={material.id}>
                                         <CardItem header bordered>
                                             <Text>{material.nome}</Text>
@@ -91,10 +110,21 @@ export default class Estoque extends Component {
                                             <Label>Qtde. Estoque:</Label>
                                             <NumericInput
                                                 minValue={0}
+                                                step={+!material.quantidadeConfirmada}
                                                 editable={false}
                                                 rounded={true}
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                            
+                                            <Button
+                                                style={{marginLeft: 10}} 
+                                                rounded={true} 
+                                                warning={!material.quantidadeConfirmada}
+                                                success={material.quantidadeConfirmada}
+                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+                                                <Text>OK</Text>
+                                            </Button>
+
                                             </Item>
                                         </CardItem>
                                     </Card>
@@ -104,9 +134,9 @@ export default class Estoque extends Component {
                             block
                             onPress={() => this.props.navigation.navigate('MenuVistoria')}
                             style={style.btnStyle}
-                            disabled={!this.state.materiais.reduce( (tudoPreenchido, material) => {
-                                return tudoPreenchido 
-                                        && material.quantidade  !== null
+                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
+                                return tudoConfirmado 
+                                        && material.quantidadeConfirmada
                             }, true)}
                         >
                             <Text>Concluído</Text>
