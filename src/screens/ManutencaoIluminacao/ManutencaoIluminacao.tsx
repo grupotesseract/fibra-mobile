@@ -10,53 +10,69 @@ import { QRCodeReader } from '../../components/QRCodeReader';
 const itens = [
     {
         id:1,
-        nome: 'Item 1 - Hall de entrada',
+        nome: 'Hall de entrada',
         status: 'pendente',
+        emergencia: true
     },
     {
         id:2,
-        nome: 'Item 2 - Salão do maquinário principal',
+        nome: 'Salão do maquinário principal',
         status: 'pendente',
+        emergencia: true
     },
     {
         id:3,
-        nome: 'Item 3 - Banheiro do salão',
+        nome: 'Banheiro do salão',
         status: 'pendente',
+        emergencia: false
     },
     {
         id:4,
-        nome: 'Item 4 - Atendimento ao cliente',
+        nome: 'Atendimento ao cliente',
         status: 'pendente',
+        emergencia: true
     },
     {
         id:5,
-        nome: 'Item 5 - Salão do maquinário',
+        nome: 'Casa de Máquinas',
         status: 'pendente',
+        emergencia: true
     },
     {
         id:13,
-        nome: 'Item 3 - Banheiro do salão',
+        nome: 'Casa de Máquinas',
         status: 'pendente',
+        emergencia: false
     },
     {
         id:14,
-        nome: 'Item 4 - Atendimento ao cliente'
+        nome: 'Atendimento ao cliente',
+        status: 'pendente',
+        emergencia: false
     },
     {
         id:15,
-        nome: 'Item 5 - Salão do maquinário'
+        nome: 'Salão do maquinário',
+        status: 'pendente',
+        emergencia: false
     },
     {
         id:23,
-        nome: 'Item 3 - Banheiro do salão'
+        nome: 'Banheiro do salão',
+        status: 'pendente',
+        emergencia: false
     },
     {
         id:24,
-        nome: 'Item 4 - Atendimento ao cliente'
+        nome: 'Atendimento ao cliente',
+        status: 'pendente',
+        emergencia: false
     },
     {
         id:25,
-        nome: 'Item 5 - Salão do maquinário'
+        nome: 'Salão do maquinário',
+        status: 'pendente',
+        emergencia: false
     },
 ]
 
@@ -132,10 +148,16 @@ class ManutencaoIluminacao extends Component {
                                 this.state.itens.map(item => {
                                     return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id }})}>
                                             <Left>
+                                                <Badge 
+                                                    danger={item.emergencia}
+                                                    success={!item.emergencia} 
+                                                    style={{ marginRight: 10}}>
+                                                    <Text>{item.emergencia ? 'E' : 'N' }</Text>
+                                                </Badge>
                                                 <Text>{ item.nome }</Text>
                                             </Left>
                                             <Right>
-                                                { status2Badge(item.status) }
+                                                { status2Badge(item.status) }                                                
                                             </Right>
                                         </ListItem>
                                 })
