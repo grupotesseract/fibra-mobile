@@ -72,13 +72,14 @@ class SelecionaPlanta extends Component<Props, State> {
   
   componentDidMount() {
     const { empresasUpdate } = this.props;
-    empresasUpdate();
+    //empresasUpdate();
   }
 
   render() {
     const { empresaSelecionada } = this.state;
     const { empresas } = this.props;
-    const { listaEmpresas } = empresas;
+    // const { listaEmpresas } = empresas;
+    const listaEmpresas = this.state.empresas;
     const listaFiltrada = listaEmpresas.map(empresa => ({
       id: empresa.id,
       nome: empresa.nome,
@@ -87,7 +88,7 @@ class SelecionaPlanta extends Component<Props, State> {
         nome: planta.nome
       }))
     }))
-    return <Container></Container>
+    
     return (
       <Container>
 

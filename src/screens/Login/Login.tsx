@@ -29,7 +29,7 @@ interface State {
 class Login extends Component<Props, State> {
 
   state = {
-    user: 'admin@grupotesseraact.com.br',
+    user: 'admin@grupotesseract.com.br',
     password: '12344321',
     auth: {
       loading: false,
