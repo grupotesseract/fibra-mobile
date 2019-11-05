@@ -12,7 +12,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: 'E27',
-        quantidade: 20
+        quantidade: 0,
+        quantidadeConfirmada: false
     },
     {
         id:2,
@@ -21,7 +22,8 @@ const materiais = [
         tensao: '110V',
         potencia: '150W',
         base: 'MR11',
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     },
     {
         id:3,
@@ -30,7 +32,8 @@ const materiais = [
         tensao: '227V',
         potencia: '50W',
         base: 'MR16',
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     },
     {
         id:4,
@@ -39,7 +42,8 @@ const materiais = [
         tensao: '227V',
         potencia: '150W',
         base: null,
-        quantidade: 0
+        quantidade: 0,
+        quantidadeConfirmada: false
     }
 ]
 export default class EntradaMateriais extends Component {
@@ -47,7 +51,7 @@ export default class EntradaMateriais extends Component {
         materiais
     }
 
-    onChangeQuantidade = (idMaterial, quantidade) => {
+    onChangeQuantidade = (idMaterial: number, quantidade: number) => {
 
         const { materiais } = this.state;
         const novosMateriais = materiais.map( material => {
@@ -62,17 +66,32 @@ export default class EntradaMateriais extends Component {
         this.setState({materiais: novosMateriais})
     }
 
+    onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
+        const { materiais } = this.state;
+        const novosMateriais = materiais.map( material => {
+            if(material.id !== idMaterial) {
+                return material;
+            }
+            return {
+                ...material,
+                quantidadeConfirmada: !quantidadeConfirmada
+            }
+        })
+        this.setState({materiais: novosMateriais})
+    }
+
     render() {
+        const { materiais } = this.state;
         return (
             <Container>
-                <HeaderNav title="Entrada Materiais" />
+                <HeaderNav title="Entrada de Materiais" />
                 <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
                     <KeyboardAvoidingView
                         behavior="height"
                     >
                         <ScrollView>
                             {
-                                this.state.materiais.map(material => {
+                                materiais.map(material => {
                                     return <Card key={material.id}>
                                         <CardItem header bordered>
                                             <Text>{material.nome}</Text>
@@ -88,13 +107,23 @@ export default class EntradaMateriais extends Component {
                                         <CardItem footer bordered>
                                             <Item style={{borderBottomColor: 'transparent'}}>
 
-                                            <Label>Qtde. Entrada de Material:</Label>
-                                            <NumericInput
+                                            <Label>Quantidade</Label>
+                                            <NumericInput                                                
                                                 minValue={0}
-                                                editable={false}
+                                                step={+!material.quantidadeConfirmada}
+                                                editable={false}                                                
                                                 rounded={true}
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                            
+                                            <Button
+                                                style={{marginLeft: 10}} 
+                                                rounded={true} 
+                                                warning={!material.quantidadeConfirmada}
+                                                success={material.quantidadeConfirmada}
+                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+                                                <Text>OK</Text>
+                                            </Button>
                                             </Item>
                                         </CardItem>
                                     </Card>
@@ -104,9 +133,9 @@ export default class EntradaMateriais extends Component {
                             block
                             onPress={() => this.props.navigation.navigate('MenuVistoria')}
                             style={style.btnStyle}
-                            disabled={!this.state.materiais.reduce( (tudoPreenchido, material) => {
-                                return tudoPreenchido 
-                                        && material.quantidade  !== null
+                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
+                                return tudoConfirmado 
+                                        && material.quantidadeConfirmada
                             }, true)}
                         >
                             <Text>Concluído</Text>
