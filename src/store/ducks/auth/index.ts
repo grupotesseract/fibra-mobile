@@ -8,12 +8,15 @@ const INITIAL_STATE: AuthState = {
 }
 
 const reducer: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
+            console.log("action chamada", action)
     switch (action.type) {
+        case AuthTypes.AUTH_CHECK:
+            return { ...state, loading: true };
         case AuthTypes.AUTH_REQUEST:
             return { ...state, loading: true };
         case AuthTypes.AUTH_SUCCESS:
             return { 
-                ...state, loading: false, error: false, data: action.payload.data, 
+                ...state, loading: false, error: false, data: action.data, 
             };
         case AuthTypes.AUTH_FAILURE:
             return {

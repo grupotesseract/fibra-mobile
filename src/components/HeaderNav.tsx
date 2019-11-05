@@ -1,10 +1,10 @@
 import React from 'react';
-import { Header, Left, Button, Icon, Body, Title, Right, Text, View  } from 'native-base';
+import { Header, Left, Button, Icon, Body, Title, View  } from 'native-base';
 import { withNavigation } from 'react-navigation';
 
 class HeaderNav extends React.Component {
     render() {
-        return <View style={{backgroundColor: '#101090', paddingTop: 26}}>
+        return <View style={{backgroundColor: '#101090', paddingTop: 0}}>
             <Header>
                 <Left>
                     <Button hasText transparent onPress={() => {
