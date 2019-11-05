@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Item, Label, Input, Button, View, Icon } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Text, Item, Label, Input, Button, View, Icon, Left, Thumbnail, Badge } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
@@ -45,15 +45,31 @@ const materiais = [
 
 
 export function ManutencaoItem(props) {
-    const {id} = props.navigation.state.params;
+    const {id, nome, emergencia, qrCode} = props.navigation.state.params;
 
     return (
         <Container>
-            <HeaderNav title={"Manutenção Item #"+id} />
+            <HeaderNav title={nome} />
             <Content padder>
                 <KeyboardAvoidingView
                     behavior="height"
                 >
+                    <Card>
+                        <CardItem>
+                        <Left>
+                            <Thumbnail source={require('../../../assets/qrcode.png')} />
+                            <Body>                                
+                                <Text note>{qrCode}</Text>
+                                <Badge 
+                                    danger={emergencia}
+                                    success={!emergencia}>
+                                    <Text>{emergencia ? 'E' : 'N' }</Text>
+                                </Badge>
+                            </Body>
+                        </Left>
+                        </CardItem>
+                    </Card>
+                    
                     <ScrollView>
                     {
                         materiais.map(material => {

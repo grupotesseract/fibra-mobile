@@ -12,67 +12,78 @@ const itens = [
         id:1,
         nome: 'Hall de entrada',
         status: 'pendente',
-        emergencia: true
+        emergencia: true,
+        qrCode: 'FIBRA-10001'
     },
     {
         id:2,
         nome: 'Salão do maquinário principal',
         status: 'pendente',
-        emergencia: true
+        emergencia: true,
+        qrCode: 'FIBRA-10002'
     },
     {
         id:3,
         nome: 'Banheiro do salão',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10003'
     },
     {
         id:4,
         nome: 'Atendimento ao cliente',
         status: 'pendente',
-        emergencia: true
+        emergencia: true,
+        qrCode: 'FIBRA-10004'
     },
     {
         id:5,
         nome: 'Casa de Máquinas',
         status: 'pendente',
-        emergencia: true
+        emergencia: true,
+        qrCode: 'FIBRA-10005'
     },
     {
         id:13,
         nome: 'Casa de Máquinas',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10013'
     },
     {
         id:14,
         nome: 'Atendimento ao cliente',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10014'
     },
     {
         id:15,
         nome: 'Salão do maquinário',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10015'
     },
     {
         id:23,
         nome: 'Banheiro do salão',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10023'
     },
     {
         id:24,
         nome: 'Atendimento ao cliente',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10024'
     },
     {
         id:25,
         nome: 'Salão do maquinário',
         status: 'pendente',
-        emergencia: false
+        emergencia: false,
+        qrCode: 'FIBRA-10025'
     },
 ]
 
@@ -146,7 +157,7 @@ class ManutencaoIluminacao extends Component {
                         <List>
                             {
                                 this.state.itens.map(item => {
-                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id }})}>
+                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id, nome: item.nome, emergencia: item.emergencia, qrCode: item.qrCode }})}>
                                             <Left>
                                                 <Badge 
                                                     danger={item.emergencia}
