@@ -51,7 +51,7 @@ export default class EntradaMateriais extends Component {
         materiais
     }
 
-    onChangeQuantidade = (idMaterial, quantidade) => {
+    onChangeQuantidade = (idMaterial: number, quantidade: number) => {
 
         const { materiais } = this.state;
         const novosMateriais = materiais.map( material => {
@@ -66,7 +66,7 @@ export default class EntradaMateriais extends Component {
         this.setState({materiais: novosMateriais})
     }
 
-    onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
+    onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
         const { materiais } = this.state;
         const novosMateriais = materiais.map( material => {
             if(material.id !== idMaterial) {

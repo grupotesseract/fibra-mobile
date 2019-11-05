@@ -86,7 +86,7 @@ export default class ManutencaoItem extends Component {
     render() {
         
         const {id} = this.props.navigation.state.params; 
-        
+        const { materiais } = this.state;
          return (
             <Container>
                 <HeaderNav title={"Manutenção Item #"+id} />
@@ -96,7 +96,7 @@ export default class ManutencaoItem extends Component {
                     >
                         <ScrollView>
                         {
-                            this.state.materiais.map(material => {
+                            materiais.map(material => {
                                 return <Card key={material.id}>
                                     <CardItem header bordered>
                                         <Text>{material.nome}</Text>
