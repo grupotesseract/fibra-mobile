@@ -140,7 +140,7 @@ export default class ManutencaoItem extends Component {
                                 style={{ flex: 1, marginRight: 3 }}
                                 iconLeft
                                 bordered
-                                disabled={!this.state.materiais.reduce( (tudoConfirmado, material) => {
+                                disabled={!materiais.reduce( (tudoConfirmado, material) => {
                                     return tudoConfirmado 
                                             && material.quantidadeConfirmada
                                 }, true)}
@@ -153,7 +153,7 @@ export default class ManutencaoItem extends Component {
                                 style={{ flex: 1, marginLeft: 3 }}
                                 iconLeft
                                 bordered
-                                disabled={!this.state.materiais.reduce( (tudoConfirmado, material) => {
+                                disabled={!materiais.reduce( (tudoConfirmado, material) => {
                                     return tudoConfirmado 
                                             && material.quantidadeConfirmada
                                 }, true)}
@@ -166,7 +166,7 @@ export default class ManutencaoItem extends Component {
                             block
                             onPress={() => this.props.navigation.goBack()}
                             style={style.btnStyle}
-                            disabled={!this.state.materiais.reduce( (tudoConfirmado, material) => {
+                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
                                 return tudoConfirmado 
                                         && material.quantidadeConfirmada
                             }, true)}

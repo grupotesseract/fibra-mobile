@@ -81,6 +81,7 @@ export default class EntradaMateriais extends Component {
     }
 
     render() {
+        const { materiais } = this.state;
         return (
             <Container>
                 <HeaderNav title="Entrada de Materiais" />
@@ -90,7 +91,7 @@ export default class EntradaMateriais extends Component {
                     >
                         <ScrollView>
                             {
-                                this.state.materiais.map(material => {
+                                materiais.map(material => {
                                     return <Card key={material.id}>
                                         <CardItem header bordered>
                                             <Text>{material.nome}</Text>
@@ -132,7 +133,7 @@ export default class EntradaMateriais extends Component {
                             block
                             onPress={() => this.props.navigation.navigate('MenuVistoria')}
                             style={style.btnStyle}
-                            disabled={!this.state.materiais.reduce( (tudoConfirmado, material) => {
+                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
                                 return tudoConfirmado 
                                         && material.quantidadeConfirmada
                             }, true)}
