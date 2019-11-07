@@ -5,7 +5,7 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
-import SelecionaPlanta from './screens/SelecionaPlanta';
+import SelecionaPlanta from './screens/SelecionaPlanta/SelecionarPlanta';
 import ConfirmarPeriodoManutencao from './screens/ConfirmarPeriodoManutencao';
 import LiberarDocumento from './screens/LiberarDocumento';
 import MenuVistoria from "./screens/MenuVistoria/MenuVistoria";
@@ -13,7 +13,7 @@ import Estoque from "./screens/Estoque/Estoque";
 import EntradaMateriais from "./screens/EntradaMateriais/EntradaMateriais";
 import ManutencaoIluminacao from "./screens/ManutencaoIluminacao/ManutencaoIluminacao";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
-import { ManutencaoItem } from "./screens/ManutencaoIluminacao/ManutencaoItem";
+import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import FotosItem from "./screens/FotosItem/FotosItem";
 
 const AuthStack = createStackNavigator(
@@ -33,7 +33,7 @@ const AuthStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: "FotosItem",
+    initialRouteName: "Login",
   }
 );
 

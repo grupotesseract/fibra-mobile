@@ -1,20 +1,41 @@
-import { call, put } from 'redux-saga/effects'
-import api from '../../../services/api'
-import { authSuccess, authFailure } from './actions';
+import { call, take, put, cancelled, fork } from 'redux-saga/effects'
+import { setToken, clearToken, login } from '../../../services/api'
+import { authSuccess, authFailure, authRequest } from './actions';
+import { AuthTypes } from './types';
 
-export function* auth(params: any) {
+function* authorize(user, password) {
     try {
-        const { user, password } = params.payload
-        const response = yield call(api.post, 'login', {
-            "email": user,
-            "password": password
+        const { token, id, nome, error } = yield call(login, {
+            email: user,
+            password: password
         });
-        const token = response.data.data.token.token;
-        const id = response.data.data.usuario.id;
-        const nome = response.data.data.usuario.nome;
-        yield put(authSuccess({ id , nome , token }));
-    } catch (err) {
-        console.log("ERR", err)
+        console.log("AUTHORIZss", user, password, token,id,nome, error)
+        if(error) {
+            throw error;
+        }
+        yield call(setToken, token)
+        yield put({ type: AuthTypes.AUTH_SUCCESS, data: { id, nome, token }});
+        return token;
+    } catch (error) {
+        yield call(clearToken)
         yield put(authFailure());
+    } finally {
+        if (yield cancelled()) {
+            yield call(clearToken)
+        }
     }
+}
+
+export function* auth() {
+  while (true) {
+    const actions = yield take(AuthTypes.AUTH_REQUEST);
+    const { user, password } = actions.payload;
+    // fork return a Task object
+    const task = yield fork(authorize, user, password)
+    // const action = yield take(['LOGOUT', 'LOGIN_ERROR'])
+    const action = yield take(AuthTypes.AUTH_FAILURE)
+    // if (action.type === 'LOGOUT')
+    //   yield cancel(task)
+    yield call(clearToken)
+  }
 }

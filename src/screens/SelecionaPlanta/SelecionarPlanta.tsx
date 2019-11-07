@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text, Header, Left, Body, Title, Right, Icon, Subtitle, Form, Picker, Item, Label } from 'native-base';
+import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
+import { bindActionCreators, Dispatch } from 'redux';
+import * as EmpresasActions from '../../store/ducks/empresas/actions'
+import { connect } from 'react-redux';
+import { EmpresasState } from '../../store/ducks/empresas/types';
+import { ApplicationState } from '../../store'
 
-export default class SelecionaPlanta extends Component {
+interface StateProps {
+  empresas: EmpresasState
+}
+
+interface DispatchProps {
+  empresasUpdate(): void
+}
+
+type Props = StateProps & DispatchProps
+
+interface State {
+  empresaSelecionada: number
+  plantaSelecionada: number
+}
+
+class SelecionaPlanta extends Component<Props, State> {
   state = {
     empresaSelecionada: null,
     plantaSelecionada: null,
@@ -38,15 +58,37 @@ export default class SelecionaPlanta extends Component {
   }
 
   getPlantasFromEmpresa = idEmpresa => {
-    const { empresas } = this.state
-    const empresa = empresas.find(empresa => empresa.id === idEmpresa);
+    const { empresas } = this.props
+    const { listaEmpresas } = empresas;
+    if(!listaEmpresas || !listaEmpresas.length) {
+      return [];
+    }
+    const empresa = listaEmpresas.find(empresa => empresa.id === idEmpresa);
     if(!empresa) {
       return [];
     }
     return empresa.plantas;
   }
+  
+  componentDidMount() {
+    const { empresasUpdate } = this.props;
+    //empresasUpdate();
+  }
 
   render() {
+    const { empresaSelecionada } = this.state;
+    const { empresas } = this.props;
+    // const { listaEmpresas } = empresas;
+    const listaEmpresas = this.state.empresas;
+    const listaFiltrada = listaEmpresas.map(empresa => ({
+      id: empresa.id,
+      nome: empresa.nome,
+      plantas: empresa.plantas.map(planta => ({
+        id: planta.id,
+        nome: planta.nome
+      }))
+    }))
+    
     return (
       <Container>
 
@@ -61,10 +103,17 @@ export default class SelecionaPlanta extends Component {
                 iosHeader="Selecione uma empresa"
                 iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
-                selectedValue={this.state.empresaSelecionada}
+                selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
-                { this.state.empresas.map(empresa => 
+                <Picker.Item
+                  label="Selecione uma empresa"
+                  value={null}
+                  key={0}
+                />
+                { listaEmpresas && 
+                  listaEmpresas.length && 
+                  listaEmpresas.map(empresa => 
                   <Picker.Item
                     label={empresa.nome}
                     value={empresa.id}
@@ -84,7 +133,7 @@ export default class SelecionaPlanta extends Component {
                 selectedValue={this.state.plantaSelecionada}
                 onValueChange={(value) => this.selectPlanta(value)}
               >
-                { this.getPlantasFromEmpresa(this.state.empresaSelecionada).map(planta => 
+                { this.getPlantasFromEmpresa(empresaSelecionada).map(planta => 
                   <Picker.Item
                     label={planta.nome}
                     value={planta.id}
@@ -94,7 +143,10 @@ export default class SelecionaPlanta extends Component {
               </Picker>
             </Item>
           </Form>
-          <Button block onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
+          <Button 
+            block 
+            disabled={(empresaSelecionada === null)}
+            onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
@@ -102,3 +154,12 @@ export default class SelecionaPlanta extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  empresas: state.empresas
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(EmpresasActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)

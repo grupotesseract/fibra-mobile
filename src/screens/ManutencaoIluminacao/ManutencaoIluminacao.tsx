@@ -10,53 +10,80 @@ import { QRCodeReader } from '../../components/QRCodeReader';
 const itens = [
     {
         id:1,
-        nome: 'Item 1 - Hall de entrada',
+        nome: 'Hall de entrada',
         status: 'pendente',
+        emergencia: true,
+        qrCode: 'FIBRA-10001'
     },
     {
         id:2,
-        nome: 'Item 2 - Salão do maquinário principal',
+        nome: 'Salão do maquinário principal',
         status: 'pendente',
+        emergencia: true,
+        qrCode: 'FIBRA-10002'
     },
     {
         id:3,
-        nome: 'Item 3 - Banheiro do salão',
+        nome: 'Banheiro do salão',
         status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10003'
     },
     {
         id:4,
-        nome: 'Item 4 - Atendimento ao cliente',
+        nome: 'Atendimento ao cliente',
         status: 'pendente',
+        emergencia: true,
+        qrCode: 'FIBRA-10004'
     },
     {
         id:5,
-        nome: 'Item 5 - Salão do maquinário',
+        nome: 'Casa de Máquinas',
         status: 'pendente',
+        emergencia: true,
+        qrCode: 'FIBRA-10005'
     },
     {
         id:13,
-        nome: 'Item 3 - Banheiro do salão',
+        nome: 'Casa de Máquinas',
         status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10013'
     },
     {
         id:14,
-        nome: 'Item 4 - Atendimento ao cliente'
+        nome: 'Atendimento ao cliente',
+        status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10014'
     },
     {
         id:15,
-        nome: 'Item 5 - Salão do maquinário'
+        nome: 'Salão do maquinário',
+        status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10015'
     },
     {
         id:23,
-        nome: 'Item 3 - Banheiro do salão'
+        nome: 'Banheiro do salão',
+        status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10023'
     },
     {
         id:24,
-        nome: 'Item 4 - Atendimento ao cliente'
+        nome: 'Atendimento ao cliente',
+        status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10024'
     },
     {
         id:25,
-        nome: 'Item 5 - Salão do maquinário'
+        nome: 'Salão do maquinário',
+        status: 'pendente',
+        emergencia: false,
+        qrCode: 'FIBRA-10025'
     },
 ]
 
@@ -130,12 +157,18 @@ class ManutencaoIluminacao extends Component {
                         <List>
                             {
                                 this.state.itens.map(item => {
-                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id }})}>
+                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id, nome: item.nome, emergencia: item.emergencia, qrCode: item.qrCode }})}>
                                             <Left>
+                                                <Badge 
+                                                    danger={item.emergencia}
+                                                    success={!item.emergencia} 
+                                                    style={{ marginRight: 10}}>
+                                                    <Text>{item.emergencia ? 'E' : 'N' }</Text>
+                                                </Badge>
                                                 <Text>{ item.nome }</Text>
                                             </Left>
                                             <Right>
-                                                { status2Badge(item.status) }
+                                                { status2Badge(item.status) }                                                
                                             </Right>
                                         </ListItem>
                                 })
@@ -154,6 +187,7 @@ class ManutencaoIluminacao extends Component {
                         <View style={{alignItems: 'center'}}>
                             <Text>CONCLUIR</Text>
                             <Text>MANUTENÇÃO</Text>
+                            <Text>FINAL</Text>
                         </View>
                     </Button>
                 </View>
