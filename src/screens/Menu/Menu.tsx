@@ -18,7 +18,7 @@ export default class Menu extends Component {
                 <Text>Manutenção de iluminação</Text>
               </Button>
               <Button 
-                onPress={() => navigate('Login')}
+                onPress={() => navigate('Colaboradores')}
                 style={style.btnStyle}
                 >
                 <Icon name="cube"/>
