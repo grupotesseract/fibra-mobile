@@ -62,6 +62,7 @@ export default class LiberarDocumento extends Component {
                 <Text>{colaborador.nome}</Text>
                 <CheckBox
                   checked={colaborador.ativo}
+                  onPress={() => this.onPressBotaoColaborador(colaborador.id, colaborador.ativo)}
                   >
                 </CheckBox>
               </ListItem>
