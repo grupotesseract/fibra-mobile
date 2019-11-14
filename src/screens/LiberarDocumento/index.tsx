@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Button, Icon, ListItem, List, View, Input, H3 } from 'native-base';
+import { Container, Content, Text, Button, Icon, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 
 export default class LiberarDocumento extends Component {
@@ -47,16 +47,23 @@ export default class LiberarDocumento extends Component {
           <H3>Colaboradores</H3>
           <List>
             { colaboradores.map(colaborador => {
-              return <ListItem               
-              key={colaborador.id}
-              style={{paddingBottom:0, paddingTop: 0, paddingRight:0, marginLeft:0, justifyContent: 'space-between'}}>
+              return <ListItem
+                key={colaborador.id}
+                style={{
+                  paddingBottom: 10,
+                  paddingTop: 10,
+                  paddingRight: 0,
+                  marginLeft: 0,
+                  justifyContent: 'space-between',
+
+                }}
+                onPress={() => this.onPressBotaoColaborador(colaborador.id, colaborador.ativo)}
+              >
                 <Text>{colaborador.nome}</Text>
-                <Button 
-                  danger={!colaborador.ativo}
-                  success={colaborador.ativo}
-                  onPress={() => this.onPressBotaoColaborador(colaborador.id, colaborador.ativo)} >
-                  <Icon name={colaborador.ativo ? "ios-remove-circle" : "ios-add-circle"} />
-                </Button>
+                <CheckBox
+                  checked={colaborador.ativo}
+                  >
+                </CheckBox>
               </ListItem>
             })}
           </List>
@@ -69,7 +76,7 @@ export default class LiberarDocumento extends Component {
                 keyboardType="numeric"/>
               <Text style={{ fontSize: 30, textAlignVertical: 'center'}}>:</Text>
               <Input 
-                style={{ fontSize: 35 }}                
+                style={{ fontSize: 35 }}
                 value={minuto < 10 ? '0'+minuto.toString() : minuto.toString()}
                 keyboardType="numeric"/>
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
