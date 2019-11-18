@@ -13,7 +13,8 @@ const materiais = [
         potencia: '150W',
         base: 'E27',
         quantidade: 0,
-        quantidadeConfirmada: false
+        quantidadeConfirmada: false,
+        quantidadeInstalada: 23        
     },
     {
         id:2,
@@ -23,7 +24,8 @@ const materiais = [
         potencia: '150W',
         base: 'MR11',
         quantidade: 0,
-        quantidadeConfirmada: false
+        quantidadeConfirmada: false,
+        quantidadeInstalada: 15
     },
     {
         id:3,
@@ -33,7 +35,8 @@ const materiais = [
         potencia: '50W',
         base: 'MR16',
         quantidade: 0,
-        quantidadeConfirmada: false
+        quantidadeConfirmada: false,
+        quantidadeInstalada: 87
     },
     {
         id:4,
@@ -43,7 +46,8 @@ const materiais = [
         potencia: '150W',
         base: null,
         quantidade: 0,
-        quantidadeConfirmada: false
+        quantidadeConfirmada: false,
+        quantidadeInstalada: 120
     }
 ]
 
@@ -122,6 +126,7 @@ export default class ManutencaoItem extends Component {
                                             <Text>Potência: {material.potencia}</Text>
                                             <Text>Tensão: {material.tensao}</Text>
                                             <Text>Base: {material.base}</Text>
+                                            <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
                                         </Body>
                                     </CardItem>
                                     <CardItem footer bordered>
