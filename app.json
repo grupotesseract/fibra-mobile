@@ -24,7 +24,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true, 
+      "supportsTablet": true,
       "bundleIdentifier": "com.tesseract.fibramobile",
       "buildNumber": "1.0",
       "infoPlist": {
