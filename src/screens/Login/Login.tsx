@@ -11,6 +11,7 @@ import ActionButton from '../../components/ActionButton';
 import HeaderLogo from '../../components/HeaderLogo';
 import { checkAuth } from '../../utils/authNavigation'
 import { NavigationAction } from 'react-navigation';
+import styles from './styles';
 
 interface StateProps {
   auth: AuthState,
@@ -62,7 +63,6 @@ class Login extends Component<Props, State> {
     const { auth } = this.props;
     return (
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <HeaderLogo />
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
           <Form>
             <View style={{ flexDirection: 'row', padding: 20 }}>
@@ -71,6 +71,7 @@ class Login extends Component<Props, State> {
                 Olá, entre com seus dados de acesso:
               </Text>
             </View>
+
             <Item floatingLabel>
               <Label>Usuário</Label>
               <Input value={user} onChangeText={(user) => this.setState({ user })} />
@@ -80,13 +81,15 @@ class Login extends Component<Props, State> {
               <Input value={password} secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
             </Item>
           </Form>
-          { auth.error && <Text> Verifique o usuário e a senha. </Text>}
+
+          { auth.error && <Text>Usuário ou senha incorretos.</Text>}
+
           <ActionButton
             block
             onPress={() => this.authLogin()}
             style={{marginBottom: 10}}
-            loading = {auth.loading}
-            >
+            loading={auth.loading}
+          >
             <Text>Login</Text>
           </ActionButton>
         </View>
