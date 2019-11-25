@@ -94,7 +94,7 @@ class Login extends Component<Props, State> {
           </ActionButton>
         </View>
       </KeyboardAvoidingView>
-    );
+    )
   }
 }
 
@@ -103,6 +103,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(AuthActions, dispatch);
+  bindActionCreators(AuthActions, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
