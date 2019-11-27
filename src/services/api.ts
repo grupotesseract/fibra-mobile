@@ -1,15 +1,16 @@
 import axios from 'axios';
-import { string } from 'prop-types';
 
 const api = axios.create({
     baseURL: 'https://develop.fibra.grupotesseract.com.br/api'
 })
 
 export const setToken = (token: string) => {
+    console.log("TOKEN DEFINIDO:", token);
     api.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
 
 export const clearToken = () => {
+    console.log("TOKEN LIMPO");
     api.defaults.headers.common['Authorization'] = "";
 }
 

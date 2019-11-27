@@ -3,13 +3,13 @@ import { setToken, clearToken, login } from '../../../services/api'
 import { authSuccess, authFailure, authRequest } from './actions';
 import { AuthTypes } from './types';
 
+
 function* authorize(user, password) {
     try {
         const { token, id, nome, error } = yield call(login, {
             email: user,
             password: password
         });
-        console.log("AUTHORIZss", user, password, token,id,nome, error)
         if(error) {
             throw error;
         }
@@ -30,8 +30,7 @@ export function* auth() {
   while (true) {
     const actions = yield take(AuthTypes.AUTH_REQUEST);
     const { user, password } = actions.payload;
-    // fork return a Task object
-    const task = yield fork(authorize, user, password)
+    const token = yield fork(authorize, user, password)
     // const action = yield take(['LOGOUT', 'LOGIN_ERROR'])
     const action = yield take(AuthTypes.AUTH_FAILURE)
     // if (action.type === 'LOGOUT')

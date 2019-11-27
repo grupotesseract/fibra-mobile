@@ -26,24 +26,7 @@ class SelecionaPlanta extends Component<Props, State> {
   state = {
     empresaSelecionada: null,
     plantaSelecionada: null,
-    empresas: [
-      {
-        id: 1,
-        nome: 'Confiança',
-        plantas: [
-          { id: 10, nome: 'Confiança Max'},
-          { id: 11, nome: 'Confiança Flex'},
-          { id: 12, nome: 'Confiança Rodoviária'},
-        ]
-      },
-      {
-        id: 2,
-        nome: 'Gera Arte',
-        plantas: [
-          { id: 20, nome: 'Planta Gera Arte'},
-        ]
-      },
-    ]
+    empresas: []
   }
 
   selectEmpresa = empresaSelecionada => {
@@ -72,14 +55,14 @@ class SelecionaPlanta extends Component<Props, State> {
   
   componentDidMount() {
     const { empresasUpdate } = this.props;
-    //empresasUpdate();
+    empresasUpdate();
   }
 
   render() {
     const { empresaSelecionada } = this.state;
     const { empresas } = this.props;
-    // const { listaEmpresas } = empresas;
-    const listaEmpresas = this.state.empresas;
+    const { listaEmpresas } = empresas;
+    // const listaEmpresas = this.state.empresas;
     const listaFiltrada = listaEmpresas.map(empresa => ({
       id: empresa.id,
       nome: empresa.nome,
