@@ -46,7 +46,6 @@ class Login extends Component<Props, State> {
 
   checkAuth() {
     const { auth, navigation } = this.props;
-    console.log("AUTH", auth)
     if(!auth.loading && !auth.error && auth.data && auth.data.token) {
       navigation.navigate('Menu');
     }
