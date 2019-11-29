@@ -37,7 +37,7 @@ const AuthStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    initialRouteName: "Menu",
+    initialRouteName: "Login",
   }
 );
 
