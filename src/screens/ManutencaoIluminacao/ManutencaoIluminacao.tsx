@@ -155,7 +155,7 @@ class ManutencaoIluminacao extends Component {
                                 this.state.itens.map(item => {
                                     return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id, nome: item.nome, emergencia: item.emergencia, qrCode: item.qrCode }})}>
                                             <Left>
-                                                <Badge                                                     
+                                                <Badge
                                                     warning={item.emergencia}
                                                     primary={!item.emergencia} 
                                                     style={{ marginRight: 10}}>
