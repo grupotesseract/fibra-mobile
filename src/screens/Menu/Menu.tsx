@@ -24,6 +24,13 @@ export default class Menu extends Component {
                 <Icon name="cube"/>
                 <Text>Colaboradores</Text>
               </Button>
+              <Button 
+                onPress={() => navigate('Programacoes')}
+                style={style.btnStyle}
+                >
+                <Icon name="cube"/>
+                <Text>Programações</Text>
+              </Button>
           </Content>
         </Container>
     );
