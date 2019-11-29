@@ -25,7 +25,7 @@ const itens = [
     {
         id:3,
         nome: 'Banheiro do salão',
-        status: 'pendente',
+        status: 'concluido',
         emergencia: false,
         qrCode: 'FIBRA-10003'
     },
@@ -39,7 +39,7 @@ const itens = [
     {
         id:5,
         nome: 'Casa de Máquinas',
-        status: 'pendente',
+        status: 'concluido',
         emergencia: true,
         qrCode: 'FIBRA-10005'
     },
@@ -92,14 +92,10 @@ function status2Badge(status) {
         case 'concluido':
             return <Badge success>
                 <Text>&nbsp;&nbsp;</Text>
-            </Badge>
-        case 'iniciado':
-            return <Badge warning>
-                <Text>&nbsp;&nbsp;</Text>
-            </Badge>
+            </Badge>        
         case 'pendente':
         default:
-            return <Badge primary>
+            return <Badge danger>
                 <Text>&nbsp;&nbsp;</Text>
             </Badge>
             
@@ -159,9 +155,9 @@ class ManutencaoIluminacao extends Component {
                                 this.state.itens.map(item => {
                                     return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id, nome: item.nome, emergencia: item.emergencia, qrCode: item.qrCode }})}>
                                             <Left>
-                                                <Badge 
-                                                    danger={item.emergencia}
-                                                    success={!item.emergencia} 
+                                                <Badge                                                     
+                                                    warning={item.emergencia}
+                                                    primary={!item.emergencia} 
                                                     style={{ marginRight: 10}}>
                                                     <Text>{item.emergencia ? 'E' : 'N' }</Text>
                                                 </Badge>
@@ -186,8 +182,6 @@ class ManutencaoIluminacao extends Component {
                         <Icon name='md-checkmark' style={{fontSize: 36}} />
                         <View style={{alignItems: 'center'}}>
                             <Text>CONCLUIR</Text>
-                            <Text>MANUTENÇÃO</Text>
-                            <Text>FINAL</Text>
                         </View>
                     </Button>
                 </View>
