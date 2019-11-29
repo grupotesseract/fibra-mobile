@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Card, CardItem, Body, Left, Badge } from 'native-base';
+import { Container, Content, Text, Card, CardItem, Body, Left, Badge, View, Button, Icon, Spinner } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView } from 'react-native';
 
@@ -27,7 +27,7 @@ const empresas = [
             data_inicio_prevista: '13/01/2020',
             data_fim_prevista: '19/01/2020',
             sincronizadoInfos: false,
-            sincronizadoFotos: false,
+            sincronizadoFotos: true,
           },
         }
       ]
@@ -43,8 +43,8 @@ const empresas = [
             id: 3,
             data_inicio_prevista: '08/01/2020',
             data_fim_prevista: '11/01/2020',
-            sincronizadoInfos: false,
-            sincronizadoFotos: false,
+            sincronizadoInfos: true,
+            sincronizadoFotos: true,
           },
         }
       ]
@@ -57,7 +57,7 @@ export default class Programacoes extends Component {
   state = {
     empresas
   }
-    
+
   render() {
     const { empresas } = this.state;
 
@@ -68,23 +68,32 @@ export default class Programacoes extends Component {
         plantas.push(
           <Card key={planta.proximaProgramacao.id}>
             <CardItem header bordered>
-                <Text>{empresa.nome}</Text>
+                <Text>{empresa.nome}</Text>                  
             </CardItem>
             <CardItem>
               <Left>
                 <Body>                                
                   <Text>{planta.nome}</Text>
                   <Text note>{planta.proximaProgramacao.data_inicio_prevista} - {planta.proximaProgramacao.data_fim_prevista}</Text>
-                  <Badge 
-                      danger={!planta.proximaProgramacao.sincronizadoInfos}
-                      success={planta.proximaProgramacao.sincronizadoInfos}>
-                      <Text>Informações</Text>
-                  </Badge>
-                  <Badge 
-                      danger={!planta.proximaProgramacao.sincronizadoFotos}
-                      success={planta.proximaProgramacao.sincronizadoFotos}>
-                      <Text>Fotos</Text>
-                  </Badge>                  
+                  <View style={{flexDirection: "row"}}>
+                    <Badge 
+                        style={style.badgeSync}
+                        danger={!planta.proximaProgramacao.sincronizadoInfos}
+                        success={planta.proximaProgramacao.sincronizadoInfos}>
+                        <Text>Informações</Text>
+                    </Badge>
+                    <Badge 
+                        style={style.badgeSync}
+                        danger={!planta.proximaProgramacao.sincronizadoFotos}
+                        success={planta.proximaProgramacao.sincronizadoFotos}>
+                        <Text>Fotos</Text>
+                    </Badge>                  
+                  </View>
+                  <Button 
+                    full 
+                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >                    
+                      <Text>SINCRONIZAR</Text>                        
+                  </Button>
                 </Body>
               </Left>
             </CardItem>                              
@@ -104,5 +113,16 @@ export default class Programacoes extends Component {
         </Content>
       </Container>
     );
+  }
+}
+
+const style = {  
+  badgeSync: {
+      margin: 5,      
+      height: 40,
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: "row"      
   }
 }
