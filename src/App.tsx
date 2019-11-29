@@ -2,6 +2,8 @@ import React from "react";
 import { Root } from "native-base";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import { PersistGate } from 'redux-persist/integration/react'
+import { Provider } from "react-redux";
 
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
@@ -16,6 +18,8 @@ import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
 import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import FotosItem from "./screens/FotosItem/FotosItem";
 import Colaboradores from "./screens/Colaboradores/Colaboradores";
+import { store, persistor } from "./store";
+import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 
 const AuthStack = createStackNavigator(
   { 
@@ -32,6 +36,7 @@ const AuthStack = createStackNavigator(
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao }, 
     LiberarDocumento: { screen: LiberarDocumento }, 
     Colaboradores: { screen: Colaboradores }, 
+    SyncEmpresas: { screen: SyncEmpresas }, 
   },
   {
     headerMode: 'none',
@@ -42,6 +47,10 @@ const AuthStack = createStackNavigator(
 const AppContainer = createAppContainer(AuthStack);
 
 export default () =>
-  <Root> 
-    <AppContainer />
-</Root>;
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <Root>
+        <AppContainer />
+      </Root>
+    </PersistGate>
+  </Provider>;

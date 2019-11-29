@@ -24,7 +24,7 @@ interface State {
 
 class SelecionaPlanta extends Component<Props, State> {
   state = {
-    empresaSelecionada: null,
+    empresaSelecionada: 0,
     plantaSelecionada: null,
     empresas: []
   }
@@ -43,9 +43,10 @@ class SelecionaPlanta extends Component<Props, State> {
   getPlantasFromEmpresa = idEmpresa => {
     const { empresas } = this.props
     const { listaEmpresas } = empresas;
-    if(!listaEmpresas || !listaEmpresas.length) {
+    if(!listaEmpresas || !Array.isArray(listaEmpresas)) {
       return [];
     }
+    console.log("LISTA EMPRESA GETPLANTAS", listaEmpresas)
     const empresa = listaEmpresas.find(empresa => empresa.id === idEmpresa);
     if(!empresa) {
       return [];
@@ -53,16 +54,11 @@ class SelecionaPlanta extends Component<Props, State> {
     return empresa.plantas;
   }
   
-  componentDidMount() {
-    const { empresasUpdate } = this.props;
-    empresasUpdate();
-  }
-
   render() {
     const { empresaSelecionada } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
-    // const listaEmpresas = this.state.empresas;
+    console.log("listaEmmpresas ", listaEmpresas, " eMPRESAS")
     const listaFiltrada = listaEmpresas.map(empresa => ({
       id: empresa.id,
       nome: empresa.nome,
@@ -89,20 +85,24 @@ class SelecionaPlanta extends Component<Props, State> {
                 selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
-                <Picker.Item
-                  label="Selecione uma empresa"
-                  value={null}
-                  key={0}
-                />
-                { listaEmpresas && 
-                  listaEmpresas.length && 
-                  listaEmpresas.map(empresa => 
-                  <Picker.Item
+                { Array.isArray(listaEmpresas) &&
+                  listaEmpresas.length > 0 
+                  ?
+                  listaEmpresas.map(empresa => {
+                  return <Picker.Item
                     label={empresa.nome}
                     value={empresa.id}
                     key={empresa.id}
                   />
-                )}
+                  }
+                  ):(<>
+                    <Picker.Item
+                      label="Nenhuma empresa carregada"
+                      value='0'
+                      key={0}
+                    />
+                  </>)
+                } 
               </Picker>
             </Item>
             <Item>
@@ -139,7 +139,7 @@ class SelecionaPlanta extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  empresas: state.empresas
+  empresas: state.empresas,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
