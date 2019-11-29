@@ -16,6 +16,7 @@ import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
 import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import FotosItem from "./screens/FotosItem/FotosItem";
 import Colaboradores from "./screens/Colaboradores/Colaboradores";
+import Programacoes from "./screens/Programacoes/Programacoes";
 
 const AuthStack = createStackNavigator(
   { 
@@ -32,10 +33,11 @@ const AuthStack = createStackNavigator(
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao }, 
     LiberarDocumento: { screen: LiberarDocumento }, 
     Colaboradores: { screen: Colaboradores }, 
+    Programacoes: { screen: Programacoes }, 
   },
   {
     headerMode: 'none',
-    initialRouteName: "Login",
+    initialRouteName: "Menu",
   }
 );
 
