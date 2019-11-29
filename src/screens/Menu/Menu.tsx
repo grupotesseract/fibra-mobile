@@ -49,6 +49,13 @@ class Menu extends Component<Props> {
                 <Text>Empresas, plantas e usuários</Text>
               </Button>
               <Button 
+                onPress={() => navigate('Programacoes')}
+                style={style.btnStyle}
+                >
+                <Icon name="cube"/>
+                <Text>Programações</Text>
+              </Button>
+              <Button 
                 onPress={() => this.logoff()}
                 style={style.btnStyle}
                 >
