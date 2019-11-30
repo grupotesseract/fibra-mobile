@@ -1,31 +1,49 @@
-import { call, take, put, cancelled, fork } from 'redux-saga/effects'
-import { setToken, clearToken, login, loginOffline } from '../../../services/api'
-import { authSuccess, authFailure, authRequest } from './actions';
+import { select, call, take, put, cancelled, fork } from 'redux-saga/effects'
+import { setToken, clearToken, login } from '../../../services/api'
+import { authFailure } from './actions';
 import { AuthTypes } from './types';
 
+export const getUsuarios = (state) => {
+    const { listaUsuarios } = state.usuariosReducer;
+    return listaUsuarios;
+}
+
+function loginOffline({ usuarios, email, password }) {
+    console.log("Usuarios carregados para login offline: ", usuarios);
+    const usuario = usuarios.find(u => u.login === email);
+    console.log("Usuario logado", usuario);
+    return usuario;
+}
 
 function* authorize(user, password) {
     try {
+        console.log("iniciando authorize", user, password)
         const { token, id, nome, error, role } = yield call(login, {
             email: user,
             password: password
         });
-        if(error) {
+        if (error) {
             throw error;
         }
         yield call(setToken, token)
-        yield put({ type: AuthTypes.AUTH_SUCCESS, data: { id, nome, token, role }});
+        yield put({ type: AuthTypes.AUTH_SUCCESS, data: { id, nome, token, role } });
         return token;
     } catch (error) {
         try {
-            const { message, success, token, id, nome, role } = yield call(loginOffline, {
+            const usuarios = yield select(getUsuarios);
+            console.log("chamous usuarios ", usuarios)
+            const { id, nome, role } = yield call(loginOffline, {
                 email: user,
-                password: password
+                password,
+                usuarios,
             });
-            if(!success) {
-                throw message;
+            const token = "tokenoffline";
+            if ( role === 'admin' ) {
+                yield call(clearToken)
+                yield put(authFailure());
+                return token;
             }
-            yield put({ type: AuthTypes.AUTH_SUCCESS, data: { id, nome, token, role }});
+            yield put({ type: AuthTypes.AUTH_SUCCESS, data: { id, nome, role, token } });
         } catch (error) {
             yield call(clearToken)
             yield put(authFailure());
@@ -38,10 +56,10 @@ function* authorize(user, password) {
 }
 
 export function* auth() {
-  while (true) {
-    const actions = yield take(AuthTypes.AUTH_REQUEST);
-    const { user, password } = actions.payload;
-    const token = yield fork(authorize, user, password)
-    console.log("TOKEN NO SAGA", token)
-  }
+    while (true) {
+        const actions = yield take(AuthTypes.AUTH_REQUEST);
+        console.log("auth take request");
+        const { user, password } = actions.payload;
+        yield fork(authorize, user, password)
+    }
 }

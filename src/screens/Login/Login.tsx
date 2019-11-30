@@ -43,6 +43,7 @@ class Login extends Component<Props, State> {
     const { authRequest } = this.props;
     const { user, password } = this.state; 
 
+    console.log("auth login request");
     authRequest({ user, password });
   }
 
@@ -82,7 +83,7 @@ class Login extends Component<Props, State> {
               <Input value={password} secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
             </Item>
           </Form>
-          { auth.error && <Text> Ocorreu um erro. </Text>}
+          { auth.error && <Text> Verifique o usuário e a senha. </Text>}
           <ActionButton 
             block 
             onPress={() => this.authLogin()} 

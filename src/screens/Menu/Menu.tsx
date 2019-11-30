@@ -22,7 +22,10 @@ class Menu extends Component<Props> {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
+    const { navigation, auth } = this.props;
+    const { navigate } = navigation;
+
+    const { role } = auth.data;
     return (
         <Container>
           <HeaderLogo/>
@@ -41,6 +44,7 @@ class Menu extends Component<Props> {
                 <Icon name="person"/>
                 <Text>Colaboradores</Text>
               </Button>
+              { role === 'admin' && 
               <Button 
                 onPress={() => navigate('SyncEmpresas')}
                 style={style.btnStyle}
@@ -48,6 +52,7 @@ class Menu extends Component<Props> {
                 <Icon name="cloud-download"/>
                 <Text>Empresas, plantas e usuários</Text>
               </Button>
+              }
               <Button 
                 onPress={() => navigate('Programacoes')}
                 style={style.btnStyle}

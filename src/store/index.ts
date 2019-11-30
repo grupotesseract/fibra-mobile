@@ -6,6 +6,7 @@ import rootReducer from './ducks/rootReducer';
 import rootSaga from './ducks/rootSaga'
 import { EmpresasState } from './ducks/empresas/types';
 import { AsyncStorage } from 'react-native';
+import { UsuariosState } from './ducks/usuarios/types';
 
 const persistConfig = {
     key: 'root',
@@ -15,7 +16,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 export interface ApplicationState {
     auth: AuthState,
-    empresas: EmpresasState
+    usuariosReducer: UsuariosState,
+    empresas: EmpresasState,
 }
 
 const sagaMiddleware = createSagaMiddleware();
@@ -25,4 +27,5 @@ const store: Store<ApplicationState> = createStore(persistedReducer, applyMiddle
 sagaMiddleware.run(rootSaga);
 
 const persistor = persistStore(store)
+
 export { store, persistor };
