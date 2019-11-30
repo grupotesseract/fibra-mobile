@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions';
 import { AuthTypes, Auth, LoginData } from './types';
 
-export const authCheck = () => action(AuthTypes.AUTH_CHECK)
 export const authRequest = (data: LoginData) => action(AuthTypes.AUTH_REQUEST, data)
 export const authSuccess = (data: Auth) => action(AuthTypes.AUTH_SUCCESS, { data })
 export const authFailure = () => action(AuthTypes.AUTH_FAILURE)
+export const authCancel = () => action(AuthTypes.AUTH_CANCEL)

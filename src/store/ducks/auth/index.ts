@@ -7,11 +7,9 @@ const INITIAL_STATE: AuthState = {
     loading: false,
 }
 
-const reducer: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
+const auth: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
             console.log("action chamada", action)
     switch (action.type) {
-        case AuthTypes.AUTH_CHECK:
-            return { ...state, loading: true };
         case AuthTypes.AUTH_REQUEST:
             return { ...state, loading: true };
         case AuthTypes.AUTH_SUCCESS:
@@ -22,9 +20,13 @@ const reducer: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
             return {
                 ...state, loading: false, error: true, data: {}
             };
+        case AuthTypes.AUTH_CANCEL:
+            return {
+                ...state, loading: false, error: false, data: {}
+            };
         default:
             return state;
     }
 }
 
-export default reducer;
+export default auth;

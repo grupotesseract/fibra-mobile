@@ -7,13 +7,13 @@ const INITIAL_STATE: EmpresasState = {
     loading: false,
 }
 
-const reducer: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
+const empresas: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
     switch (action.type) {
         case EmpresasTypes.UPDATE:
             return { ...state, loading: true };
         case EmpresasTypes.LOADED:
             return { 
-                ...state, loading: false, error: false, listaEmpresas: action.payload.data, 
+                ...state, loading: false, error: false, listaEmpresas: action.data, 
             };
         case EmpresasTypes.ERROR:
             return {
@@ -24,4 +24,4 @@ const reducer: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
     }
 }
 
-export default reducer;
+export default empresas;

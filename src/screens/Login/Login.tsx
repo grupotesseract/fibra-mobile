@@ -8,11 +8,13 @@ import { Auth, LoginData, AuthState } from '../../store/ducks/auth/types'
 import * as AuthActions from '../../store/ducks/auth/actions'
 import { ApplicationState } from '../../store'
 import ActionButton from '../../components/ActionButton';
-import { auth } from '../../store/ducks/auth/sagas';
 import HeaderLogo from '../../components/HeaderLogo';
+import { checkAuth } from '../../utils/authNavigation'
+import { NavigationAction } from 'react-navigation';
 
 interface StateProps {
-  auth: AuthState
+  auth: AuthState,
+  navigation: NavigationAction
 }
 
 interface DispatchProps {
@@ -29,7 +31,7 @@ interface State {
 class Login extends Component<Props, State> {
 
   state = {
-    user: 'admin@grupotesseract.com.br',
+    user: 'renato.gomes',
     password: '12344321',
     auth: {
       loading: false,
@@ -44,19 +46,17 @@ class Login extends Component<Props, State> {
     authRequest({ user, password });
   }
 
-  checkAuth() {
-    const { auth, navigation } = this.props;
-    if(!auth.loading && !auth.error && auth.data && auth.data.token) {
-      navigation.navigate('Menu');
-    }
-  }
 
   componentDidMount() {
-    // this.checkAuth();
+    const { auth, navigation } = this.props;
+    console.log("AUTH no login: ", auth)
+    checkAuth({ auth, navigation, origin: 'didmount login' });
   }
 
   componentDidUpdate() {
-    this.checkAuth();
+    const { auth, navigation } = this.props;
+    console.log("AUTH no update login: ", auth)
+    checkAuth({ auth, navigation, origin: 'didupdate login'  });
   }
 
   render() {

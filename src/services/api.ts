@@ -21,6 +21,24 @@ export const login = ({ email, password }) =>
     })
     .then(response => {
         const data = response.data.data;
+        const { id, nome, role } = data.usuario;
+        const { token } = data.token;
+        return {
+            id,
+            nome,
+            role,
+            token 
+        }
+    })
+    .catch(error => ({ error }));
+
+export const loginOffline = ({ email, password }) =>
+    api.post('login', {
+        email,
+        password
+    })
+    .then(response => {
+        const data = response.data.data;
         const { id, nome } = data.usuario;
         const { token } = data.token;
         return {

@@ -1,15 +1,15 @@
 import { createStore, applyMiddleware, Store } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga'
 import { AuthState } from './ducks/auth/types'
 import rootReducer from './ducks/rootReducer';
 import rootSaga from './ducks/rootSaga'
 import { EmpresasState } from './ducks/empresas/types';
+import { AsyncStorage } from 'react-native';
 
 const persistConfig = {
     key: 'root',
-    storage
+    storage: AsyncStorage
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
