@@ -1,18 +1,26 @@
-import React from 'react';
-import { Image } from 'react-native';
-import { Header, Body, View  } from 'native-base';
+import React from 'react'
+import { Header, Body, View } from 'native-base'
+import { StyleSheet } from 'react-native'
+import Logo from './Logo'
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#aaa',
+    paddingTop: 20,
+    marginBottom: 10
+  }
+})
 
 const HeaderLogo = () => {
-    return <View style={{ backgroundColor: '#aaa' ,paddingTop: 20, marginBottom: 10}}>
-        <Header transparent style={{ backgroundColor: 'white' }}>
+  return (
+    <View style={styles.container}>
+      <Header transparent style={{ backgroundColor: 'white' }}>
         <Body>
-            <Image 
-            style={{ width: 300, height: 87, marginTop: 10 }}
-            resizeMode="contain"
-            source={require('../../assets/fibraheader.png')}/>
+          <Logo />
         </Body>
-        </Header>
+      </Header>
     </View>
+  )
 }
 
-export default HeaderLogo;
+export default HeaderLogo
