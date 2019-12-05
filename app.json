@@ -34,6 +34,10 @@
     "android": {
       "versionCode": 1,
       "package": "com.tesseract.fibramobile"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#2d465f",
+      "barStyle": "light-content"
     }
   }
 }
