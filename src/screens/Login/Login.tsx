@@ -66,18 +66,16 @@ class Login extends Component<Props, State> {
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
           <Form>
             <View style={{ flexDirection: 'row', padding: 20 }}>
-              <Icon name="lock" />
-              <Text style={{ paddingLeft: 10 }}>
-                Olá, entre com seus dados de acesso:
-              </Text>
+              <Text>Faça login para continuar</Text>
+              <Text style={loginStyles.p}>Insira seu nome de usuário e senha</Text>
             </View>
 
             <Item floatingLabel>
-              <Label>Usuário</Label>
+              <Label style={loginStyles.label}>Usuário</Label>
               <Input value={user} onChangeText={(user) => this.setState({ user })} />
             </Item>
             <Item floatingLabel>
-              <Label>Senha</Label>
+              <Label style={loginStyles.label}>Senha</Label>
               <Input value={password} secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
             </Item>
           </Form>
@@ -87,9 +85,9 @@ class Login extends Component<Props, State> {
           <ActionButton
             block
             onPress={() => this.authLogin()}
-            style={{marginBottom: 10}}
-            loading={auth.loading}
-          >
+            style={loginStyles.buttonLogin}
+            loading={auth.loading}>
+
             <Text>Login</Text>
           </ActionButton>
         </View>
