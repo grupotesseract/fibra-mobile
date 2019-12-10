@@ -2,24 +2,25 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as EmpresasActions from '../../store/ducks/empresas/actions'
+import * as PlantaActions from '../../store/ducks/planta/actions'
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../store/ducks/empresas/types';
 import { ApplicationState } from '../../store'
+import { Planta } from '../../store/ducks/planta/types';
 
 interface StateProps {
-  empresas: EmpresasState
+  empresas: EmpresasState,
 }
 
 interface DispatchProps {
-  empresasUpdate(): void
+  setPlantaAtiva(planta: Planta): void,
 }
 
 type Props = StateProps & DispatchProps
 
 interface State {
   empresaSelecionada: number
-  plantaSelecionada: number
+  plantaSelecionada: Planta
 }
 
 class SelecionaPlanta extends Component<Props, State> {
@@ -29,44 +30,46 @@ class SelecionaPlanta extends Component<Props, State> {
     empresas: []
   }
 
-  selectEmpresa = empresaSelecionada => {
+  selectEmpresa = (empresaSelecionada: number) => {
     this.setState({ 
       empresaSelecionada,
       plantaSelecionada: null
     });
   }
 
-  selectPlanta = plantaSelecionada => {
+  selectPlanta = (idPlantaSelecionada: number) => {
+    const { empresaSelecionada } = this.state;
+    const plantas = this.getPlantasFromEmpresa(empresaSelecionada);
+    const plantaSelecionada = plantas.find(planta => planta.id === idPlantaSelecionada)
     this.setState({ plantaSelecionada });
   }
 
-  getPlantasFromEmpresa = idEmpresa => {
+  getPlantasFromEmpresa = (idEmpresa: number) => {
     const { empresas } = this.props
     const { listaEmpresas } = empresas;
     if(!listaEmpresas || !Array.isArray(listaEmpresas)) {
       return [];
     }
-    console.log("LISTA EMPRESA GETPLANTAS", listaEmpresas)
     const empresa = listaEmpresas.find(empresa => empresa.id === idEmpresa);
     if(!empresa) {
       return [];
     }
     return empresa.plantas;
   }
+
+  iniciaManutencao = async () => {
+    const { navigation, setPlantaAtiva } = this.props;
+    const { plantaSelecionada } = this.state;
+
+    await setPlantaAtiva(plantaSelecionada);
+
+    navigation.navigate('ConfirmarPeriodoManutencao');
+  }
   
   render() {
-    const { empresaSelecionada } = this.state;
+    const { empresaSelecionada, plantaSelecionada } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
-    console.log("listaEmmpresas ", listaEmpresas, " eMPRESAS")
-    const listaFiltrada = listaEmpresas.map(empresa => ({
-      id: empresa.id,
-      nome: empresa.nome,
-      plantas: empresa.plantas.map(planta => ({
-        id: planta.id,
-        nome: planta.nome
-      }))
-    }))
     
     return (
       <Container>
@@ -113,7 +116,7 @@ class SelecionaPlanta extends Component<Props, State> {
                 iosHeader="Selecione uma planta"
                 iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
-                selectedValue={this.state.plantaSelecionada}
+                selectedValue={plantaSelecionada?.id}
                 onValueChange={(value) => this.selectPlanta(value)}
               >
                 { this.getPlantasFromEmpresa(empresaSelecionada).map(planta => 
@@ -129,7 +132,7 @@ class SelecionaPlanta extends Component<Props, State> {
           <Button 
             block 
             disabled={(empresaSelecionada === null)}
-            onPress={() => this.props.navigation.navigate('ConfirmarPeriodoManutencao')}>
+            onPress={() => this.iniciaManutencao()}>
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
@@ -143,6 +146,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
-  bindActionCreators(EmpresasActions, dispatch);
+  bindActionCreators(PlantaActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)

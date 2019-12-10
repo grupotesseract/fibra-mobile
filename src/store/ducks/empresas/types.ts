@@ -1,3 +1,5 @@
+import { Planta } from "../planta/types";
+
 /**
  * Action types
  */
@@ -11,11 +13,6 @@
  /**
   * Data types
   */
-
-export interface Planta {
-    id?: number
-    nome?: string
-}
 
 export interface Empresa {
     id?: number

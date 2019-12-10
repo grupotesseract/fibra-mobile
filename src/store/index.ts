@@ -7,6 +7,7 @@ import rootSaga from './ducks/rootSaga'
 import { EmpresasState } from './ducks/empresas/types';
 import { AsyncStorage } from 'react-native';
 import { UsuariosState } from './ducks/usuarios/types';
+import { PlantaState } from './ducks/planta/types';
 
 const persistConfig = {
     key: 'root',
@@ -17,6 +18,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 export interface ApplicationState {
     auth: AuthState,
     usuariosReducer: UsuariosState,
+    plantaReducer: PlantaState,
     empresas: EmpresasState,
 }
 
