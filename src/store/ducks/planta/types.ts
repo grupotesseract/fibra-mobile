@@ -1,3 +1,5 @@
+import { Programacao } from "../programacoes/types";
+
 /**
  * Action types
  */
@@ -11,36 +13,6 @@
  /**
   * Data types
   */
-export interface Programacao {
-    id?: number
-    data_inicio_prevista?: string
-    data_fim_prevista?: string
-    data_inicio_real?: string
-    data_fim_real?: string
-}
-
-export interface LiberacaoDocumento {
-    usuarios?: number[]
-    data_hora?: string
-}
-
-export interface Entrada {
-    material_id: number
-    quantidade: number
-}
-
-export interface QuantidadeSubstituida {
-    material_id: number
-    item_id: number
-    quantidade_substituida: number
-    data_manutencao: string
-}
-
-export interface Estoque {
-    material_id: number
-    quantidade_inicial: number
-}
-
 export interface Material {
     id: number,
     nome: string,
@@ -63,10 +35,6 @@ export interface Planta {
     id: number
     nome?: string
     proximaProgramacao?: Programacao
-    liberacoesDocumento?: LiberacaoDocumento[]
-    entradas?: Entrada[]
-    quantidadesSubstituidas?: QuantidadeSubstituida[]
-    estoques?: Estoque[]
     itens?: Item[]
 }
 

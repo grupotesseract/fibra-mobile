@@ -3,10 +3,12 @@ import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } fr
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as PlantaActions from '../../store/ducks/planta/actions'
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../store/ducks/empresas/types';
 import { ApplicationState } from '../../store'
 import { Planta } from '../../store/ducks/planta/types';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
   empresas: EmpresasState,
@@ -14,6 +16,7 @@ interface StateProps {
 
 interface DispatchProps {
   setPlantaAtiva(planta: Planta): void,
+  addProgramacao(programacao: ProgramacaoRealizada): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -58,10 +61,19 @@ class SelecionaPlanta extends Component<Props, State> {
   }
 
   iniciaManutencao = async () => {
-    const { navigation, setPlantaAtiva } = this.props;
+    const { navigation, setPlantaAtiva, addProgramacao } = this.props;
     const { plantaSelecionada } = this.state;
 
     await setPlantaAtiva(plantaSelecionada);
+    await addProgramacao({
+      programacao: plantaSelecionada.proximaProgramacao,
+      liberacoesDocumento: [],
+      entradas: [],
+      quantidadesSubstituidas: [],
+      estoques: [],
+      comentarios: [],
+      fotos: [],
+    });
 
     navigation.navigate('ConfirmarPeriodoManutencao');
   }
@@ -146,6 +158,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
-  bindActionCreators(PlantaActions, dispatch);
+  bindActionCreators(Object.assign({}, PlantaActions, ProgramacoesActions), dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)

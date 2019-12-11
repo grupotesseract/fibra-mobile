@@ -2,11 +2,23 @@ import React, { Component } from 'react';
 import { Container, Content, Text, Button, Icon, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as PlantaActions from '../../store/ducks/planta/actions'
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store'
+import { Planta } from '../../store/ducks/planta/types';
+import { Usuario } from '../../store/ducks/usuarios/types';
 
-class LiberarDocumento extends Component {
+interface StateProps {
+  plantaAtiva: Planta,
+  usuarios: Usuario[],
+}
+
+interface DispatchProps {
+  liberarDocumentoPlanta(idProgramacao: number, now: Date, usuarios: number[]): void,
+}
+
+type Props = StateProps & DispatchProps
+class LiberarDocumento extends Component<Props> {
 
   state = {
     idsUsuariosSelecionados: [],
@@ -28,10 +40,11 @@ class LiberarDocumento extends Component {
   }
   
   liberarDocumento = async () => {
-    const { navigation, liberarDocumentoPlanta } = this.props;
+    const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
     const { now, idsUsuariosSelecionados } = this.state;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
     
-    await liberarDocumentoPlanta(now, idsUsuariosSelecionados);
+    await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
     navigation.navigate({ routeName: 'MenuVistoria' })
   }
 
@@ -97,9 +110,10 @@ class LiberarDocumento extends Component {
 
 const mapStateToProps = (state: ApplicationState) => ({
   usuarios: state.usuariosReducer.listaUsuarios,
+  plantaAtiva: state.plantaReducer.plantaAtiva,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
-  bindActionCreators(PlantaActions, dispatch);
+  bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiberarDocumento)

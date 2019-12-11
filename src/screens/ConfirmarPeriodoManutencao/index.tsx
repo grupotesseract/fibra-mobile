@@ -3,7 +3,7 @@ import { Container, Content, Form, Item, Label, Button, Text } from 'native-base
 import HeaderNav from '../../components/HeaderNav';
 
 import { bindActionCreators, Dispatch } from 'redux';
-import * as PlantaActions from '../../store/ducks/planta/actions'
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store'
 import { Planta } from '../../store/ducks/planta/types';
@@ -14,7 +14,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  confirmaPeriodoPlanta(dataInicioReal: Date): void,
+  confirmaPeriodoProgramacao(idProgramacao: number, dataInicioReal: Date): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -24,8 +24,9 @@ const iso2ddmmaaaa = (utfData: string) => utfData.split('-').reverse().join('/')
 class ConfirmarPeriodoManutencao extends Component<Props> {
 
   confirmarPeriodo = async () => {
-    const { navigation, confirmaPeriodoPlanta } = this.props;
-    await confirmaPeriodoPlanta(new Date());
+    const { navigation, confirmaPeriodoProgramacao, plantaAtiva } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    await confirmaPeriodoProgramacao(idProgramacao, new Date());
     navigation.navigate('LiberarDocumento');
   }
 
@@ -74,6 +75,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
-  bindActionCreators(PlantaActions, dispatch);
+  bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmarPeriodoManutencao)
