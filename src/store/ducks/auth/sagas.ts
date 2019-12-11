@@ -17,7 +17,6 @@ function loginOffline({ usuarios, email, password }) {
 
 function* authorize(user, password) {
     try {
-        console.log("iniciando authorize", user, password)
         const { token, id, nome, error, role } = yield call(login, {
             email: user,
             password: password
@@ -31,7 +30,6 @@ function* authorize(user, password) {
     } catch (error) {
         try {
             const usuarios = yield select(getUsuarios);
-            console.log("chamous usuarios ", usuarios)
             const { id, nome, role } = yield call(loginOffline, {
                 email: user,
                 password,
@@ -58,7 +56,6 @@ function* authorize(user, password) {
 export function* auth() {
     while (true) {
         const actions = yield take(AuthTypes.AUTH_REQUEST);
-        console.log("auth take request");
         const { user, password } = actions.payload;
         yield fork(authorize, user, password)
     }

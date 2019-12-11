@@ -1,44 +1,60 @@
 import React, { Component } from 'react';
 import { Container, Content, Text, Button, Icon, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
+import { bindActionCreators, Dispatch } from 'redux';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { connect } from 'react-redux';
+import { ApplicationState } from '../../store'
+import { Planta } from '../../store/ducks/planta/types';
+import { Usuario } from '../../store/ducks/usuarios/types';
 
-export default class LiberarDocumento extends Component {
+interface StateProps {
+  plantaAtiva: Planta,
+  usuarios: Usuario[],
+}
+
+interface DispatchProps {
+  liberarDocumentoPlanta(idProgramacao: number, now: Date, usuarios: number[]): void,
+}
+
+type Props = StateProps & DispatchProps
+class LiberarDocumento extends Component<Props> {
 
   state = {
-    colaboradores: [
-      { nome: 'Fernando Lima Fernandes', id: 1, ativo: false},
-      { nome: 'Evandro Barbosa Carreira', id: 2, ativo: false},
-      { nome: 'Ana Elisa Tueder Camparo', id: 3, ativo: false},
-      { nome: 'Michel Greger Stone', id: 4, ativo: false},
-      { nome: 'Julio Douglas Plaza', id: 5, ativo: false},
-      { nome: 'Monica Tavares', id: 6, ativo: false},
-      { nome: 'Alceu Dispor', id: 7, ativo: false},
-      { nome: 'Antonio Bobra D\'Agua', id: 8, ativo: false},
-      { nome: 'José das Couves', id: 9, ativo: false},
-      { nome: 'Leonardo da Vinte', id: 10, ativo: false},
-      { nome: 'José Bezerra da Silva', id: 11, ativo: false},
-      { nome: 'Michelangelo das Neves', id: 12, ativo: false},
-    ],
-    hora: new Date().getHours(),
-    minuto: new Date().getMinutes(),
+    idsUsuariosSelecionados: [],
+    now: new Date(),
   }
 
-  onPressBotaoColaborador = (idColaborador: number, colaboradorAtivo: boolean) => {
-    const { colaboradores } = this.state;
-    const novosColaboradores = colaboradores.map( colaborador => {
-        if(colaborador.id !== idColaborador) {
-            return colaborador;
-        }
-        return {
-            ...colaborador,
-            ativo: !colaboradorAtivo
-        }
-    })
-    this.setState({colaboradores: novosColaboradores})
+  onPressBotaoColaborador = (idColaborador: number) => {
+    const { idsUsuariosSelecionados } = this.state;
+    let listaIds = [];
+    if(!idsUsuariosSelecionados.includes(idColaborador)) {
+      listaIds = [ 
+        ...idsUsuariosSelecionados,
+        idColaborador,
+      ]
+    } else {
+      listaIds = idsUsuariosSelecionados.filter(id => id !== idColaborador)
+    }
+    this.setState({idsUsuariosSelecionados: listaIds})
+  }
+  
+  liberarDocumento = async () => {
+    const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
+    const { now, idsUsuariosSelecionados } = this.state;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    
+    await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
+    navigation.navigate({ routeName: 'MenuVistoria' })
   }
 
   render() {
-    const { hora, minuto, colaboradores } = this.state;
+    const { usuarios } = this.props;
+    const { now, idsUsuariosSelecionados } = this.state;
+    const hora = now.getHours();
+    const minuto = now.getMinutes();
+
+    const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico');
     return (
       <Container>
         <HeaderNav title="Liberação de Documento"/>
@@ -57,12 +73,12 @@ export default class LiberarDocumento extends Component {
                   justifyContent: 'space-between',
 
                 }}
-                onPress={() => this.onPressBotaoColaborador(colaborador.id, colaborador.ativo)}
+                onPress={() => this.onPressBotaoColaborador(colaborador.id)}
               >
                 <Text>{colaborador.nome}</Text>
                 <CheckBox
-                  checked={colaborador.ativo}
-                  onPress={() => this.onPressBotaoColaborador(colaborador.id, colaborador.ativo)}
+                  checked={idsUsuariosSelecionados.includes(colaborador.id)}
+                  onPress={() => this.onPressBotaoColaborador(colaborador.id)}
                   >
                 </CheckBox>
               </ListItem>
@@ -83,7 +99,7 @@ export default class LiberarDocumento extends Component {
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
             </View>
           </View>
-          <Button block onPress={() => this.props.navigation.navigate({routeName: 'MenuVistoria'})}>
+          <Button block onPress={() => this.liberarDocumento()}>
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
@@ -91,3 +107,13 @@ export default class LiberarDocumento extends Component {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  usuarios: state.usuariosReducer.listaUsuarios,
+  plantaAtiva: state.plantaReducer.plantaAtiva,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiberarDocumento)
