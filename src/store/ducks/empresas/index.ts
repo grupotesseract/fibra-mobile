@@ -7,7 +7,7 @@ const INITIAL_STATE: EmpresasState = {
     loading: false,
 }
 
-const empresas: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
+const empresasReducer: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
     switch (action.type) {
         case EmpresasTypes.UPDATE:
             return { ...state, loading: true };
@@ -24,4 +24,4 @@ const empresas: Reducer<EmpresasState> = (state = INITIAL_STATE,action) => {
     }
 }
 
-export default empresas;
+export default empresasReducer;

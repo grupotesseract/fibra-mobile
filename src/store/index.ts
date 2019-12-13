@@ -19,7 +19,7 @@ export interface ApplicationState {
     auth: AuthState,
     usuariosReducer: UsuariosState,
     plantaReducer: PlantaState,
-    empresas: EmpresasState,
+    empresasReducer: EmpresasState,
 }
 
 const sagaMiddleware = createSagaMiddleware();

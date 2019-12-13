@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-import { Container, Icon, Content, Button, Text, Fab, Card, CardItem, Body, Input, Item, Label } from 'native-base';
+import { Container, Content, Button, Text, Card, CardItem, Body, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
+import { Empresa } from '../../store/ducks/empresas/types';
+import { ApplicationState } from '../../store';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Planta } from '../../store/ducks/planta/types';
 
 const materiais = [
     {
@@ -46,9 +52,30 @@ const materiais = [
         quantidadeConfirmada: false
     }
 ]
-export default class Estoque extends Component {
+
+interface StateProps {
+  empresas: Empresa[],
+  plantaAtiva: Planta,
+}
+
+interface DispatchProps {
+}
+
+type Props = StateProps & DispatchProps
+
+class Estoque extends Component<Props> {
     state = {
         materiais
+    }
+
+    componentDidMount() {
+        const { empresas, plantaAtiva } = this.props;
+        const idPlanta = plantaAtiva.id;
+
+        const empresa = empresas.find(empresa => {
+            return empresa.plantas.find(planta => planta.id === idPlanta)
+        })
+        const planta = empresa.plantas.find(planta => planta.id === idPlanta)
     }
 
     onChangeQuantidade = (idMaterial, quantidade) => {
@@ -154,3 +181,13 @@ const style = {
         marginVertical: 5,
     }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  empresas: state.empresasReducer.listaEmpresas,
+  plantaAtiva: state.plantaReducer.plantaAtiva,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Estoque)

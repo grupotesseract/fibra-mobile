@@ -12,11 +12,10 @@ export default function ComentariosGerais(props) {
                     behavior="height"
                 >
                     <ScrollView>
-                    <Form>
-                        <Textarea rowSpan={50} bordered />
-                    </Form>
-                    </ScrollView>                    
-                    
+                        <Form>
+                            <Textarea rowSpan={50} bordered />
+                        </Form>
+                    </ScrollView>
                 </KeyboardAvoidingView>
             </Content>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
