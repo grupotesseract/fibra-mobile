@@ -7,9 +7,11 @@ import { connect } from 'react-redux';
 import { EmpresasState, Empresa } from '../../store/ducks/empresas/types';
 import { ApplicationState } from '../../store'
 import ActionButton from '../../components/ActionButton';
+import { UsuariosState } from '../../store/ducks/usuarios/types';
 
 interface StateProps {
-  empresas: EmpresasState
+  empresasReducer: EmpresasState
+  usuariosReducer: UsuariosState
 }
 
 interface DispatchProps {
@@ -29,8 +31,8 @@ class SyncEmpresas extends Component<Props, State> {
   }
 
   render() {
-    const { empresas, usuariosReducer } = this.props;
-    const { listaEmpresas, loading } = empresas;
+    const { empresasReducer, usuariosReducer } = this.props;
+    const { listaEmpresas, loading } = empresasReducer;
     const { listaUsuarios } = usuariosReducer;
 
     const totalPlantasReducer = (total: number, empresa: Empresa) => total + empresa.plantas.length;
@@ -38,7 +40,6 @@ class SyncEmpresas extends Component<Props, State> {
 
     const totalUsuarios = listaUsuarios.length;
 
-    console.log("listaEmpresas", listaEmpresas)
     const role = 'admin';
     return (
       <Container>
@@ -96,7 +97,7 @@ class SyncEmpresas extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  empresas: state.empresas,
+  empresasReducer: state.empresasReducer,
   usuariosReducer: state.usuariosReducer,
 })
 

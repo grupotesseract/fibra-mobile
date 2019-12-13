@@ -1,13 +1,13 @@
-import { Programacao } from "../programacoes/types";
+import { Programacao, Estoque } from "../programacoes/types";
 
 /**
  * Action types
  */
 
  export enum PlantaTypes {
-     SET = '@planta/SET',
-     LIBERAR_DOCUMENTO = '@planta/LIBERAR_DOCUMENTO',
-     CONFIRMAR_PERIODO_MANUTENCAO = '@planta/CONFIRMAR_PERIODO_MANUTENCAO',
+    SET = '@planta/SET',
+    LIBERAR_DOCUMENTO = '@planta/LIBERAR_DOCUMENTO',
+    CONFIRMAR_PERIODO_MANUTENCAO = '@planta/CONFIRMAR_PERIODO_MANUTENCAO',
  }
 
  /**
@@ -16,6 +16,8 @@ import { Programacao } from "../programacoes/types";
 export interface Material {
     id: number,
     nome: string,
+    potencia?: string,
+    tensao?: string,
     base?: any,
     reator?: any,
     tipoMaterial?: string,
@@ -36,6 +38,7 @@ export interface Planta {
     nome?: string
     proximaProgramacao?: Programacao
     itens?: Item[]
+    estoque: Estoque[]
 }
 
 /**

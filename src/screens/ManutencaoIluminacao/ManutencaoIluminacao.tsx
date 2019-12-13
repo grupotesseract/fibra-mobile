@@ -4,104 +4,27 @@ import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, View } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as Permissions from 'expo-permissions';
-import { withNavigation } from 'react-navigation';
+import { ApplicationState } from '../../store';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { Planta, Item } from '../../store/ducks/planta/types';
 import { QRCodeReader } from '../../components/QRCodeReader';
+import { Empresa } from '../../store/ducks/empresas/types';
+import { NavigationScreenProp } from 'react-navigation';
 
-const itens = [
-    {
-        id:1,
-        nome: 'Hall de entrada',
-        status: 'pendente',
-        emergencia: true,
-        qrCode: 'FIBRA-10001'
-    },
-    {
-        id:2,
-        nome: 'Salão do maquinário principal',
-        status: 'pendente',
-        emergencia: true,
-        qrCode: 'FIBRA-10002'
-    },
-    {
-        id:3,
-        nome: 'Banheiro do salão',
-        status: 'concluido',
-        emergencia: false,
-        qrCode: 'FIBRA-10003'
-    },
-    {
-        id:4,
-        nome: 'Atendimento ao cliente',
-        status: 'pendente',
-        emergencia: true,
-        qrCode: 'FIBRA-10004'
-    },
-    {
-        id:5,
-        nome: 'Casa de Máquinas',
-        status: 'concluido',
-        emergencia: true,
-        qrCode: 'FIBRA-10005'
-    },
-    {
-        id:13,
-        nome: 'Casa de Máquinas',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10013'
-    },
-    {
-        id:14,
-        nome: 'Atendimento ao cliente',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10014'
-    },
-    {
-        id:15,
-        nome: 'Salão do maquinário',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10015'
-    },
-    {
-        id:23,
-        nome: 'Banheiro do salão',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10023'
-    },
-    {
-        id:24,
-        nome: 'Atendimento ao cliente',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10024'
-    },
-    {
-        id:25,
-        nome: 'Salão do maquinário',
-        status: 'pendente',
-        emergencia: false,
-        qrCode: 'FIBRA-10025'
-    },
-]
-
-function status2Badge(status) {
-    switch(status) {
-        case 'concluido':
-            return <Badge success>
-                <Text>&nbsp;&nbsp;</Text>
-            </Badge>        
-        case 'pendente':
-        default:
-            return <Badge danger>
-                <Text>&nbsp;&nbsp;</Text>
-            </Badge>
-            
-    }
+interface StateProps {
+  empresas: Empresa[],
+  plantaAtiva: Planta,
+  navigation: NavigationScreenProp<any, any>,
 }
-class ManutencaoIluminacao extends Component {
+
+interface DispatchProps {
+}
+
+type Props = StateProps & DispatchProps
+
+class ManutencaoIluminacao extends Component<Props> {
     state = {
         itens: [],
         hasCameraPermission: false,
@@ -111,8 +34,10 @@ class ManutencaoIluminacao extends Component {
     async componentDidMount() {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
+        const { plantaAtiva } = this.props;
+        const { itens } = plantaAtiva;
         this.setState({
-            itens: itens
+            itens
         })
     }
 
@@ -128,17 +53,20 @@ class ManutencaoIluminacao extends Component {
         })
     }
 
-    handleScan(code) {
-        console.log('handlescan', code);
+    handleScan(scannedObj) {
+        const { navigation } = this.props;
+        const qrcode = scannedObj.data;
         this.setState({
-            qrcode: code,
+            qrcode,
             readingQRCode: false,
         })
-        this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: 1 }})
+        console.log("scanned qrcode", qrcode);
+        navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
     }
 
     render() {
-        const { readingQRCode } = this.state;
+        const { readingQRCode, itens } = this.state;
+        const { navigation } = this.props;
         if (readingQRCode) {
             return <QRCodeReader
                 handleClose={() => this.handleCloseQRCode()}
@@ -151,25 +79,24 @@ class ManutencaoIluminacao extends Component {
                 <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
                     <ScrollView>
                         <List>
-                            {
-                                this.state.itens.map(item => {
-                                    return <ListItem key={item.id} onPress={() => this.props.navigation.navigate({ routeName: 'ManutencaoItem', params: { id: item.id, nome: item.nome, emergencia: item.emergencia, qrCode: item.qrCode }})}>
-                                            <Left>
-                                                <Badge
-                                                    warning={item.emergencia}
-                                                    primary={!item.emergencia} 
-                                                    style={{ marginRight: 10}}>
-                                                    <Text>{item.emergencia ? 'E' : 'N' }</Text>
-                                                </Badge>
-                                                <Text>{ item.nome }</Text>
-                                            </Left>
-                                            <Right>
-                                                { status2Badge(item.status) }                                                
-                                            </Right>
-                                        </ListItem>
-                                })
-                            }
-                        
+                        {
+                            itens?.map( (item: Item) => {
+                                const isEmergencia = item.circuito === 'Emergência';
+                                return <ListItem key={item.id} onPress={() => navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })}>
+                                    <Left>
+                                        <Badge
+                                            warning={isEmergencia}
+                                            primary={!isEmergencia}
+                                            style={{ marginRight: 10 }}>
+                                            <Text>{isEmergencia ? 'E' : 'N'}</Text>
+                                        </Badge>
+                                        <Text>{item.nome}</Text>
+                                    </Left>
+                                    <Right>
+                                    </Right>
+                                </ListItem>
+                            })
+                        }
                         </List>
                     </ScrollView>
                 </Content>
@@ -205,4 +132,12 @@ const style = {
     }
 }
 
-export default withNavigation(ManutencaoIluminacao);
+const mapStateToProps = (state: ApplicationState) => ({
+  empresas: state.empresasReducer.listaEmpresas,
+  plantaAtiva: state.plantaReducer.plantaAtiva,
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoIluminacao)

@@ -154,7 +154,7 @@ class SelecionaPlanta extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  empresas: state.empresas,
+  empresas: state.empresasReducer,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => 
