@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Label, Item, Button, View, Icon, Left, Thumbnail, Badge } from 'native-base';
+import { Container, Content, Card, CardItem, Body, Text, Label, Item, Button, View, Icon, Left, Thumbnail, Badge, Right } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
@@ -32,7 +32,6 @@ class ManutencaoItem extends Component<Props> {
     }
 
     onChangeQuantidade = (idMaterial: number, quantidade: number) => {
-
         const { materiais } = this.state;
         const novosMateriais = materiais.map( (material: Material) => {
             if(material.id !== idMaterial) {
@@ -40,13 +39,41 @@ class ManutencaoItem extends Component<Props> {
             }
             return {
                 ...material,
-                quantidade: quantidade
+                quantidade
             }
         })
         this.setState({materiais: novosMateriais})
     }
     
-    onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: number) => {
+    onChangeQuantidadeBase = (idMaterial: number, quantidadeBase: number) => {
+        const { materiais } = this.state;
+        const novosMateriais = materiais.map( (material: Material) => {
+            if(material.id !== idMaterial) {
+                return material;
+            }
+            return {
+                ...material,
+                quantidadeBase
+            }
+        })
+        this.setState({materiais: novosMateriais})
+    }
+    
+    onChangeQuantidadeReator = (idMaterial: number, quantidadeReator: number) => {
+        const { materiais } = this.state;
+        const novosMateriais = materiais.map( (material: Material) => {
+            if(material.id !== idMaterial) {
+                return material;
+            }
+            return {
+                ...material,
+                quantidadeReator
+            }
+        })
+        this.setState({materiais: novosMateriais})
+    }
+    
+    onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
         const { materiais } = this.state;
         const novosMateriais = materiais.map( material => {
             if(material.id !== idMaterial) {
@@ -88,6 +115,7 @@ class ManutencaoItem extends Component<Props> {
     render() {
         const { error, materiais, qrcode, emergencia, nome } = this.state;
         const { navigation } = this.props;
+        const { idItem } = navigation.state.params; 
 
         if (error) {
             return <Container>
@@ -122,40 +150,83 @@ class ManutencaoItem extends Component<Props> {
                         </Card>
                         <ScrollView>
                             {
-                                materiais ?.map(material => {
+                                materiais ?.map( (material: Material) => {
                                     return <Card key={material.id}>
                                         <CardItem header bordered>
                                             <Text>{material.nome}</Text>
                                         </CardItem>
                                         <CardItem>
                                             <Body>
-                                                <Text>Tipo: {material.tipoMaterial}</Text>
+                                                <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
+                                                    <Text>Tipo: {material.tipoMaterial}</Text>
+                                                    {material.base && <Text>Base: {material.base}</Text>}
+                                                    {material.reator && <Text>Reator : {material.reator}</Text>}
+                                                </View>
+
                                                 {material.potencia && <Text>Potência: {material.potencia}</Text>}
                                                 {material.tensao && <Text>Tensão: {material.tensao}</Text>}
-                                                {material.base && <Text>Base: {material.base}</Text>}
-                                                {material.reator && <Text>Reator: {material.reator}</Text>}
                                                 <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
                                             </Body>
                                         </CardItem>
-                                        <CardItem footer bordered>
-                                            <Item style={{ borderBottomColor: 'transparent' }}>
-                                                <Label>Qtde. Substituída:</Label>
-                                                <NumericInput
-                                                    minValue={0}
-                                                    step={+!material.quantidadeConfirmada}
-                                                    editable={false}
-                                                    rounded={true}
-                                                    value={material.quantidade}
-                                                    onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                        <CardItem footer bordered style={{flexDirection: 'column'}}>
+                                            <Text style={{ marginVertical: 3 }}>Substituições</Text>
+                                            {material.base &&
+                                                <Item style={style.itemSubstituicao}>
+                                                    <Left>
+                                                        <Label>Bases:</Label>
+                                                    </Left>
+                                                    <Right>
+                                                        <NumericInput
+                                                            minValue={0}
+                                                            step={+!material.quantidadeConfirmada}
+                                                            editable={false}
+                                                            rounded={true}
+                                                            value={material.quantidadeBase}
+                                                            onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                                    </Right>
+                                                </Item>
+                                            }
+                                            {material.reator &&
+                                                <Item style={style.itemSubstituicao}>
+                                                    <Left>
+                                                        <Label>Reatores:</Label>
+                                                    </Left>
+                                                    <Right>
+                                                        <NumericInput
+                                                            minValue={0}
+                                                            step={+!material.quantidadeConfirmada}
+                                                            editable={false}
+                                                            rounded={true}
+                                                            value={material.quantidadeReator}
+                                                            onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                                    </Right>
+                                                </Item>
+                                            }
+                                            <Item style={style.itemSubstituicao}>
+                                                <Left>
+                                                    <Label>Lâmpadas:</Label>
+                                                </Left>
+                                                <Right>
+                                                    <NumericInput
+                                                        minValue={0}
+                                                        step={+!material.quantidadeConfirmada}
+                                                        editable={false}
+                                                        rounded={true}
+                                                        value={material.quantidade}
+                                                        onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                                </Right>
 
-                                                <Button
-                                                    style={{ marginLeft: 10 }}
-                                                    rounded={true}
-                                                    warning={!material.quantidadeConfirmada}
-                                                    success={material.quantidadeConfirmada}
-                                                    onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
-                                                    <Text>OK</Text>
-                                                </Button>
+                                            </Item>
+                                            <Item style={style.itemSubstituicao}>
+                                                    <Button
+                                                        // style={{ marginLeft: 10 }}
+                                                        small
+                                                        rounded={true}
+                                                        warning={!material.quantidadeConfirmada}
+                                                        success={material.quantidadeConfirmada}
+                                                        onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+                                                        <Text>Confirmar</Text>
+                                                    </Button>
                                             </Item>
                                         </CardItem>
                                     </Card>
@@ -164,7 +235,7 @@ class ManutencaoItem extends Component<Props> {
                         </ScrollView>
                         <View style={{ flexDirection: 'row', marginVertical: 5 }}>
                             <Button
-                                onPress={() => navigation.navigate('FotosItem')}
+                                onPress={() => navigation.navigate({ routeName: 'FotosItem', params: { idItem: idItem }})}
                                 style={{ flex: 1, marginRight: 3 }}
                                 iconLeft
                                 bordered
@@ -211,7 +282,11 @@ class ManutencaoItem extends Component<Props> {
 const style = {
     btnStyle: {
         marginVertical: 5,
-    }
+    },
+    itemSubstituicao: {
+        marginVertical: 2,
+        borderBottomColor: 'transparent',
+    },
 }
 
 const mapStateToProps = (state: ApplicationState) => ({

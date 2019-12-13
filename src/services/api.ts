@@ -5,12 +5,10 @@ const api = axios.create({
 })
 
 export const setToken = (token: string) => {
-    console.log("TOKEN DEFINIDO:", token);
     api.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
 
 export const clearToken = () => {
-    console.log("TOKEN LIMPO");
     api.defaults.headers.common['Authorization'] = "";
 }
 

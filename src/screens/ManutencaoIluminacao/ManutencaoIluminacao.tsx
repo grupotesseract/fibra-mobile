@@ -60,7 +60,6 @@ class ManutencaoIluminacao extends Component<Props> {
             qrcode,
             readingQRCode: false,
         })
-        console.log("scanned qrcode", qrcode);
         navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
     }
 

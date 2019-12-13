@@ -6,7 +6,8 @@
     ADD = '@programacoes/ADD',
     CONFIRMA_PERIODO = '@programacoes/CONFIRMA_PERIODO',
     LIBERAR_DOCUMENTO = '@programacoes/LIBERAR_DOCUMENTO',
-    UPDATE = '@programacoes/UPDATE',
+    ARMAZENA_FOTOS = '@programacoes/ARMAZENA_FOTOS',
+    DELETE_ALL = '@programacoes/DELETE_ALL',
  }
 
 /**
@@ -51,7 +52,7 @@ export interface Comentario {
 
 export interface FotosItem {
     fotos: string[]
-    id: number
+    id_item: number
 }
 
 export interface ProgramacaoRealizada {
@@ -61,7 +62,7 @@ export interface ProgramacaoRealizada {
     quantidadesSubstituidas?: QuantidadeSubstituida[]
     estoques?: Estoque[]
     comentarios?: Comentario[]
-    fotos: FotosItem[]
+    fotosItens: FotosItem[]
 }
 
 /**

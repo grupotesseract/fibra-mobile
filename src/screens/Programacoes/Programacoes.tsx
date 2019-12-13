@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Content, Text, Card, CardItem, Body, Left, Badge, View, Button, Icon, Spinner } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView } from 'react-native';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../../store';
+import { ProgramacaoRealizada, Programacao } from '../../store/ducks/programacoes/types';
 
 const empresas = [
     { 
@@ -52,13 +56,31 @@ const empresas = [
     
 ]
 
-export default class Programacoes extends Component {    
+interface StateProps {
+  programacoesRealizadas: ProgramacaoRealizada[],
+}
+
+interface DispatchProps {
+  deleteProgramacoes(): void,
+}
+
+type Props = StateProps & DispatchProps
+
+class Programacoes extends Component<Props> {    
 
   state = {
     empresas
   }
 
+  componentDidMount() {
+    const { deleteProgramacoes, programacoesRealizadas } = this.props;
+    console.log( programacoesRealizadas );
+    
+  }
+  
+
   render() {
+    const { programacoesRealizadas } = this.props;
     const { empresas } = this.state;
 
     var plantas = [];
@@ -110,6 +132,28 @@ export default class Programacoes extends Component {
           {
             plantas          
           }             
+          {
+            programacoesRealizadas.map( (programacaoRealizada: ProgramacaoRealizada) => {
+
+              return <Card key={programacaoRealizada.programacao.id}>
+                <Text>programacao</Text>
+                <Text>data_inicio_prevista {programacaoRealizada.programacao.data_inicio_prevista}</Text>
+                <Text>data_fim_prevista {programacaoRealizada.programacao.data_fim_prevista}</Text>
+                <Text>data_inicio_real {programacaoRealizada.programacao.data_inicio_real}</Text>
+                <Text>data_fim_real {programacaoRealizada.programacao.data_fim_real}</Text>
+                <Text>comentarioGeral {programacaoRealizada.programacao.comentarioGeral}</Text>
+
+                <Text>qtdFotos {programacaoRealizada.fotos.length}</Text>
+              </Card>
+            })
+          }
+
+          <Button
+            full
+            onPress={() => this.props.deleteProgramacoes()}
+          >
+            <Text>Limpar programações</Text>
+          </Button>
         </Content>
       </Container>
     );
@@ -123,6 +167,15 @@ const style = {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: "row"      
+      flexDirection: "row"  
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => 
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Programacoes)

@@ -1,8 +1,9 @@
 import { select, call, put, take, fork } from 'redux-saga/effects'
-import api, { setToken } from '../../../services/api'
+import api, { setToken, clearToken } from '../../../services/api'
 import { empresasFailure } from './actions';
 import { Empresa, EmpresasTypes } from './types';
 import { Usuario, UsuariosTypes } from '../usuarios/types';
+import { authFailure } from '../auth/actions';
 
 export const getEmpresas = (state) => {
   const { listaEmpresas } = state.empresas;
@@ -42,8 +43,10 @@ export function* loadEmpresas() {
         yield put({ type: UsuariosTypes.LOADED, data: [ ...usuarios ]});
         yield put({ type: EmpresasTypes.LOADED, data: [ ...empresas ]});
     } catch (err) {
-        console.log("ERR", err)
-        yield put(empresasFailure());
+      console.log("ERR", err)
+      yield call(clearToken)
+      yield put(authFailure());
+      yield put(empresasFailure());
     }
 }
 
