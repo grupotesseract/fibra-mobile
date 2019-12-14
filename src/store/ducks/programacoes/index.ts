@@ -143,6 +143,7 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                         }
                         return qtdArmazenada;
                     })
+
                     return {
                       ...programacaoRealizada,
                       quantidadesSubstituidas: [
@@ -150,6 +151,98 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                         ...quantidadesSubstituidas,
                       ]
                     };
+                })
+            }
+        }
+        case ProgramacoesTypes.ARMAZENA_COMENTARIO_ITEM:
+        {
+            const { idProgramacao, comentario, idItem } = action.payload;
+            const { programacoesRealizadas } = state;
+
+            return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    const { comentarios } = programacaoRealizada;
+                    const indexComentario = comentarios.findIndex(c => c.item_id === idItem)
+                    // Subsititui o comentario que já está armazenado
+                    if (indexComentario >= 0) {
+                      return {
+                        ...programacaoRealizada,
+                        comentarios: comentarios.splice(indexComentario, 1, {
+                          comentario,
+                          item_id: idItem
+                        })
+                      }
+                    }
+                    return {
+                      ...programacaoRealizada,
+                      comentarios: [
+                        ...comentarios,
+                        {
+                          comentario,
+                          item_id: idItem
+                        }
+                      ]
+                    }
+                })
+            }
+        }
+        case ProgramacoesTypes.CONCLUI_ITEM:
+        {
+          const { idProgramacao, idItem } = action.payload;
+          const { programacoesRealizadas } = state;
+          return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    const itensVistoriados = programacaoRealizada.itensVistoriados || [];
+                    const indexItem = itensVistoriados.findIndex(i => i.id_item === idItem)
+                    // Subsititui o item que já está armazenado
+                    if (indexItem >= 0) {
+                      return {
+                        ...programacaoRealizada,
+                        itensVistoriados: itensVistoriados.splice(indexItem, 1, {
+                          concluido: true,
+                          id_item: idItem
+                        })
+                      }
+                    }
+                    return {
+                      ...programacaoRealizada,
+                      itensVistoriados: [
+                        ...itensVistoriados,
+                        {
+                          concluido: true,
+                          id_item: idItem
+                        }
+                      ]
+                    }
+                })
+            }
+        }
+        case ProgramacoesTypes.ARMAZENA_COMENTARIOS_GERAIS:
+        {
+          const { idProgramacao, comentario } = action.payload;
+          const { programacoesRealizadas } = state;
+
+          return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    return {
+                      ...programacaoRealizada,
+                      programacao: {
+                        ...programacaoRealizada.programacao,
+                        comentarioGeral: comentario,
+                      }
+                    }
                 })
             }
         }

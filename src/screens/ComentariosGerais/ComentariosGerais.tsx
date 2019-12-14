@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Item, Label, Input, Button, View, Icon, Textarea, Form } from 'native-base';
+import { Container, Content, Text, Button, View, Textarea, Form } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -7,7 +7,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
-import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import { Planta } from '../../store/ducks/planta/types';
 
 interface StateProps {
@@ -17,21 +17,29 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
+  armazenaComentarioItem({ idProgramacao, idItem, comentario }): void
 }
 
 type Props = StateProps & DispatchProps
 
 class ComentariosGerais extends Component<Props> {
 
-  salvaComentario = () => {
-    const { navigation, plantaAtiva } =this.props;
+  state = {
+    comentario: '',
+  }
+
+  salvaComentario = async () => {
+    const { navigation, plantaAtiva, armazenaComentarioItem } = this.props;
     const { idItem } = navigation.state.params;
-        const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const { comentario } = this.state;
+
+    await armazenaComentarioItem({idItem, idProgramacao, comentario});
     navigation.goBack();
   }
 
   render() {
+    const { comentario } = this.state;
     return <Container>
       <HeaderNav title={"Comentários"} />
       <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
@@ -40,7 +48,12 @@ class ComentariosGerais extends Component<Props> {
         >
           <ScrollView>
             <Form>
-              <Textarea rowSpan={50} bordered />
+              <Textarea
+                rowSpan={50}
+                bordered
+                value={comentario}
+                onChangeText={(comentario) => this.setState({comentario})}
+              />
             </Form>
           </ScrollView>
         </KeyboardAvoidingView>

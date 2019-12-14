@@ -36,7 +36,8 @@ export interface Item {
     nome?: string
     qrcode?: string
     circuito?: string
-    materiais?: Material[]
+    materiais?: Material[],
+    concluido?: boolean
 }
 
 export interface Planta {

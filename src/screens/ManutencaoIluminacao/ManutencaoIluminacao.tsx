@@ -11,12 +11,15 @@ import { connect } from 'react-redux';
 import { Planta, Item } from '../../store/ducks/planta/types';
 import { QRCodeReader } from '../../components/QRCodeReader';
 import { Empresa } from '../../store/ducks/empresas/types';
-import { NavigationScreenProp } from 'react-navigation';
+import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
   empresas: Empresa[],
   plantaAtiva: Planta,
   navigation: NavigationScreenProp<any, any>,
+  programacoesRealizadas: ProgramacaoRealizada[],
+  isFocused: boolean
 }
 
 interface DispatchProps {
@@ -34,8 +37,29 @@ class ManutencaoIluminacao extends Component<Props> {
     async componentDidMount() {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
-        const { plantaAtiva } = this.props;
-        const { itens } = plantaAtiva;
+        this.carregaItens();
+    }
+
+    componentDidUpdate(prevProps: Props) {
+      if (prevProps.isFocused !== this.props.isFocused) {
+        this.carregaItens();
+      }
+    }
+
+    carregaItens = () => {
+        const { plantaAtiva, programacoesRealizadas } = this.props;
+        const idProgramacao = plantaAtiva.proximaProgramacao.id;
+        const itens = plantaAtiva.itens.map( itemPlanta => {
+          const programacaoItem = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
+          const itensVistoriados = programacaoItem.itensVistoriados || [];
+          const itemVistoriado = itensVistoriados.find(item => item.id_item === itemPlanta.id)
+          const concluido = !!(itemVistoriado && itemVistoriado.concluido)
+          return {
+            ...itemPlanta,
+            concluido
+          }
+        });
+
         this.setState({
             itens
         })
@@ -63,9 +87,15 @@ class ManutencaoIluminacao extends Component<Props> {
         navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
     }
 
+    openItem = (item: Item) => {
+      const { navigation } = this.props;
+      if(!item.concluido) {
+        navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })
+      }
+    }
+
     render() {
         const { readingQRCode, itens } = this.state;
-        const { navigation } = this.props;
         if (readingQRCode) {
             return <QRCodeReader
                 handleClose={() => this.handleCloseQRCode()}
@@ -81,7 +111,7 @@ class ManutencaoIluminacao extends Component<Props> {
                         {
                             itens?.map( (item: Item) => {
                                 const isEmergencia = item.circuito === 'Emergência';
-                                return <ListItem key={item.id} onPress={() => navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })}>
+                                return <ListItem key={item.id} onPress={() => this.openItem(item)} disabled={item.concluido}>
                                     <Left>
                                         <Badge
                                             warning={isEmergencia}
@@ -92,6 +122,11 @@ class ManutencaoIluminacao extends Component<Props> {
                                         <Text>{item.nome}</Text>
                                     </Left>
                                     <Right>
+                                        <Badge
+                                          danger={!item.concluido}
+                                          success={item.concluido}
+                                          style={{ marginLeft: 10, width: 26 }}>
+                                        </Badge>
                                     </Right>
                                 </ListItem>
                             })
@@ -134,9 +169,10 @@ const style = {
 const mapStateToProps = (state: ApplicationState) => ({
   empresas: state.empresasReducer.listaEmpresas,
   plantaAtiva: state.plantaReducer.plantaAtiva,
+  programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoIluminacao)
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(ManutencaoIluminacao))

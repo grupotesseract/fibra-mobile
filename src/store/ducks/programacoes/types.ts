@@ -62,6 +62,11 @@ export interface FotosItem {
     id_item: number
 }
 
+export interface ItensVistoriados {
+  id_item: number
+  concluido: boolean
+}
+
 export interface ProgramacaoRealizada {
     programacao?: Programacao
     liberacoesDocumento?: LiberacaoDocumento[]
@@ -70,6 +75,7 @@ export interface ProgramacaoRealizada {
     estoques?: Estoque[]
     comentarios?: Comentario[]
     fotosItens: FotosItem[]
+    itensVistoriados?: ItensVistoriados[]
 }
 
 /**

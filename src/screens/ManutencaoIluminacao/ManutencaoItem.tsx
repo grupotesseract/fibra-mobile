@@ -18,6 +18,7 @@ interface StateProps {
 
 interface DispatchProps {
   armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
+  concluiItem(idItem: number, idProgramacao: number): void
 }
 
 type Props = StateProps & DispatchProps
@@ -119,6 +120,14 @@ class ManutencaoItem extends Component<Props> {
     const { navigation } = this.props;
     await this.salvaQuantidades(idItem);
     navigation.navigate({ routeName: 'ComentariosGerais', params: { idItem: idItem } })
+  }
+
+  concluirItem = async (idItem: number) => {
+    const { navigation, concluiItem, plantaAtiva } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    await this.salvaQuantidades(idItem);
+    await concluiItem(idItem, idProgramacao);
+    navigation.navigate({ routeName: 'ManutencaoIluminacao' })
   }
 
   componentDidMount() {
@@ -296,7 +305,7 @@ class ManutencaoItem extends Component<Props> {
             </View>
             <Button
               block
-              onPress={() => navigation.goBack()}
+              onPress={() => this.concluirItem(idItem)}
               style={style.btnStyle}
               disabled={!materiais.reduce((tudoConfirmado, material) => {
                 return tudoConfirmado
