@@ -1,33 +1,60 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Container, Content, Card, CardItem, Body, Text, Item, Label, Input, Button, View, Icon, Textarea, Form } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../../store';
+import { NavigationScreenProp } from 'react-navigation';
+import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { Planta } from '../../store/ducks/planta/types';
 
-export default function ComentariosGerais(props) {
-    return (
-        <Container>
-            <HeaderNav title={"Comentários"} />
-            <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-                <KeyboardAvoidingView
-                    behavior="height"
-                >
-                    <ScrollView>
-                        <Form>
-                            <Textarea rowSpan={50} bordered />
-                        </Form>
-                    </ScrollView>
-                </KeyboardAvoidingView>
-            </Content>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                <Button
-                    block
-                    onPress={() => props.navigation.goBack()}
-                    style={style.btnStyle} >
-                    <Text>Concluído</Text>
-                </Button>
-            </View>
-        </Container>
-    );
+interface StateProps {
+  plantaAtiva: Planta,
+  programacoesRealizadas: ProgramacaoRealizada[],
+  navigation: NavigationScreenProp<any, any>,
+}
+
+interface DispatchProps {
+  armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
+}
+
+type Props = StateProps & DispatchProps
+
+class ComentariosGerais extends Component<Props> {
+
+  salvaComentario = () => {
+    const { navigation, plantaAtiva } =this.props;
+    const { idItem } = navigation.state.params;
+        const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    navigation.goBack();
+  }
+
+  render() {
+    return <Container>
+      <HeaderNav title={"Comentários"} />
+      <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+        <KeyboardAvoidingView
+          behavior="height"
+        >
+          <ScrollView>
+            <Form>
+              <Textarea rowSpan={50} bordered />
+            </Form>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </Content>
+      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+        <Button
+          block
+          onPress={() => this.salvaComentario()}
+          style={style.btnStyle} >
+          <Text>Concluído</Text>
+        </Button>
+      </View>
+    </Container>
+  };
 }
 
 const style = {
@@ -36,3 +63,14 @@ const style = {
         flex: 1
     }
 }
+
+
+const mapStateToProps = (state: ApplicationState) => ({
+  plantaAtiva: state.plantaReducer.plantaAtiva,
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ComentariosGerais)

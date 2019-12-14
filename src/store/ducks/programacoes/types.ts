@@ -7,6 +7,10 @@
     CONFIRMA_PERIODO = '@programacoes/CONFIRMA_PERIODO',
     LIBERAR_DOCUMENTO = '@programacoes/LIBERAR_DOCUMENTO',
     ARMAZENA_FOTOS = '@programacoes/ARMAZENA_FOTOS',
+    ARMAZENA_QUANTIDADES = '@programacoes/ARMAZENA_QUANTIDADES',
+    ARMAZENA_COMENTARIO_ITEM = '@programacoes/ARMAZENA_COMENTARIO_ITEM',
+    ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
+    CONCLUI_ITEM = '@programacoes/CONCLUI_ITEM',
     DELETE_ALL = '@programacoes/DELETE_ALL',
  }
 
@@ -17,8 +21,11 @@
 export interface QuantidadeSubstituida {
     material_id: number
     item_id: number
+    reator_id?: number
+    base_id?: number
     quantidade_substituida: number
-    data_manutencao: string
+    quantidade_substituida_base?: number
+    quantidade_substituida_reator?: number
 }
 
 export interface Estoque {

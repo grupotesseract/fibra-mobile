@@ -1,12 +1,11 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { CameraRoll, Image, ScrollView, View, FlatList } from 'react-native';
+import { Image, View, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
-import { armazenaFotos } from '../../store/ducks/programacoes/actions';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
@@ -36,7 +35,7 @@ class FotosItemScreen extends Component<Props> {
             photos,
         })
     };
-    
+
     pickImage = async () => {
         const { photos } = this.state;
         ImagePicker.launchCameraAsync()
@@ -54,7 +53,7 @@ class FotosItemScreen extends Component<Props> {
     componentDidMount() {
         this.getPermissionAsync();
         const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
-        const { idItem } = navigation.state.params; 
+        const { idItem } = navigation.state.params;
         const idProgramacao = plantaAtiva.proximaProgramacao.id;
 
         const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
@@ -78,7 +77,7 @@ class FotosItemScreen extends Component<Props> {
 
     storePhotos = async () => {
         const { navigation, plantaAtiva, armazenaFotos } = this.props;
-        const { idItem } = navigation.state.params; 
+        const { idItem } = navigation.state.params;
         const { photos } = this.state;
         const idProgramacao = plantaAtiva.proximaProgramacao.id;
         await armazenaFotos(idProgramacao, idItem, photos);
@@ -90,10 +89,10 @@ class FotosItemScreen extends Component<Props> {
             }
         })
     }
-    
+
     render() {
         const { photos } = this.state;
-        const { idItem } = this.props.navigation.state.params; 
+        const { idItem } = this.props.navigation.state.params;
         return <Container>
             <HeaderNav title={"Fotos Item #"+idItem} />
             <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
@@ -112,7 +111,7 @@ class FotosItemScreen extends Component<Props> {
                     numColumns={3}
                     keyExtractor={(item, index) => String(index)}
                 />
-                <Fab 
+                <Fab
                     position="bottomRight"
                     style={{ backgroundColor: "#13328c" }}
                     onPress={() => { this.pickImage() }}>
@@ -136,7 +135,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FotosItemScreen)

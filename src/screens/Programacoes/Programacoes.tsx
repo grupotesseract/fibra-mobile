@@ -8,9 +8,9 @@ import { ApplicationState } from '../../store';
 import { ProgramacaoRealizada, Programacao } from '../../store/ducks/programacoes/types';
 
 const empresas = [
-    { 
-      id: 1, 
-      nome: 'Valentin e Saraiva e Filhos', 
+    {
+      id: 1,
+      nome: 'Valentin e Saraiva e Filhos',
       plantas: [
         {
           id: 1,
@@ -36,9 +36,9 @@ const empresas = [
         }
       ]
     },
-    { 
-      id: 2, 
-      nome: 'Rios e Filhos', 
+    {
+      id: 2,
+      nome: 'Rios e Filhos',
       plantas: [
         {
           id: 2,
@@ -53,7 +53,7 @@ const empresas = [
         }
       ]
     },
-    
+
 ]
 
 interface StateProps {
@@ -66,18 +66,18 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class Programacoes extends Component<Props> {    
+class Programacoes extends Component<Props> {
 
   state = {
     empresas
   }
 
   componentDidMount() {
-    const { deleteProgramacoes, programacoesRealizadas } = this.props;
+    const { programacoesRealizadas } = this.props;
     console.log( programacoesRealizadas );
-    
+    // this.props.deleteProgramacoes();
   }
-  
+
 
   render() {
     const { programacoesRealizadas } = this.props;
@@ -90,35 +90,35 @@ class Programacoes extends Component<Props> {
         plantas.push(
           <Card key={planta.proximaProgramacao.id}>
             <CardItem header bordered>
-                <Text>{empresa.nome}</Text>                  
+                <Text>{empresa.nome}</Text>
             </CardItem>
             <CardItem>
               <Left>
-                <Body>                                
+                <Body>
                   <Text>{planta.nome}</Text>
                   <Text note>{planta.proximaProgramacao.data_inicio_prevista} - {planta.proximaProgramacao.data_fim_prevista}</Text>
                   <View style={{flexDirection: "row"}}>
-                    <Badge 
+                    <Badge
                         style={style.badgeSync}
                         danger={!planta.proximaProgramacao.sincronizadoInfos}
                         success={planta.proximaProgramacao.sincronizadoInfos}>
                         <Text>Informações</Text>
                     </Badge>
-                    <Badge 
+                    <Badge
                         style={style.badgeSync}
                         danger={!planta.proximaProgramacao.sincronizadoFotos}
                         success={planta.proximaProgramacao.sincronizadoFotos}>
                         <Text>Fotos</Text>
-                    </Badge>                  
+                    </Badge>
                   </View>
-                  <Button 
-                    full 
-                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >                    
-                      <Text>SINCRONIZAR</Text>                        
+                  <Button
+                    full
+                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >
+                      <Text>SINCRONIZAR</Text>
                   </Button>
                 </Body>
               </Left>
-            </CardItem>                              
+            </CardItem>
           </Card>
         );
       })
@@ -130,8 +130,8 @@ class Programacoes extends Component<Props> {
 
         <Content padder>
           {
-            plantas          
-          }             
+            plantas
+          }
           {
             programacoesRealizadas.map( (programacaoRealizada: ProgramacaoRealizada) => {
 
@@ -143,7 +143,7 @@ class Programacoes extends Component<Props> {
                 <Text>data_fim_real {programacaoRealizada.programacao.data_fim_real}</Text>
                 <Text>comentarioGeral {programacaoRealizada.programacao.comentarioGeral}</Text>
 
-                <Text>qtdFotos {programacaoRealizada.fotos.length}</Text>
+                <Text>qtdFotos {programacaoRealizada.fotosItens.length}</Text>
               </Card>
             })
           }
@@ -160,14 +160,14 @@ class Programacoes extends Component<Props> {
   }
 }
 
-const style = {  
+const style = {
   badgeSync: {
-      margin: 5,      
+      margin: 5,
       height: 40,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: "row"  
+      flexDirection: "row"
   }
 }
 
@@ -175,7 +175,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Programacoes)
