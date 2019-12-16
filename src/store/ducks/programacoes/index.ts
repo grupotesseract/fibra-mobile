@@ -190,9 +190,9 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                 })
             }
         }
-        case ProgramacoesTypes.CONCLUI_ITEM:
+        case ProgramacoesTypes.INICIA_ITEM:
         {
-          const { idProgramacao, idItem } = action.payload;
+          const { idProgramacao, idItem, data } = action.payload;
           const { programacoesRealizadas } = state;
           return {
                 ...state,
@@ -200,12 +200,71 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     if (programacaoRealizada?.programacao?.id !== idProgramacao) {
                         return programacaoRealizada;
                     }
+                    const datasManutencoes = programacaoRealizada.datasManutencoes || [];
+                    const indexQtd = datasManutencoes.findIndex(d => d.item_id === idItem)
+                    // Se já existe uma data iniciada, NÃO substitui
+                    if (indexQtd >= 0) {
+                      return programacaoRealizada
+                    }
+                    // No caso de não existir uma data iniciada pra esse item, inclui
+                    return {
+                      ...programacaoRealizada,
+                      datasManutencoes: [
+                        ...datasManutencoes,
+                        {
+                          item_id: idItem,
+                          data_inicio: data,
+                        }
+                      ]
+                    }
+                })
+            }
+        }
+        case ProgramacoesTypes.CONCLUI_ITEM:
+        {
+          const { idProgramacao, idItem, data } = action.payload;
+          const { programacoesRealizadas } = state;
+          return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+
+                    // Define a data de conclusao
+                    let datasManutencoes = programacaoRealizada.datasManutencoes || [];
+                    const indexQtd = datasManutencoes.findIndex(d => d.item_id === idItem)
+                    // Se já existe uma data iniciada, preenche o campo data_fim
+                    if (indexQtd >= 0) {
+                      datasManutencoes = datasManutencoes.map(dataManutencao => {
+                        if (dataManutencao.item_id !== idItem) {
+                          return dataManutencao
+                        }
+                        return {
+                          ...dataManutencao,
+                          data_fim: data
+                        }
+                      })
+                    } else {
+                      // No caso de não existir uma data iniciada pra esse item
+                      // inclui um item somente com data_fim
+                      datasManutencoes = [
+                        ...datasManutencoes,
+                        {
+                          item_id: idItem,
+                          data_fim: data,
+                        }
+                      ]
+                    }
+
+                    // Define estado concluido para TRUE
                     const itensVistoriados = programacaoRealizada.itensVistoriados || [];
                     const indexItem = itensVistoriados.findIndex(i => i.id_item === idItem)
                     // Subsititui o item que já está armazenado
                     if (indexItem >= 0) {
                       return {
                         ...programacaoRealizada,
+                        datasManutencoes: datasManutencoes,
                         itensVistoriados: itensVistoriados.splice(indexItem, 1, {
                           concluido: true,
                           id_item: idItem
@@ -214,6 +273,7 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     }
                     return {
                       ...programacaoRealizada,
+                      datasManutencoes: datasManutencoes,
                       itensVistoriados: [
                         ...itensVistoriados,
                         {

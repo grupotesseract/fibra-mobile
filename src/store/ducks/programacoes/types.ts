@@ -10,6 +10,7 @@
     ARMAZENA_QUANTIDADES = '@programacoes/ARMAZENA_QUANTIDADES',
     ARMAZENA_COMENTARIO_ITEM = '@programacoes/ARMAZENA_COMENTARIO_ITEM',
     ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
+    INICIA_ITEM = '@programacoes/INICIA_ITEM',
     CONCLUI_ITEM = '@programacoes/CONCLUI_ITEM',
     DELETE_ALL = '@programacoes/DELETE_ALL',
  }
@@ -67,6 +68,12 @@ export interface ItensVistoriados {
   concluido: boolean
 }
 
+export interface DataManutencao {
+  item_id: number
+  data_inicio?: string
+  data_fim?: string
+}
+
 export interface ProgramacaoRealizada {
     programacao?: Programacao
     liberacoesDocumento?: LiberacaoDocumento[]
@@ -76,6 +83,7 @@ export interface ProgramacaoRealizada {
     comentarios?: Comentario[]
     fotosItens: FotosItem[]
     itensVistoriados?: ItensVistoriados[]
+    datasManutencoes?: DataManutencao[]
 }
 
 /**

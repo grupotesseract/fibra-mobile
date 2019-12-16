@@ -18,6 +18,7 @@ interface StateProps {
 
 interface DispatchProps {
   armazenaComentarioItem({ idProgramacao, idItem, comentario }): void
+  armazenaComentariosGerais({ idProgramacao, comentario }): void
 }
 
 type Props = StateProps & DispatchProps
@@ -29,12 +30,16 @@ class ComentariosGerais extends Component<Props> {
   }
 
   salvaComentario = async () => {
-    const { navigation, plantaAtiva, armazenaComentarioItem } = this.props;
-    const { idItem } = navigation.state.params;
+    const { navigation, plantaAtiva, armazenaComentarioItem, armazenaComentariosGerais } = this.props;
+    const idItem = navigation.state.params?.idItem || null;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const { comentario } = this.state;
 
-    await armazenaComentarioItem({idItem, idProgramacao, comentario});
+    if (idItem) {
+      await armazenaComentarioItem({ idItem, idProgramacao, comentario });
+    } else {
+      await armazenaComentariosGerais({ idProgramacao, comentario});
+    }
     navigation.goBack();
   }
 
