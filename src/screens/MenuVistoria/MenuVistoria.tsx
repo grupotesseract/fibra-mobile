@@ -7,7 +7,7 @@ export default class MenuVistoria extends Component {
     return (
         <Container>
             <Content padder>
-                <Image 
+                <Image
                   style={{ width: 300, height: 87 }}
                   resizeMode="contain"
                   source={require('../../../assets/fibraheader.png')}/>
@@ -18,21 +18,21 @@ export default class MenuVistoria extends Component {
                   <Icon name="cube"/>
                   <Text>Estoque de Material</Text>
                 </Button>
-                <Button 
+                <Button
                   onPress={() => this.props.navigation.navigate('EntradaMateriais')}
                   style={style.btnStyle}
                   >
                   <Icon name="download"/>
                   <Text>Entrada de materiais</Text>
                 </Button>
-                <Button 
+                <Button
                   onPress={() => this.props.navigation.navigate('ComentariosGerais')}
                   style={style.btnStyle}
                   >
                   <Icon name="md-chatboxes"/>
                   <Text>Comentários Gerais</Text>
                 </Button>
-                <Button 
+                <Button
                   onPress={() => this.props.navigation.navigate('ManutencaoIluminacao')}
                   style={style.btnStyle}
                   >
