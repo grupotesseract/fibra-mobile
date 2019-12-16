@@ -80,6 +80,7 @@ class ManutencaoIluminacao extends Component<Props> {
     handleScan(scannedObj) {
         const { navigation } = this.props;
         const qrcode = scannedObj.data;
+        console.log('qrcode', qrcode);
         this.setState({
             qrcode,
             readingQRCode: false,

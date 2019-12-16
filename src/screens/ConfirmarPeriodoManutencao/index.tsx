@@ -32,10 +32,14 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
 
   render() {
     const { plantaAtiva } = this.props;
+
+    console.log(plantaAtiva);
     if (!plantaAtiva) {
       return <ActivityIndicator />
     }
+
     const { proximaProgramacao } = plantaAtiva;
+    console.log(proximaProgramacao);
     if (!proximaProgramacao) {
       return <ActivityIndicator />
     }
