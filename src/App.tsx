@@ -16,11 +16,11 @@ import EntradaMateriais from "./screens/EntradaMateriais/EntradaMateriais";
 import ManutencaoIluminacao from "./screens/ManutencaoIluminacao/ManutencaoIluminacao";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
 import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
-import FotosItem from "./screens/FotosItem/FotosItem";
 import Colaboradores from "./screens/Colaboradores/Colaboradores";
 import { store, persistor } from "./store";
 import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
+import FotosItemScreen from "./screens/FotosItem/FotosItem";
 
 const AuthStack = createStackNavigator(
   { 
@@ -31,7 +31,7 @@ const AuthStack = createStackNavigator(
     EntradaMateriais: { screen: EntradaMateriais }, 
     ManutencaoIluminacao: { screen: ManutencaoIluminacao },
     ManutencaoItem: { screen: ManutencaoItem },
-    FotosItem: { screen: FotosItem },
+    FotosItem: { screen: FotosItemScreen },
     ComentariosGerais: { screen: ComentariosGerais },
     SelecionaPlanta: { screen: SelecionaPlanta }, 
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao }, 

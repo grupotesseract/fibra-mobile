@@ -15,13 +15,19 @@ import { Programacao, Estoque } from "../programacoes/types";
   */
 export interface Material {
     id: number,
+    reator_id?: number,
+    base_id?: number,
     nome: string,
     potencia?: string,
     tensao?: string,
-    base?: any,
-    reator?: any,
+    base?: string,
+    reator?: string,
     tipoMaterial?: string,
-    quantidadeInstalada?: number
+    quantidadeInstalada?: number,
+    quantidade?: number,
+    quantidadeBase?: number,
+    quantidadeReator?: number,
+    quantidadeConfirmada?: boolean,
 }
 
 // Item é uma sala dentro de uma planta
@@ -30,7 +36,8 @@ export interface Item {
     nome?: string
     qrcode?: string
     circuito?: string
-    materiais?: Material[]
+    materiais?: Material[],
+    concluido?: boolean
 }
 
 export interface Planta {

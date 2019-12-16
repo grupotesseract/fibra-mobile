@@ -99,7 +99,11 @@ class LiberarDocumento extends Component<Props> {
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
             </View>
           </View>
-          <Button block onPress={() => this.liberarDocumento()}>
+          <Button 
+            block 
+            disabled={idsUsuariosSelecionados.length <= 0}
+            onPress={() => this.liberarDocumento()}
+          >
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>

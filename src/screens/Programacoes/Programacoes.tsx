@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Container, Content, Text, Card, CardItem, Body, Left, Badge, View, Button, Icon, Spinner } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView } from 'react-native';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { ApplicationState } from '../../store';
+import { ProgramacaoRealizada, Programacao } from '../../store/ducks/programacoes/types';
 
 const empresas = [
-    { 
-      id: 1, 
-      nome: 'Valentin e Saraiva e Filhos', 
+    {
+      id: 1,
+      nome: 'Valentin e Saraiva e Filhos',
       plantas: [
         {
           id: 1,
@@ -32,9 +36,9 @@ const empresas = [
         }
       ]
     },
-    { 
-      id: 2, 
-      nome: 'Rios e Filhos', 
+    {
+      id: 2,
+      nome: 'Rios e Filhos',
       plantas: [
         {
           id: 2,
@@ -49,16 +53,34 @@ const empresas = [
         }
       ]
     },
-    
+
 ]
 
-export default class Programacoes extends Component {    
+interface StateProps {
+  programacoesRealizadas: ProgramacaoRealizada[],
+}
+
+interface DispatchProps {
+  deleteProgramacoes(): void,
+}
+
+type Props = StateProps & DispatchProps
+
+class Programacoes extends Component<Props> {
 
   state = {
     empresas
   }
 
+  componentDidMount() {
+    const { programacoesRealizadas } = this.props;
+    console.log( programacoesRealizadas );
+    // this.props.deleteProgramacoes();
+  }
+
+
   render() {
+    const { programacoesRealizadas } = this.props;
     const { empresas } = this.state;
 
     var plantas = [];
@@ -68,35 +90,35 @@ export default class Programacoes extends Component {
         plantas.push(
           <Card key={planta.proximaProgramacao.id}>
             <CardItem header bordered>
-                <Text>{empresa.nome}</Text>                  
+                <Text>{empresa.nome}</Text>
             </CardItem>
             <CardItem>
               <Left>
-                <Body>                                
+                <Body>
                   <Text>{planta.nome}</Text>
                   <Text note>{planta.proximaProgramacao.data_inicio_prevista} - {planta.proximaProgramacao.data_fim_prevista}</Text>
                   <View style={{flexDirection: "row"}}>
-                    <Badge 
+                    <Badge
                         style={style.badgeSync}
                         danger={!planta.proximaProgramacao.sincronizadoInfos}
                         success={planta.proximaProgramacao.sincronizadoInfos}>
                         <Text>Informações</Text>
                     </Badge>
-                    <Badge 
+                    <Badge
                         style={style.badgeSync}
                         danger={!planta.proximaProgramacao.sincronizadoFotos}
                         success={planta.proximaProgramacao.sincronizadoFotos}>
                         <Text>Fotos</Text>
-                    </Badge>                  
+                    </Badge>
                   </View>
-                  <Button 
-                    full 
-                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >                    
-                      <Text>SINCRONIZAR</Text>                        
+                  <Button
+                    full
+                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >
+                      <Text>SINCRONIZAR</Text>
                   </Button>
                 </Body>
               </Left>
-            </CardItem>                              
+            </CardItem>
           </Card>
         );
       })
@@ -108,21 +130,52 @@ export default class Programacoes extends Component {
 
         <Content padder>
           {
-            plantas          
-          }             
+            plantas
+          }
+          {
+            programacoesRealizadas.map( (programacaoRealizada: ProgramacaoRealizada) => {
+
+              return <Card key={programacaoRealizada.programacao.id}>
+                <Text>programacao</Text>
+                <Text>data_inicio_prevista {programacaoRealizada.programacao.data_inicio_prevista}</Text>
+                <Text>data_fim_prevista {programacaoRealizada.programacao.data_fim_prevista}</Text>
+                <Text>data_inicio_real {programacaoRealizada.programacao.data_inicio_real}</Text>
+                <Text>data_fim_real {programacaoRealizada.programacao.data_fim_real}</Text>
+                <Text>comentarioGeral {programacaoRealizada.programacao.comentarioGeral}</Text>
+
+                <Text>qtdFotos {programacaoRealizada.fotosItens.length}</Text>
+              </Card>
+            })
+          }
+
+          <Button
+            full
+            onPress={() => this.props.deleteProgramacoes()}
+          >
+            <Text>Limpar programações</Text>
+          </Button>
         </Content>
       </Container>
     );
   }
 }
 
-const style = {  
+const style = {
   badgeSync: {
-      margin: 5,      
+      margin: 5,
       height: 40,
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      flexDirection: "row"      
+      flexDirection: "row"
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(ProgramacoesActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Programacoes)

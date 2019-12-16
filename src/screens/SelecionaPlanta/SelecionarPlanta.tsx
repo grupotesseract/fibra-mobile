@@ -9,9 +9,11 @@ import { EmpresasState } from '../../store/ducks/empresas/types';
 import { ApplicationState } from '../../store'
 import { Planta } from '../../store/ducks/planta/types';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
   empresas: EmpresasState,
+  navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
@@ -72,7 +74,7 @@ class SelecionaPlanta extends Component<Props, State> {
       quantidadesSubstituidas: [],
       estoques: [],
       comentarios: [],
-      fotos: [],
+      fotosItens: [],
     });
 
     navigation.navigate('ConfirmarPeriodoManutencao');
