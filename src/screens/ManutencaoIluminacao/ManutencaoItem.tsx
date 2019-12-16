@@ -32,6 +32,7 @@ class ManutencaoItem extends Component<Props> {
     emergencia: false,
     qrcode: 'FIBRA-#',
     error: false,
+    idItem: null
   }
 
   onChangeQuantidade = (idMaterial: number, quantidade: number) => {
@@ -150,12 +151,13 @@ class ManutencaoItem extends Component<Props> {
       item = itens.find(item => item.qrcode === qrcode);
     }
     if (item) {
-      const { materiais, circuito, qrcode, nome } = item;
+      const { materiais, circuito, qrcode, nome, id } = item;
       this.setState({
         materiais,
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
+        idItem: item.id
       });
       this.iniciarItem(idItem);
     } else {
@@ -166,9 +168,8 @@ class ManutencaoItem extends Component<Props> {
   }
 
   render() {
-    const { error, materiais, qrcode, emergencia, nome } = this.state;
+    const { error, materiais, qrcode, emergencia, nome, idItem } = this.state;
     const { navigation } = this.props;
-    const { idItem } = navigation.state.params;
 
     if (error) {
       return <Container>
