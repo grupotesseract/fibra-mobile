@@ -18,7 +18,8 @@ interface StateProps {
 
 interface DispatchProps {
   armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
-  concluiItem(idItem: number, idProgramacao: number): void
+  concluiItem({ idItem, idProgramacao, data }): void
+  iniciaItem({ idItem, idProgramacao, data }): void
 }
 
 type Props = StateProps & DispatchProps
@@ -127,8 +128,16 @@ class ManutencaoItem extends Component<Props> {
     const { navigation, concluiItem, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     await this.salvaQuantidades(idItem);
-    await concluiItem(idItem, idProgramacao);
+    const data = new Date();
+    await concluiItem({ idItem, idProgramacao, data });
     navigation.navigate({ routeName: 'ManutencaoIluminacao' })
+  }
+
+  iniciarItem = async (idItem: number) => {
+    const { iniciaItem, plantaAtiva } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const data = new Date();
+    await iniciaItem({ idItem, idProgramacao, data });
   }
 
   componentDidMount() {
@@ -149,7 +158,8 @@ class ManutencaoItem extends Component<Props> {
         emergencia: circuito === 'Emergência',
         nome,
         idItem: item.id
-      })
+      });
+      this.iniciarItem(idItem);
     } else {
       this.setState({
         error: 'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.'
@@ -194,7 +204,7 @@ class ManutencaoItem extends Component<Props> {
             </Card>
             <ScrollView>
               {
-                materiais ?.map((material: Material) => {
+                materiais?.map((material: Material) => {
                   return <Card key={material.id}>
                     <CardItem header bordered>
                       <Text>{material.nome}</Text>
@@ -274,7 +284,7 @@ class ManutencaoItem extends Component<Props> {
                     </CardItem>
                   </Card>
                 })
-                        }
+            }
             </ScrollView>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
               <Button
