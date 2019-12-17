@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Form, Item, Label, Button, Text } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-
 import { bindActionCreators, Dispatch } from 'redux';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { connect } from 'react-redux';
@@ -33,13 +32,11 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
   render() {
     const { plantaAtiva } = this.props;
 
-    console.log(plantaAtiva);
     if (!plantaAtiva) {
       return <ActivityIndicator />
     }
 
     const { proximaProgramacao } = plantaAtiva;
-    console.log(proximaProgramacao);
     if (!proximaProgramacao) {
       return <ActivityIndicator />
     }
@@ -47,7 +44,7 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
     const dataFimPrevista = proximaProgramacao.data_fim_prevista.split('T')[0];
     return (
       <Container>
-        
+
         <HeaderNav title="Período Manutenção"/>
 
         <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
@@ -78,7 +75,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmarPeriodoManutencao)

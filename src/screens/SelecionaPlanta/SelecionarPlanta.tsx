@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label } from 'native-base';
+import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as PlantaActions from '../../store/ducks/planta/actions'
@@ -65,20 +65,27 @@ class SelecionaPlanta extends Component<Props, State> {
   iniciaManutencao = async () => {
     const { navigation, setPlantaAtiva, addProgramacao } = this.props;
     const { plantaSelecionada } = this.state;
+    const { proximaProgramacao } = plantaSelecionada;
+    if (!proximaProgramacao) {
+      Toast.show({
+        text: 'Sem programação armazenada para esta planta!',
+        position: 'top',
+      });
+    } else {
+      await setPlantaAtiva(plantaSelecionada);
+      await addProgramacao({
+        programacao: plantaSelecionada.proximaProgramacao,
+        liberacoesDocumentos: [],
+        entradas: [],
+        quantidadesSubstituidas: [],
+        itensVistoriados: [],
+        estoques: [],
+        comentarios: [],
+        fotosItens: [],
+      });
 
-    await setPlantaAtiva(plantaSelecionada);
-    await addProgramacao({
-      programacao: plantaSelecionada.proximaProgramacao,
-      liberacoesDocumentos: [],
-      entradas: [],
-      quantidadesSubstituidas: [],
-      itensVistoriados: [],
-      estoques: [],
-      comentarios: [],
-      fotosItens: [],
-    });
-
-    navigation.navigate('ConfirmarPeriodoManutencao');
+      navigation.navigate('ConfirmarPeriodoManutencao');
+    }
   }
 
   render() {

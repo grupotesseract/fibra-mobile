@@ -3,79 +3,35 @@ import { Container, Content, Button, Text, Card, CardItem, Body, Item, Label } f
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
-import { Empresa } from '../../store/ducks/empresas/types';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Planta } from '../../store/ducks/planta/types';
-
-const materiais = [
-    {
-        id:1,
-        tipo: 'FL',
-        nome: 'Fluorescente FL',
-        tensao: '227V',
-        potencia: '150W',
-        base: 'E27',
-        quantidade: 20,
-        quantidadeConfirmada: false
-    },
-    {
-        id:2,
-        tipo: 'FL',
-        nome: 'Fluorescente FL',
-        tensao: '110V',
-        potencia: '150W',
-        base: 'MR11',
-        quantidade: 15,
-        quantidadeConfirmada: false
-    },
-    {
-        id:3,
-        tipo: 'FL',
-        nome: 'Fluorescente FL',
-        tensao: '227V',
-        potencia: '50W',
-        base: 'MR16',
-        quantidade: 18,
-        quantidadeConfirmada: false
-    },
-    {
-        id:4,
-        tipo: 'FL',
-        nome: 'Fluorescente FL',
-        tensao: '227V',
-        potencia: '150W',
-        base: null,
-        quantidade: 100,
-        quantidadeConfirmada: false
-    }
-]
+import { NavigationScreenProp } from 'react-navigation';
+import { Estoque } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
-  empresas: Empresa[],
   plantaAtiva: Planta,
+  navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
+  armazenaEstoque(idProgramacao: number, estoques: Estoque[]): void
 }
 
 type Props = StateProps & DispatchProps
 
-class Estoque extends Component<Props> {
+class EstoqueScreen extends Component<Props> {
     state = {
-        materiais
+        materiais: []
     }
 
     componentDidMount() {
-        const { empresas, plantaAtiva } = this.props;
-        const idPlanta = plantaAtiva.id;
+        const { plantaAtiva } = this.props;
 
-        const empresa = empresas.find(empresa => {
-            return empresa.plantas.find(planta => planta.id === idPlanta)
-        })
-        const planta = empresa.plantas.find(planta => planta.id === idPlanta)
+        const { estoque } = plantaAtiva;
+        this.setState({ materiais: estoque })
     }
 
     onChangeQuantidade = (idMaterial, quantidade) => {
@@ -107,6 +63,18 @@ class Estoque extends Component<Props> {
         this.setState({materiais: novosMateriais})
     }
 
+    concluiEstoque = async () => {
+      const { materiais } = this.state;
+      const { navigation, armazenaEstoque, plantaAtiva } = this.props;
+      const idProgramacao = plantaAtiva.proximaProgramacao.id;
+      const estoques = materiais.map( material => ({
+        material_id: material.id,
+        quantidade_inicial: material.quantidade
+      }));
+      await armazenaEstoque(idProgramacao, estoques);
+      navigation.navigate('MenuVistoria');
+    }
+
     render() {
         const { materiais } = this.state;
         return (
@@ -125,10 +93,11 @@ class Estoque extends Component<Props> {
                                         </CardItem>
                                         <CardItem>
                                             <Body>
-                                                <Text>Tipo: {material.tipo}</Text>
+                                                <Text>Tipo: {material.tipoMaterial}</Text>
                                                 <Text>Potência: {material.potencia}</Text>
                                                 <Text>Tensão: {material.tensao}</Text>
-                                                <Text>Base: {material.base}</Text>
+                                                { material.reator && <Text>Reator: {material.reator}</Text> }
+                                                { material.base && <Text>Base: {material.base}</Text> }
                                             </Body>
                                         </CardItem>
                                         <CardItem footer bordered>
@@ -142,10 +111,10 @@ class Estoque extends Component<Props> {
                                                 rounded={true}
                                                 value={material.quantidade}
                                                 onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
-                                            
+
                                             <Button
-                                                style={{marginLeft: 10}} 
-                                                rounded={true} 
+                                                style={{marginLeft: 10}}
+                                                rounded={true}
                                                 warning={!material.quantidadeConfirmada}
                                                 success={material.quantidadeConfirmada}
                                                 onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
@@ -159,10 +128,10 @@ class Estoque extends Component<Props> {
                             }
                         <Button
                             block
-                            onPress={() => this.props.navigation.navigate('MenuVistoria')}
+                            onPress={() => this.concluiEstoque()}
                             style={style.btnStyle}
                             disabled={!materiais.reduce( (tudoConfirmado, material) => {
-                                return tudoConfirmado 
+                                return tudoConfirmado
                                         && material.quantidadeConfirmada
                             }, true)}
                         >
@@ -183,11 +152,10 @@ const style = {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  empresas: state.empresasReducer.listaEmpresas,
   plantaAtiva: state.plantaReducer.plantaAtiva,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Estoque)
+export default connect(mapStateToProps, mapDispatchToProps)(EstoqueScreen)
