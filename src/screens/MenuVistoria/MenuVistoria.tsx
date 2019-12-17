@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { ApplicationState } from '../../store';
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -28,6 +29,8 @@ class MenuVistoria extends Component<Props> {
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
     const { estoqueConcluido, entradaConcluida } = programacao;
+
+    console.log('programacao atual', programacao)
     return (
         <Container>
             <Content padder>

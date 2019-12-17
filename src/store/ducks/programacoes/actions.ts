@@ -5,6 +5,7 @@ export const armazenaEstoque = (idProgramacao: number, estoque: Estoque[]) => ac
 export const armazenaEntrada = (idProgramacao: number, entrada: Entrada[]) => action(ProgramacoesTypes.ARMAZENA_ENTRADA, { idProgramacao, entrada })
 export const updateProgramacao = ({ idProgramacao, programacao }) => action(ProgramacoesTypes.UPDATE_PROGRAMACAO, { idProgramacao, programacao })
 export const iniciaItem = ({ idItem, idProgramacao, data}) => action(ProgramacoesTypes.INICIA_ITEM, { idProgramacao, idItem, data })
+export const concluiManutencao = ({ idProgramacao }) => action(ProgramacoesTypes.CONCLUI_MANUTENCAO, { idProgramacao })
 export const concluiItem = ({ idItem, idProgramacao, data }) => action(ProgramacoesTypes.CONCLUI_ITEM, { idProgramacao, idItem, data })
 export const armazenaComentariosGerais = ({ idProgramacao, comentario }) => action(ProgramacoesTypes.ARMAZENA_COMENTARIOS_GERAIS, { idProgramacao, comentario })
 export const armazenaComentarioItem = ({ idProgramacao, idItem, comentario }) => action(ProgramacoesTypes.ARMAZENA_COMENTARIO_ITEM, { idProgramacao, idItem, comentario })

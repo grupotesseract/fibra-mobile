@@ -63,42 +63,43 @@ class Programacoes extends Component<Props> {
 
       //Envia fotos item por item
       const { fotosItens } = programacao;
-      fotosItens.forEach(fotoItem => {
+      const promisesFotos = fotosItens.map(async fotoItem => {
         const idItem = fotoItem.id_item;
         const fotos = fotoItem.fotos || [];
         let fotosEnviadas = fotoItem.fotosEnviadas || false;
 
         console.log("FotoItem", fotoItem)
         if (!fotosEnviadas) {
-          uploadFotos({ idProgramacao, idItem, fotos })
-            .then(res => {
-              if (res.error) {
-                console.log("Erro ao subir fotos", res.error);
-              } else {
-                fotosEnviadas = true;
-                console.log("Dados enviados!", res)
-              }
-
-              updateProgramacao(
-                {
-                  idProgramacao,
-                  programacao: {
-                    ...programacao,
-                    fotosItens: fotosItens.map(fi => {
-                      if (fi.id_item !== fotoItem.id_item) {
-                        return fi;
-                      }
-                      return {
-                        ...fi,
-                        fotosEnviadas
-                      }
-                    })
-                  }
-                }
-              );
-            });
+          try {
+            const res = await uploadFotos({ idProgramacao, idItem, fotos });
+            if (res.error) {
+              console.log("Erro ao subir fotos", res.error);
+            } else {
+              fotosEnviadas = true;
+              console.log("Dados enviados!", res)
+            }
+          } catch(err) {
+            console.log("Erro ao subir fotos", err);
+          }
         }
-      })
+
+        return {
+          ...fotoItem,
+          fotosEnviadas
+        }
+      });
+      const fotosItensAtualizadas = await Promise.all(promisesFotos);
+      updateProgramacao(
+        {
+          idProgramacao,
+          programacao: {
+            ...programacao,
+            fotosItens: fotosItensAtualizadas,
+            dadosEnviados,
+            errorSync
+          },
+        }
+      );
     }
   }
 
