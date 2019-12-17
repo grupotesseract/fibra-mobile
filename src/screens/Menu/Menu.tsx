@@ -37,30 +37,32 @@ class Menu extends Component<Props> {
                 <Icon name="bulb"/>
                 <Text>Manutenção de iluminação</Text>
               </Button>
-              <Button 
+              <Button
                 onPress={() => navigate('Colaboradores')}
                 style={style.btnStyle}
                 >
                 <Icon name="person"/>
                 <Text>Colaboradores</Text>
               </Button>
-              { role === 'admin' && 
-              <Button 
-                onPress={() => navigate('SyncEmpresas')}
-                style={style.btnStyle}
+              { role === 'admin' &&
+              <>
+                <Button
+                  onPress={() => navigate('SyncEmpresas')}
+                  style={style.btnStyle}
                 >
-                <Icon name="cloud-download"/>
-                <Text>Empresas, plantas e usuários</Text>
-              </Button>
+                  <Icon name="cloud-download" />
+                  <Text>Empresas, plantas e usuários</Text>
+                </Button>
+                <Button
+                  onPress={() => navigate('Programacoes')}
+                  style={style.btnStyle}
+                >
+                  <Icon name="cube" />
+                  <Text>Programações</Text>
+                </Button>
+              </>
               }
-              <Button 
-                onPress={() => navigate('Programacoes')}
-                style={style.btnStyle}
-                >
-                <Icon name="cube"/>
-                <Text>Programações</Text>
-              </Button>
-              <Button 
+              <Button
                 onPress={() => this.logoff()}
                 style={style.btnStyle}
                 >
@@ -83,7 +85,7 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(AuthActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)

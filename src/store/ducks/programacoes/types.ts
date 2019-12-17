@@ -14,6 +14,7 @@
     ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
     INICIA_ITEM = '@programacoes/INICIA_ITEM',
     CONCLUI_ITEM = '@programacoes/CONCLUI_ITEM',
+    CONCLUI_MANUTENCAO = '@programacoes/CONCLUI_MANUTENCAO',
     UPDATE_PROGRAMACAO = '@programacoes/UPDATE_PROGRAMACAO',
     DELETE_ALL = '@programacoes/DELETE_ALL',
  }

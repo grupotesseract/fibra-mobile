@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text, List, ListItem, Left, Right, Icon, Grid, Row, Badge } from 'native-base';
+import { Container, Content, Button, Text, List, ListItem, Left, Right, Icon, Badge } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, ActivityIndicator } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -20,6 +20,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
+  concluiManutencao({ idProgramacao }): void
 }
 
 type Props = StateProps & DispatchProps
@@ -74,8 +75,10 @@ class ManutencaoIluminacao extends Component<Props> {
         })
     }
 
-    concluirManutencao() {
-      const { navigation } = this.props;
+    concluirManutencao = async () => {
+      const { plantaAtiva, navigation, concluiManutencao } = this.props;
+      const idProgramacao = plantaAtiva.proximaProgramacao.id;
+      await concluiManutencao({ idProgramacao });
       navigation.navigate('Menu');
     }
 
@@ -98,59 +101,61 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     render() {
-        const { readingQRCode, itens } = this.state;
-        if (readingQRCode) {
-            return <QRCodeReader
-                handleClose={() => this.handleCloseQRCode()}
-                handleScan={e => this.handleScan(e)} />
-        }
+      const { readingQRCode, itens } = this.state;
+      if (readingQRCode) {
+        return <QRCodeReader
+          handleClose={() => this.handleCloseQRCode()}
+          handleScan={e => this.handleScan(e)} />
+      }
 
-        return (
-            <Container>
-                <HeaderNav title="Manutenção Iluminação"  />
-                <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-                    <ScrollView>
-                        <List>
-                        {
-                            itens?.map( (item: Item) => {
-                                const isEmergencia = item.circuito === 'Emergência';
-                                return <ListItem key={item.id} onPress={() => this.openItem(item)} disabled={item.concluido}>
-                                    <Left>
-                                        <Badge
-                                            warning={isEmergencia}
-                                            primary={!isEmergencia}
-                                            style={{ marginRight: 10 }}>
-                                            <Text>{isEmergencia ? 'E' : 'N'}</Text>
-                                        </Badge>
-                                        <Text>{item.nome}</Text>
-                                    </Left>
-                                    <Right>
-                                        <Badge
-                                          danger={!item.concluido}
-                                          success={item.concluido}
-                                          style={{ marginLeft: 10, width: 26 }}>
-                                        </Badge>
-                                    </Right>
-                                </ListItem>
-                            })
-                        }
-                        </List>
-                    </ScrollView>
-                </Content>
-                <View style={{ flexDirection: 'row' }}>
-                    <Button style={style.botaoQuadrado} onPress={() => this.ativaQRCodeReader()}>
-                        <Icon name='md-qr-scanner' style={{fontSize: 48}}/>
-                        <Text>LER QRCODE</Text>
-                    </Button>
-                    <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencao()}>
-                        <Icon name='md-checkmark' style={{fontSize: 36}} />
-                        <View style={{alignItems: 'center'}}>
-                            <Text>CONCLUIR</Text>
-                        </View>
-                    </Button>
-                </View>
-            </Container>
-        );
+      return (
+        <Container>
+          <HeaderNav title="Manutenção Iluminação" />
+          <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+            <ScrollView>
+              <List>
+                {
+                  (!itens || itens.length === 0) ?
+                    <ActivityIndicator /> :
+                    itens.map((item: Item) => {
+                      const isEmergencia = item.circuito === 'Emergência';
+                      return <ListItem key={item.id} onPress={() => this.openItem(item)} disabled={item.concluido}>
+                        <Left>
+                          <Badge
+                            warning={isEmergencia}
+                            primary={!isEmergencia}
+                            style={{ marginRight: 10 }}>
+                            <Text>{isEmergencia ? 'E' : 'N'}</Text>
+                          </Badge>
+                          <Text>{item.nome}</Text>
+                        </Left>
+                        <Right>
+                          <Badge
+                            danger={!item.concluido}
+                            success={item.concluido}
+                            style={{ marginLeft: 10, width: 26 }}>
+                          </Badge>
+                        </Right>
+                      </ListItem>
+                    })
+                }
+              </List>
+            </ScrollView>
+          </Content>
+          <View style={{ flexDirection: 'row' }}>
+            <Button style={style.botaoQuadrado} onPress={() => this.ativaQRCodeReader()}>
+              <Icon name='md-qr-scanner' style={{ fontSize: 48 }} />
+              <Text>LER QRCODE</Text>
+            </Button>
+            <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencao()}>
+              <Icon name='md-checkmark' style={{ fontSize: 36 }} />
+              <View style={{ alignItems: 'center' }}>
+                <Text>CONCLUIR</Text>
+              </View>
+            </Button>
+          </View>
+        </Container>
+      );
     }
 }
 

@@ -370,6 +370,27 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
             return state;
           }
         }
+        case ProgramacoesTypes.CONCLUI_MANUTENCAO:
+        {
+          const { idProgramacao } = action.payload;
+          const { programacoesRealizadas } = state;
+
+          return {
+            ...state,
+            programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+              if (programacaoRealizada?.programacao ?.id !== idProgramacao) {
+                return programacaoRealizada;
+              }
+              return {
+                ...programacaoRealizada,
+                programacao: {
+                  ...programacaoRealizada.programacao,
+                  data_fim_real: new Date(),
+                }
+              }
+            })
+          }
+        }
         case ProgramacoesTypes.DELETE_ALL:
             return {
                 ...state,

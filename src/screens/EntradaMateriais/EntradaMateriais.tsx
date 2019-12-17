@@ -30,7 +30,6 @@ class EntradaMateriais extends Component<Props> {
 
     componentDidMount() {
         const { plantaAtiva } = this.props;
-        console.log("plantaAtiva", plantaAtiva)
         const entrada = plantaAtiva?.entrada || [];
         this.setState({ materiais: entrada })
     }
