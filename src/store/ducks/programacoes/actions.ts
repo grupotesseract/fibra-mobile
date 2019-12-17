@@ -1,6 +1,8 @@
 import { action } from 'typesafe-actions';
-import { ProgramacoesTypes, ProgramacaoRealizada, QuantidadeSubstituida } from './types';
+import { ProgramacoesTypes, ProgramacaoRealizada, QuantidadeSubstituida, Entrada, Estoque } from './types';
 
+export const armazenaEstoque = (idProgramacao: number, estoque: Estoque[]) => action(ProgramacoesTypes.ARMAZENA_ESTOQUE, { idProgramacao, estoque })
+export const armazenaEntrada = (idProgramacao: number, entrada: Entrada[]) => action(ProgramacoesTypes.ARMAZENA_ENTRADA, { idProgramacao, entrada })
 export const updateProgramacao = ({ idProgramacao, programacao }) => action(ProgramacoesTypes.UPDATE_PROGRAMACAO, { idProgramacao, programacao })
 export const iniciaItem = ({ idItem, idProgramacao, data}) => action(ProgramacoesTypes.INICIA_ITEM, { idProgramacao, idItem, data })
 export const concluiItem = ({ idItem, idProgramacao, data }) => action(ProgramacoesTypes.CONCLUI_ITEM, { idProgramacao, idItem, data })

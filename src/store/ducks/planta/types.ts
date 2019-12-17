@@ -1,4 +1,4 @@
-import { Programacao, Estoque } from "../programacoes/types";
+import { Programacao } from "../programacoes/types";
 
 /**
  * Action types
@@ -45,7 +45,8 @@ export interface Planta {
     nome?: string
     proximaProgramacao?: Programacao
     itens?: Item[]
-    estoque: Estoque[]
+    estoque?: Material[]
+    entrada?: Material[]
 }
 
 /**

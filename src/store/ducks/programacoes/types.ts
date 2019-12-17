@@ -7,6 +7,8 @@
     CONFIRMA_PERIODO = '@programacoes/CONFIRMA_PERIODO',
     LIBERAR_DOCUMENTO = '@programacoes/LIBERAR_DOCUMENTO',
     ARMAZENA_FOTOS = '@programacoes/ARMAZENA_FOTOS',
+    ARMAZENA_ESTOQUE = '@programacoes/ARMAZENA_ESTOQUE',
+    ARMAZENA_ENTRADA = '@programacoes/ARMAZENA_ENTRADA',
     ARMAZENA_QUANTIDADES = '@programacoes/ARMAZENA_QUANTIDADES',
     ARMAZENA_COMENTARIO_ITEM = '@programacoes/ARMAZENA_COMENTARIO_ITEM',
     ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
@@ -88,6 +90,8 @@ export interface ProgramacaoRealizada {
     datasManutencoes?: DataManutencao[]
     dadosEnviados?: boolean
     errorSync?: boolean
+    estoqueConcluido?: boolean
+    entradaConcluida?: boolean
 }
 
 /**

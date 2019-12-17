@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://stage.fibra.grupotesseract.com.br/api'
+    baseURL: 'https://develop.fibra.grupotesseract.com.br/api'
 })
 
 export const setToken = (token: string) => {

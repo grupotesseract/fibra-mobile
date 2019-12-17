@@ -307,6 +307,50 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                 })
             }
         }
+        case ProgramacoesTypes.ARMAZENA_ESTOQUE:
+        {
+            const { idProgramacao, estoque } = action.payload;
+            const { programacoesRealizadas } = state;
+
+            return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    // Subsititui os estoques
+                    return {
+                      ...programacaoRealizada,
+                      estoqueConcluido: true,
+                      estoques: [
+                        ...estoque,
+                      ]
+                    };
+                })
+            }
+        }
+        case ProgramacoesTypes.ARMAZENA_ENTRADA:
+        {
+            const { idProgramacao, entrada } = action.payload;
+            const { programacoesRealizadas } = state;
+
+            return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    // Subsititui os estoques
+                    return {
+                      ...programacaoRealizada,
+                      entradaConcluida: true,
+                      entradas: [
+                        ...entrada,
+                      ]
+                    };
+                })
+            }
+        }
         case ProgramacoesTypes.UPDATE_PROGRAMACAO:
         {
           const { idProgramacao, programacao } = action.payload;

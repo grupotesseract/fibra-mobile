@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text, List, ListItem, Left, Right, Icon, Grid, Row, Badge } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, View } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as Permissions from 'expo-permissions';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -10,12 +9,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Planta, Item } from '../../store/ducks/planta/types';
 import { QRCodeReader } from '../../components/QRCodeReader';
-import { Empresa } from '../../store/ducks/empresas/types';
 import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
-  empresas: Empresa[],
   plantaAtiva: Planta,
   navigation: NavigationScreenProp<any, any>,
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -173,7 +170,6 @@ const style = {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  empresas: state.empresasReducer.listaEmpresas,
   plantaAtiva: state.plantaReducer.plantaAtiva,
   programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
 })
