@@ -7,9 +7,12 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../../store'
 import { Planta } from '../../store/ducks/planta/types';
 import { ActivityIndicator } from 'react-native';
+import { iso2ddmmaaaa } from '../../utils/utils';
+import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
   plantaAtiva: Planta,
+  navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
@@ -17,8 +20,6 @@ interface DispatchProps {
 }
 
 type Props = StateProps & DispatchProps
-
-const iso2ddmmaaaa = (utfData: string) => utfData.split('-').reverse().join('/');
 
 class ConfirmarPeriodoManutencao extends Component<Props> {
 

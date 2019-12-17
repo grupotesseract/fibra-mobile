@@ -7,55 +7,7 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import { uploadProgramacao, uploadFotos } from '../../services/api';
-
-const empresas = [
-    {
-      id: 1,
-      nome: 'Valentin e Saraiva e Filhos',
-      plantas: [
-        {
-          id: 1,
-          nome: "65532-630, Travessa Simon, 0 Porto Andres - MS",
-          proximaProgramacao: {
-            id: 1,
-            data_inicio_prevista: '12/01/2020',
-            data_fim_prevista: '18/01/2020',
-            sincronizadoInfos: false,
-            sincronizadoFotos: false,
-          },
-        },
-        {
-          id: 3,
-          nome: "65532-630, Travessa Simon, Planta 2 Porto Andres - MS",
-          proximaProgramacao: {
-            id: 2,
-            data_inicio_prevista: '13/01/2020',
-            data_fim_prevista: '19/01/2020',
-            sincronizadoInfos: false,
-            sincronizadoFotos: true,
-          },
-        }
-      ]
-    },
-    {
-      id: 2,
-      nome: 'Rios e Filhos',
-      plantas: [
-        {
-          id: 2,
-          nome: "07969-607, R. Teobaldo, 0405 David d'Oeste - PB",
-          proximaProgramacao: {
-            id: 3,
-            data_inicio_prevista: '08/01/2020',
-            data_fim_prevista: '11/01/2020',
-            sincronizadoInfos: true,
-            sincronizadoFotos: true,
-          },
-        }
-      ]
-    },
-
-]
+import { iso2ddmmaaaa } from '../../utils/utils';
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -70,10 +22,6 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps
 
 class Programacoes extends Component<Props> {
-
-  state = {
-    empresas
-  }
 
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
@@ -156,43 +104,12 @@ class Programacoes extends Component<Props> {
 
   render() {
     const { programacoesRealizadas } = this.props;
-    const { empresas } = this.state;
-
-    var plantas = [];
-
-    empresas.forEach(function (empresa) {
-      empresa.plantas.forEach(function (planta) {
-        plantas.push(
-          <Card key={planta.proximaProgramacao.id}>
-            <CardItem header bordered>
-              <Text>{empresa.nome}</Text>
-            </CardItem>
-            <CardItem>
-              <Left>
-                <Body>
-                  <Text>{planta.nome}</Text>
-                  <Text note>{planta.proximaProgramacao.data_inicio_prevista} - {planta.proximaProgramacao.data_fim_prevista}</Text>
-                  <Button
-                    full
-                    disabled={planta.proximaProgramacao.sincronizadoFotos && planta.proximaProgramacao.sincronizadoInfos} >
-                    <Text>SINCRONIZAR</Text>
-                  </Button>
-                </Body>
-              </Left>
-            </CardItem>
-          </Card>
-        );
-      })
-    });
 
     return (
       <Container>
         <HeaderNav title="Listagem de Programações" />
 
         <Content padder>
-          {/* {
-            plantas
-          } */}
           {
             programacoesRealizadas?.map((programacaoRealizada: ProgramacaoRealizada) => {
 
@@ -207,9 +124,10 @@ class Programacoes extends Component<Props> {
                 <CardItem>
                   <Left>
                     <Body>
-                      <Text>Nome da planta</Text>
-                      <Text note>{inicio} - {fim}</Text>
-
+                      <Text>Manutenção prevista para</Text>
+                      <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
+                      <Text>Itens com fotos armazenadas: {fotosItens.length}</Text>
+                      <Text>Itens com fotos enviadas: {fotosEnviadas}</Text>
                       {/* <Text>data_inicio_prevista {programacaoRealizada.programacao.data_inicio_prevista}</Text>
                       <Text>data_fim_prevista {programacaoRealizada.programacao.data_fim_prevista}</Text>
                       <Text>data_inicio_real {programacaoRealizada.programacao.data_inicio_real}</Text>
