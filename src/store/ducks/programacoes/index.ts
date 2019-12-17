@@ -19,10 +19,11 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     if (programacaoRealizada?.programacao?.id !== idProgramacao) {
                         return programacaoRealizada;
                     }
+                    const liberacoesDocumentos = programacaoRealizada.liberacoesDocumentos || []
                     return {
                         ...programacaoRealizada,
-                        liberacoesDocumento: [
-                            ...programacaoRealizada.liberacoesDocumento,
+                        liberacoesDocumentos: [
+                            ...liberacoesDocumentos,
                             {
                                 data_hora: now,
                                 usuarios,
@@ -56,11 +57,11 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
         }
         case ProgramacoesTypes.ADD:
         {
-            const { programacoesRealizadas } = state;
+            const programacoesRealizadas = state.programacoesRealizadas || [];
             const { programacaoRealizada } = action.payload;
 
             // Caso já exista a programação, nada acontece feijoada
-            const indexProgramacao = programacoesRealizadas.findIndex(programacao => programacao.programacao.id === programacaoRealizada.programacao.id);
+            const indexProgramacao = programacoesRealizadas?.findIndex(programacao => programacao.programacao.id === programacaoRealizada.programacao.id);
             if ( indexProgramacao >= 0) {
                 return {
                     ...state,
@@ -305,6 +306,25 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     }
                 })
             }
+        }
+        case ProgramacoesTypes.UPDATE_PROGRAMACAO:
+        {
+          const { idProgramacao, programacao } = action.payload;
+          const { programacoesRealizadas } = state;
+
+          if (programacao) {
+            return {
+              ...state,
+              programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                if (programacaoRealizada ?.programacao ?.id !== idProgramacao) {
+                  return programacaoRealizada;
+                }
+                return programacao
+              })
+            }
+          } else {
+            return state;
+          }
         }
         case ProgramacoesTypes.DELETE_ALL:
             return {

@@ -5,6 +5,7 @@ const api = axios.create({
 })
 
 export const setToken = (token: string) => {
+  console.log("Token definido:", token)
     api.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
 
@@ -25,7 +26,7 @@ export const login = ({ email, password }) =>
             id,
             nome,
             role,
-            token 
+            token
         }
     })
     .catch(error => ({ error }));
@@ -42,9 +43,48 @@ export const loginOffline = ({ email, password }) =>
         return {
             id,
             nome,
-            token 
+            token
         }
     })
     .catch(error => ({ error }));
+
+export const uploadProgramacao = ({ idProgramacao, programacao }) =>
+    api.post('sync/programacoes/'+idProgramacao, programacao)
+    .then(response => {
+        const data = response.data.data;
+        return data;
+    })
+    .catch(error => ({ error }));
+
+export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
+  const url = 'sync/programacoes/'+idProgramacao+'/item/'+idItem+'/fotos';
+
+  let formData = new FormData();
+
+  fotos.forEach(foto => {
+    const { uri } = foto;
+
+    let uriParts = uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+    let filePathAndName = uriParts[uriParts.length - 2].split('/');
+    let fileName = filePathAndName[filePathAndName.length - 1];
+
+    formData.append('fotos[]', {
+      uri,
+      name: `${fileName}.${fileType}`,
+      type: `image/${fileType}`,
+    });
+  })
+
+
+  try {
+    const response = await api.post(url, formData);
+    const data = response.data.data;
+    return data
+  }
+  catch (error) {
+    return ({ error });
+  }
+}
 
 export default api;

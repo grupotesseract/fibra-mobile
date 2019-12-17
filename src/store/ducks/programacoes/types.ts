@@ -12,6 +12,7 @@
     ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
     INICIA_ITEM = '@programacoes/INICIA_ITEM',
     CONCLUI_ITEM = '@programacoes/CONCLUI_ITEM',
+    UPDATE_PROGRAMACAO = '@programacoes/UPDATE_PROGRAMACAO',
     DELETE_ALL = '@programacoes/DELETE_ALL',
  }
 
@@ -61,6 +62,7 @@ export interface Comentario {
 export interface FotosItem {
     fotos: string[]
     id_item: number
+    fotosEnviadas?: boolean
 }
 
 export interface ItensVistoriados {
@@ -76,7 +78,7 @@ export interface DataManutencao {
 
 export interface ProgramacaoRealizada {
     programacao?: Programacao
-    liberacoesDocumento?: LiberacaoDocumento[]
+    liberacoesDocumentos?: LiberacaoDocumento[]
     entradas?: Entrada[]
     quantidadesSubstituidas?: QuantidadeSubstituida[]
     estoques?: Estoque[]
@@ -84,6 +86,8 @@ export interface ProgramacaoRealizada {
     fotosItens: FotosItem[]
     itensVistoriados?: ItensVistoriados[]
     datasManutencoes?: DataManutencao[]
+    dadosEnviados?: boolean
+    errorSync?: boolean
 }
 
 /**

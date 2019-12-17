@@ -36,7 +36,7 @@ class SelecionaPlanta extends Component<Props, State> {
   }
 
   selectEmpresa = (empresaSelecionada: number) => {
-    this.setState({ 
+    this.setState({
       empresaSelecionada,
       plantaSelecionada: null
     });
@@ -69,9 +69,10 @@ class SelecionaPlanta extends Component<Props, State> {
     await setPlantaAtiva(plantaSelecionada);
     await addProgramacao({
       programacao: plantaSelecionada.proximaProgramacao,
-      liberacoesDocumento: [],
+      liberacoesDocumentos: [],
       entradas: [],
       quantidadesSubstituidas: [],
+      itensVistoriados: [],
       estoques: [],
       comentarios: [],
       fotosItens: [],
@@ -79,12 +80,12 @@ class SelecionaPlanta extends Component<Props, State> {
 
     navigation.navigate('ConfirmarPeriodoManutencao');
   }
-  
+
   render() {
     const { empresaSelecionada, plantaSelecionada } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
-    
+
     return (
       <Container>
 
@@ -103,7 +104,7 @@ class SelecionaPlanta extends Component<Props, State> {
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
                 { Array.isArray(listaEmpresas) &&
-                  listaEmpresas.length > 0 
+                  listaEmpresas.length > 0
                   ?
                   listaEmpresas.map(empresa => {
                   return <Picker.Item
@@ -119,7 +120,7 @@ class SelecionaPlanta extends Component<Props, State> {
                       key={0}
                     />
                   </>)
-                } 
+                }
               </Picker>
             </Item>
             <Item>
@@ -133,7 +134,7 @@ class SelecionaPlanta extends Component<Props, State> {
                 selectedValue={plantaSelecionada?.id}
                 onValueChange={(value) => this.selectPlanta(value)}
               >
-                { this.getPlantasFromEmpresa(empresaSelecionada).map(planta => 
+                { this.getPlantasFromEmpresa(empresaSelecionada).map(planta =>
                   <Picker.Item
                     label={planta.nome}
                     value={planta.id}
@@ -143,8 +144,8 @@ class SelecionaPlanta extends Component<Props, State> {
               </Picker>
             </Item>
           </Form>
-          <Button 
-            block 
+          <Button
+            block
             disabled={(empresaSelecionada === null)}
             onPress={() => this.iniciaManutencao()}>
             <Text>Iniciar manutenção</Text>
@@ -159,7 +160,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   empresas: state.empresasReducer,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(Object.assign({}, PlantaActions, ProgramacoesActions), dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)
