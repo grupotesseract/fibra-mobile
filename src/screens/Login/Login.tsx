@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Image, View, KeyboardAvoidingView } from 'react-native';
-import { Label, Form, Button, Input, Item, Icon, Text } from 'native-base';
+import { View, KeyboardAvoidingView } from 'react-native';
+import { Label, Form, Input, Item, Icon, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Auth, LoginData, AuthState } from '../../store/ducks/auth/types'
+import { LoginData, AuthState } from '../../store/ducks/auth/types'
 import * as AuthActions from '../../store/ducks/auth/actions'
 import { ApplicationState } from '../../store'
 import ActionButton from '../../components/ActionButton';
@@ -41,23 +41,20 @@ class Login extends Component<Props, State> {
 
   authLogin() {
     const { authRequest } = this.props;
-    const { user, password } = this.state; 
+    const { user, password } = this.state;
 
-    console.log("auth login request");
     authRequest({ user, password });
   }
 
 
   componentDidMount() {
     const { auth, navigation } = this.props;
-    console.log("AUTH no login: ", auth)
-    checkAuth({ auth, navigation, origin: 'didmount login' });
+    checkAuth({ auth, navigation });
   }
 
   componentDidUpdate() {
     const { auth, navigation } = this.props;
-    console.log("AUTH no update login: ", auth)
-    checkAuth({ auth, navigation, origin: 'didupdate login'  });
+    checkAuth({ auth, navigation });
   }
 
   render() {
@@ -84,9 +81,9 @@ class Login extends Component<Props, State> {
             </Item>
           </Form>
           { auth.error && <Text> Verifique o usuário e a senha. </Text>}
-          <ActionButton 
-            block 
-            onPress={() => this.authLogin()} 
+          <ActionButton
+            block
+            onPress={() => this.authLogin()}
             style={{marginBottom: 10}}
             loading = {auth.loading}
             >
@@ -102,7 +99,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   auth: state.auth
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(AuthActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
