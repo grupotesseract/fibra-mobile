@@ -9,10 +9,11 @@ import { connect } from 'react-redux';
 import { Planta, Item as ItemPlanta, Material } from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
-import { QuantidadeSubstituida } from '../../store/ducks/programacoes/types';
+import { QuantidadeSubstituida, Programacao, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
   plantaAtiva: Planta,
+  programacoesRealizadas: ProgramacaoRealizada[],
   navigation: NavigationScreenProp<any, any>,
 }
 
@@ -141,7 +142,9 @@ class ManutencaoItem extends Component<Props> {
   }
 
   componentDidMount() {
-    const { plantaAtiva, navigation } = this.props;
+    const { plantaAtiva, programacoesRealizadas, navigation } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
     const { idItem, qrcode } = navigation.state.params;
     const { itens } = plantaAtiva;
     let item: ItemPlanta;
@@ -152,8 +155,24 @@ class ManutencaoItem extends Component<Props> {
     }
     if (item) {
       const { materiais, circuito, qrcode, nome, id } = item;
+      let materiaisComQuantidade = materiais;
+      if (programacao) {
+        materiaisComQuantidade = materiais.map( (m: Material) => {
+          const materialPreenchido = programacao.quantidadesSubstituidas
+            .find( q => q.material_id === m.id);
+          if (!materialPreenchido) {
+            return m;
+          }
+          return {
+            ...m,
+            quantidade: materialPreenchido.quantidade_substituida,
+            quantidadeBase: materialPreenchido.quantidade_substituida_base,
+            quantidadeReator: materialPreenchido.quantidade_substituida_reator,
+          }
+        })
+      }
       this.setState({
-        materiais,
+        materiais: materiaisComQuantidade,
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
@@ -344,6 +363,7 @@ const style = {
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
+  programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

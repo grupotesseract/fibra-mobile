@@ -101,7 +101,7 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     render() {
-      const { readingQRCode, itens } = this.state;
+      const { readingQRCode, itens, loadingConcluir } = this.state;
       if (readingQRCode) {
         return <QRCodeReader
           handleClose={() => this.handleCloseQRCode()}

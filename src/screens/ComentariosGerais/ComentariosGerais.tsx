@@ -43,6 +43,20 @@ class ComentariosGerais extends Component<Props> {
     navigation.goBack();
   }
 
+  componentDidMount() {
+    const { plantaAtiva, programacoesRealizadas, navigation } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+    const idItem = navigation.state.params?.idItem || null;
+    if (programacao && idItem) {
+      const Comentario = programacao.comentarios.find(comentario => comentario.item_id == idItem)
+      this.setState({
+        comentario: Comentario.comentario
+      })
+
+    }
+  }
+
   render() {
     const { comentario } = this.state;
     return <Container>
