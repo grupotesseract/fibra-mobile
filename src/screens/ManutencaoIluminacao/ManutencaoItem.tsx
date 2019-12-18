@@ -166,6 +166,7 @@ class ManutencaoItem extends Component<Props> {
           return {
             ...m,
             quantidade: materialPreenchido.quantidade_substituida,
+            quantidadeConfirmada: true,
             quantidadeBase: materialPreenchido.quantidade_substituida_base,
             quantidadeReator: materialPreenchido.quantidade_substituida_reator,
           }
