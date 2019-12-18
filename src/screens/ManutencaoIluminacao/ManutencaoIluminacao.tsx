@@ -15,6 +15,7 @@ import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 interface StateProps {
   plantaAtiva: Planta,
   programacoesRealizadas: ProgramacaoRealizada[],
+  navigation: NavigationScreenProp<any, any>,
   isFocused: boolean
 }
 
@@ -99,9 +100,7 @@ class ManutencaoIluminacao extends Component<Props> {
 
     openItem = (item: Item) => {
       const { navigation } = this.props;
-      if(!item.concluido) {
-        navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })
-      }
+      navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })
     }
 
     render() {
@@ -123,7 +122,7 @@ class ManutencaoIluminacao extends Component<Props> {
                     <ActivityIndicator /> :
                     itens.map((item: Item) => {
                       const isEmergencia = item.circuito === 'Emergência';
-                      return <ListItem key={item.id} onPress={() => this.openItem(item)} disabled={item.concluido}>
+                      return <ListItem key={item.id} onPress={() => this.openItem(item)} >
                         <Left>
                           <Badge
                             warning={isEmergencia}

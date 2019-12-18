@@ -48,12 +48,18 @@ class ComentariosGerais extends Component<Props> {
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
     const idItem = navigation.state.params?.idItem || null;
-    if (programacao && idItem) {
-      const Comentario = programacao.comentarios.find(comentario => comentario.item_id == idItem)
-      this.setState({
-        comentario: Comentario.comentario
-      })
-
+    if (programacao) {
+      if (idItem) {
+        const Comentario = programacao.comentarios.find(comentario => comentario.item_id == idItem)
+        this.setState({
+          comentario: Comentario.comentario
+        })
+      } else {
+        const comentario = programacao.programacao.comentarioGeral;
+        this.setState({
+          comentario
+        })
+      }
     }
   }
 
