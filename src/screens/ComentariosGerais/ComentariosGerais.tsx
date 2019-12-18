@@ -52,7 +52,7 @@ class ComentariosGerais extends Component<Props> {
       if (idItem) {
         const Comentario = programacao.comentarios.find(comentario => comentario.item_id == idItem)
         this.setState({
-          comentario: Comentario.comentario
+          comentario: Comentario ? Comentario.comentario : null
         })
       } else {
         const comentario = programacao.programacao.comentarioGeral;
