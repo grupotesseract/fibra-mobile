@@ -83,8 +83,8 @@ class SyncEmpresas extends Component<Props, State> {
               </CardItem>
             </Card>
           </View>
-          <ActionButton 
-            block 
+          <ActionButton
+            block
             loading={loading}
             disabled={(role !== 'admin')}
             onPress={() => this.atualizarEmpresas()}>
@@ -101,7 +101,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   usuariosReducer: state.usuariosReducer,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(EmpresasActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SyncEmpresas)

@@ -7,10 +7,12 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../../store'
 import { Planta } from '../../store/ducks/planta/types';
 import { Usuario } from '../../store/ducks/usuarios/types';
+import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
   plantaAtiva: Planta,
   usuarios: Usuario[],
+  navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
@@ -29,7 +31,7 @@ class LiberarDocumento extends Component<Props> {
     const { idsUsuariosSelecionados } = this.state;
     let listaIds = [];
     if(!idsUsuariosSelecionados.includes(idColaborador)) {
-      listaIds = [ 
+      listaIds = [
         ...idsUsuariosSelecionados,
         idColaborador,
       ]
@@ -38,12 +40,12 @@ class LiberarDocumento extends Component<Props> {
     }
     this.setState({idsUsuariosSelecionados: listaIds})
   }
-  
+
   liberarDocumento = async () => {
     const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
     const { now, idsUsuariosSelecionados } = this.state;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    
+
     await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
     navigation.navigate({ routeName: 'MenuVistoria' })
   }
@@ -87,20 +89,20 @@ class LiberarDocumento extends Component<Props> {
           <View style={{ marginVertical: 30 }}>
             <H3 style={{textAlign: 'center'}}>Liberação de documentos</H3>
             <View style={{flex: 1,flexDirection: 'row', alignContent: 'center', alignSelf: 'center', width: 150}}>
-              <Input 
+              <Input
                 style={{ fontSize: 35 }}
                 value={hora < 10 ? '0'+hora.toString() : hora.toString()}
                 keyboardType="numeric"/>
               <Text style={{ fontSize: 30, textAlignVertical: 'center'}}>:</Text>
-              <Input 
+              <Input
                 style={{ fontSize: 35 }}
                 value={minuto < 10 ? '0'+minuto.toString() : minuto.toString()}
                 keyboardType="numeric"/>
               <Text style={{fontSize: 30, textAlignVertical: 'center'}}>h</Text>
             </View>
           </View>
-          <Button 
-            block 
+          <Button
+            block
             disabled={idsUsuariosSelecionados.length <= 0}
             onPress={() => this.liberarDocumento()}
           >
@@ -117,7 +119,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => 
+const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiberarDocumento)
