@@ -10,7 +10,7 @@ import { NavigationAction } from 'react-navigation';
 
 interface Props {
   auth: AuthState,
-  navigation: NavigationAction
+  navigation: NavigationScreenProp<any, any>,
   authCancel(): void
 }
 class Menu extends Component<Props> {

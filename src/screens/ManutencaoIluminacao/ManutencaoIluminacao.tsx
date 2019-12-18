@@ -14,7 +14,6 @@ import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
   plantaAtiva: Planta,
-  navigation: NavigationScreenProp<any, any>,
   programacoesRealizadas: ProgramacaoRealizada[],
   isFocused: boolean
 }
@@ -30,6 +29,7 @@ class ManutencaoIluminacao extends Component<Props> {
         itens: [],
         hasCameraPermission: false,
         readingQRCode: false,
+        loadingConcluir: false,
     }
 
     async componentDidMount() {
@@ -75,14 +75,18 @@ class ManutencaoIluminacao extends Component<Props> {
         })
     }
 
-    concluirManutencao = async () => {
-      const { plantaAtiva, navigation, concluiManutencao } = this.props;
-      const idProgramacao = plantaAtiva.proximaProgramacao.id;
-      await concluiManutencao({ idProgramacao });
-      navigation.navigate('Menu');
+    concluirManutencao = () => {
+      this.setState({ loadingConcluir: true }, async () => {
+        const { navigation, concluiManutencao } = this.props;
+        const idProgramacao = this.props.plantaAtiva.proximaProgramacao.id;
+        await concluiManutencao({ idProgramacao });
+        this.setState({ loadingConcluir: false });
+        navigation.navigate('Menu');
+      });
     }
 
     handleScan(scannedObj) {
+        console.log('qrcode scanned');
         const { navigation } = this.props;
         const qrcode = scannedObj.data;
         console.log('qrcode', qrcode);
@@ -148,10 +152,15 @@ class ManutencaoIluminacao extends Component<Props> {
               <Text>LER QRCODE</Text>
             </Button>
             <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencao()}>
-              <Icon name='md-checkmark' style={{ fontSize: 36 }} />
-              <View style={{ alignItems: 'center' }}>
-                <Text>CONCLUIR</Text>
-              </View>
+              {loadingConcluir ?
+                <ActivityIndicator /> :
+                <>
+                  <Icon name='md-checkmark' style={{ fontSize: 36 }} />
+                  <View style={{ alignItems: 'center' }}>
+                    <Text>CONCLUIR</Text>
+                  </View>
+                </>
+              }
             </Button>
           </View>
         </Container>

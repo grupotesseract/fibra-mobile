@@ -30,7 +30,7 @@ class MenuVistoria extends Component<Props> {
     const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
     const { estoqueConcluido, entradaConcluida } = programacao;
 
-    console.log('programacao atual', programacao)
+    console.log('Renderizando menuVistoria');
     return (
         <Container>
             <Content padder>

@@ -178,7 +178,7 @@ class ManutencaoItem extends Component<Props> {
         nome,
         idItem: item.id
       });
-      this.iniciarItem(idItem);
+      this.iniciarItem(id);
     } else {
       this.setState({
         error: 'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.'
@@ -188,7 +188,6 @@ class ManutencaoItem extends Component<Props> {
 
   render() {
     const { error, materiais, qrcode, emergencia, nome, idItem } = this.state;
-    const { navigation } = this.props;
 
     if (error) {
       return <Container>
@@ -198,6 +197,7 @@ class ManutencaoItem extends Component<Props> {
         </Content>
       </Container>
     }
+    console.log('render Manutencao Item')
 
     return (
       <Container>
