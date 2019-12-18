@@ -63,7 +63,6 @@ class EntradaMateriais extends Component<Props> {
 
     onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
         const { materiais } = this.state;
-        console.log(materiais);
         const novosMateriais = materiais.map( material => {
             if(material.id !== idMaterial) {
                 return material;
