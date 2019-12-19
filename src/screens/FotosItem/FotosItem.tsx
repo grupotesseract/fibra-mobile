@@ -38,7 +38,7 @@ class FotosItemScreen extends Component<Props> {
 
     pickImage = async () => {
         const { photos } = this.state;
-        ImagePicker.launchCameraAsync()
+        ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
             this.setPhotos([
                 ...photos,
