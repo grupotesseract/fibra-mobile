@@ -130,6 +130,7 @@ class ManutencaoItem extends Component<Props> {
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     await this.salvaQuantidades(idItem);
     const data = new Date();
+    console.log(idItem, idProgramacao, data);
     await concluiItem({ idItem, idProgramacao, data });
     navigation.navigate({ routeName: 'ManutencaoIluminacao' })
   }
@@ -159,7 +160,7 @@ class ManutencaoItem extends Component<Props> {
       if (programacao) {
         materiaisComQuantidade = materiais.map( (m: Material) => {
           const materialPreenchido = programacao.quantidadesSubstituidas
-            .find( q => q.material_id === m.id);
+            .find( q => q.material_id === m.id && q.item_id === id);
           if (!materialPreenchido) {
             return m;
           }
