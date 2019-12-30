@@ -33,7 +33,8 @@ class ManutencaoItem extends Component<Props> {
     emergencia: false,
     qrcode: 'FIBRA-#',
     error: false,
-    idItem: null
+    idItem: null,
+    permiteAlteracao: false
   }
 
   onChangeQuantidade = (idMaterial: number, quantidade: number) => {
@@ -152,6 +153,7 @@ class ManutencaoItem extends Component<Props> {
       item = itens.find(item => item.id === idItem);
     } else if (qrcode) {
       item = itens.find(item => item.qrcode === qrcode);
+      this.setState({permiteAlteracao : true});
     }
     if (item) {
       const { materiais, circuito, qrcode, nome, id } = item;
@@ -187,7 +189,7 @@ class ManutencaoItem extends Component<Props> {
   }
 
   render() {
-    const { error, materiais, qrcode, emergencia, nome, idItem } = this.state;
+    const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
 
     if (error) {
       return <Container>
@@ -293,6 +295,7 @@ class ManutencaoItem extends Component<Props> {
                       <Item style={style.itemSubstituicao}>
                         <Button
                           small
+                          disabled={!permiteAlteracao}
                           rounded={true}
                           warning={!material.quantidadeConfirmada}
                           success={material.quantidadeConfirmada}
