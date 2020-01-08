@@ -49,7 +49,7 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                         ...programacaoRealizada,
                         programacao: {
                             ...programacaoRealizada.programacao,
-                            data_inicio_real: dataInicioReal,
+                            data_inicio_real: programacaoRealizada.programacao.data_inicio_real || dataInicioReal ,
                         }
                     }
                 })

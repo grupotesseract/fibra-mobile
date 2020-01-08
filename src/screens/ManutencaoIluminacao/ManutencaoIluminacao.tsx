@@ -86,6 +86,11 @@ class ManutencaoIluminacao extends Component<Props> {
       });
     }
 
+    concluirManutencaoDia = () => {
+      const { navigation } = this.props;
+      navigation.navigate('Menu');
+    }
+
     handleScan(scannedObj) {
         console.log('qrcode scanned');
         const { navigation } = this.props;
@@ -150,13 +155,17 @@ class ManutencaoIluminacao extends Component<Props> {
               <Icon name='md-qr-scanner' style={{ fontSize: 48 }} />
               <Text>LER QRCODE</Text>
             </Button>
+            <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencaoDia()}>
+              <Icon name='md-stopwatch' style={{ fontSize: 48 }} />
+              <Text>CONCLUIR DIA</Text>
+            </Button>
             <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencao()}>
               {loadingConcluir ?
                 <ActivityIndicator /> :
                 <>
                   <Icon name='md-checkmark' style={{ fontSize: 36 }} />
                   <View style={{ alignItems: 'center' }}>
-                    <Text>CONCLUIR</Text>
+                    <Text>CONCLUIR FINAL</Text>
                   </View>
                 </>
               }
