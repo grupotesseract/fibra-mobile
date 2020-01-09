@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
-import { Label, Form, Input, Item, Icon, Text } from 'native-base';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import React, { Component } from 'react'
+import { View, KeyboardAvoidingView, Image, StyleSheet } from 'react-native'
+import { Label, Form, Input, Item, Text } from 'native-base'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
 import { LoginData, AuthState } from '../../store/ducks/auth/types'
 import * as AuthActions from '../../store/ducks/auth/actions'
@@ -11,7 +11,6 @@ import ActionButton from '../../components/ActionButton';
 import HeaderLogo from '../../components/HeaderLogo';
 import { checkAuth } from '../../utils/authNavigation'
 import { NavigationAction } from 'react-navigation';
-import styles from './styles';
 
 interface StateProps {
   auth: AuthState,
@@ -59,24 +58,35 @@ class Login extends Component<Props, State> {
   }
 
   render() {
-    const { user, password } = this.state;
-    const { auth } = this.props;
+    const { user, password } = this.state
+    const { auth } = this.props
+
     return (
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', padding: 10 }}>
-          <Form>
-            <View style={{ flexDirection: 'row', padding: 20 }}>
-              <Text>Faça login para continuar</Text>
-              <Text style={loginStyles.p}>Insira seu nome de usuário e senha</Text>
-            </View>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={style.container}>
+
+        <View>
+          <Image
+            style={style.logo}
+            source={require('../../../assets/fibra-logo.png')} />
+
+          <Text style={style.text}>Faça login para continuar</Text>
+
+          <Form style={style.form}>
+            <Item floatingLabel>
+              <Label style={style.label}>Usuário</Label>
+              <Input value={user}
+                style={style.input}
+                onChangeText={user => this.setState({ user })}/>
+            </Item>
 
             <Item floatingLabel>
-              <Label style={loginStyles.label}>Usuário</Label>
-              <Input value={user} onChangeText={(user) => this.setState({ user })} />
-            </Item>
-            <Item floatingLabel>
-              <Label style={loginStyles.label}>Senha</Label>
-              <Input value={password} secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
+              <Label style={style.label}>Senha</Label>
+              <Input value={password}
+                style={style.input}
+                secureTextEntry={true}
+                onChangeText={password => this.setState({ password })}/>
             </Item>
           </Form>
 
@@ -85,12 +95,13 @@ class Login extends Component<Props, State> {
           <ActionButton
             block
             onPress={() => this.authLogin()}
-            style={loginStyles.buttonLogin}
+            style={style.buttonLogin}
             loading={auth.loading}>
-
+            
             <Text>Login</Text>
           </ActionButton>
         </View>
+
       </KeyboardAvoidingView>
     )
   }
@@ -104,3 +115,38 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(AuthActions, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    padding: 40,
+    paddingTop: 0,
+  },
+  form: {
+    marginTop: 40,
+  },
+  buttonLogin: {
+    justifyContent: 'center',
+    borderRadius: 3,
+    marginTop: 60,
+  },
+  input: {},
+  text: {
+    fontWeight: '300',
+    fontSize: 16,
+    opacity: 0.75,
+    marginTop: 10,
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  label: {
+    alignSelf: 'flex-start',
+  },
+  logo: {
+    width: 'auto',
+    height: 70,
+    resizeMode: 'contain'
+  }
+})

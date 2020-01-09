@@ -47,8 +47,8 @@ export default {
 
   // Android
   androidRipple: true,
-  androidRippleColor: 'rgba(256, 256, 256, 0.3)',
-  androidRippleColorDark: 'rgba(0, 0, 0, 0.15)',
+  androidRippleColor: 'rgba(256,256,256,0.3)',
+  androidRippleColorDark: 'rgba(0,0,0,0.15)',
   buttonUppercaseAndroidText: true,
 
   // Badge
@@ -164,7 +164,7 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#14328c',
+  footerDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#2d465f',
   footerPaddingBottom: 0,
 
   // FooterTab
@@ -173,11 +173,11 @@ export default {
   activeTab: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   sTabBarActiveTextColor: '#007aff',
   tabBarActiveTextColor: platform === PLATFORM.IOS ? '#2874F0' : '#fff',
-  tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#14328c',
+  tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#2d465f',
 
   // Header
-  toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  toolbarDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#14328c',
+  toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#2d465f',
+  toolbarDefaultBg: platform === PLATFORM.IOS ? '#f9f9f9' : '#f9f9f9',
   toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
   toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : '#fff',
@@ -185,7 +185,7 @@ export default {
   searchBarInputHeight: platform === PLATFORM.IOS ? 30 : 50,
   toolbarBtnTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   iosStatusbar: 'dark-content',
-  toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : '#14328c',
+  toolbarDefaultBorder: platform === PLATFORM.IOS ? '#f9f9f9' : '#f9f9f9',
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
       .darken(0.2)
@@ -230,7 +230,7 @@ export default {
   listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
   listNoteColor: '#808080',
   listNoteSize: 13,
-  listItemSelected: platform === PLATFORM.IOS ? '#007aff' : '#14328c',
+  listItemSelected: platform === PLATFORM.IOS ? '#007aff' : '#2d465f',
 
   // Progress Bar
   defaultProgressColor: '#E4202D',
@@ -238,26 +238,26 @@ export default {
 
   // Radio Button
   radioBtnSize: platform === PLATFORM.IOS ? 25 : 23,
-  radioSelectedColorAndroid: '#14328c',
+  radioSelectedColorAndroid: '#2d465f',
   radioBtnLineHeight: platform === PLATFORM.IOS ? 29 : 24,
   get radioColor() {
     return this.brandPrimary;
   },
 
   // Segment
-  segmentBackgroundColor: platform === PLATFORM.IOS ? '#F8F8F8' : '#14328c',
+  segmentBackgroundColor: platform === PLATFORM.IOS ? '#F8F8F8' : '#2d465f',
   segmentActiveBackgroundColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   segmentTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  segmentActiveTextColor: platform === PLATFORM.IOS ? '#fff' : '#14328c',
+  segmentActiveTextColor: platform === PLATFORM.IOS ? '#fff' : '#2d465f',
   segmentBorderColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  segmentBorderColorMain: platform === PLATFORM.IOS ? '#a7a6ab' : '#14328c',
+  segmentBorderColorMain: platform === PLATFORM.IOS ? '#a7a6ab' : '#2d465f',
 
   // Spinner
   defaultSpinnerColor: '#45D56E',
   inverseSpinnerColor: '#1A191B',
 
   // Tab
-  tabDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#14328c',
+  tabDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#2d465f',
   topTabBarTextColor: platform === PLATFORM.IOS ? '#6b6b6b' : '#b3c7f9',
   topTabBarActiveTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   topTabBarBorderColor: platform === PLATFORM.IOS ? '#a7a6ab' : '#fff',

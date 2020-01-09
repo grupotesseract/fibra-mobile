@@ -44,7 +44,7 @@ export default {
   androidRipple: true,
   androidRippleColor: 'rgba(256,256,256,0.3)',
   androidRippleColorDark: 'rgba(0,0,0,0.15)',
-  buttonUppercaseAndroidText: true,
+  buttonUppercaseAndroidText: false,
 
   // Badge
   badgeBg: '#ED1727',
@@ -132,7 +132,7 @@ export default {
   brandLight: '#f4f4f4',
 
   // Container
-  containerBgColor: '#fff',
+  containerBgColor: '#f9f9f9',
 
   // Date Picker
   datePickerTextColor: '#000',
@@ -157,7 +157,7 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: '#14328c',
+  footerDefaultBg: '#2d465f',
   footerPaddingBottom: 0,
 
   // FooterTab
@@ -166,18 +166,18 @@ export default {
   activeTab: '#fff',
   sTabBarActiveTextColor: '#007aff',
   tabBarActiveTextColor: '#fff',
-  tabActiveBgColor: '#14328c',
+  tabActiveBgColor: '#2d465f',
 
   // Header
-  toolbarBtnColor: '#fff',
-  toolbarDefaultBg: '#14328c',
+  toolbarBtnColor: '#2d465f',
+  toolbarDefaultBg: '#f9f9f9',
   toolbarHeight: 56,
   toolbarSearchIconSize: 23,
   toolbarInputColor: '#fff',
   searchBarHeight: platform === PLATFORM.IOS ? 30 : 40,
   searchBarInputHeight: platform === PLATFORM.IOS ? 40 : 50,
   toolbarBtnTextColor: '#fff',
-  toolbarDefaultBorder: '#14328c',
+  toolbarDefaultBorder: '#2d465f',
   iosStatusbar: 'light-content',
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
@@ -223,7 +223,7 @@ export default {
   listItemPadding: 12,
   listNoteColor: '#808080',
   listNoteSize: 13,
-  listItemSelected: '#14328c',
+  listItemSelected: '#2d465f',
 
   // Progress Bar
   defaultProgressColor: '#E4202D',
@@ -231,26 +231,26 @@ export default {
 
   // Radio Button
   radioBtnSize: 23,
-  radioSelectedColorAndroid: '#14328c',
+  radioSelectedColorAndroid: '#2d465f',
   radioBtnLineHeight: 24,
   get radioColor() {
     return this.brandPrimary;
   },
 
   // Segment
-  segmentBackgroundColor: '#14328c',
+  segmentBackgroundColor: '#2d465f',
   segmentActiveBackgroundColor: '#fff',
   segmentTextColor: '#fff',
-  segmentActiveTextColor: '#14328c',
+  segmentActiveTextColor: '#2d465f',
   segmentBorderColor: '#fff',
-  segmentBorderColorMain: '#14328c',
+  segmentBorderColorMain: '#2d465f',
 
   // Spinner
   defaultSpinnerColor: '#45D56E',
   inverseSpinnerColor: '#1A191B',
 
   // Tab
-  tabDefaultBg: '#14328c',
+  tabDefaultBg: '#2d465f',
   topTabBarTextColor: '#b3c7f9',
   topTabBarActiveTextColor: '#fff',
   topTabBarBorderColor: '#fff',
@@ -261,7 +261,7 @@ export default {
   tabFontSize: 15,
 
   // Text
-  textColor: '#000',
+  textColor: '#5c6873',
   inverseTextColor: '#fff',
   noteFontSize: 14,
   get defaultTextColor() {
