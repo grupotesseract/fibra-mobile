@@ -89,14 +89,13 @@ class EstoqueScreen extends Component<Props> {
                                 materiais.map(material => {
                                     return <Card key={material.id}>
                                         <CardItem header bordered>
-                                            <Text>{material.nome}</Text>
+                                            <Text>{material.nome ? material.nome : material.tipoMaterialTipo}</Text>
                                         </CardItem>
                                         <CardItem>
                                             <Body>
-                                                <Text>Tipo: {material.tipoMaterial}</Text>
-                                                <Text>Potência: {material.potencia}</Text>
-                                                <Text>Tensão: {material.tensao}</Text>
-                                                { material.reator && <Text>Reator: {material.reator}</Text> }
+                                                { material.tipoMaterial && <Text>Tipo: {material.tipoMaterial}</Text> }
+                                                { material.potencia && <Text>Potência: {material.potencia}</Text> }
+                                                { material.tensao && <Text>Tensão: {material.tensao}</Text> }
                                                 { material.base && <Text>Base: {material.base}</Text> }
                                             </Body>
                                         </CardItem>

@@ -230,7 +230,7 @@ class ManutencaoItem extends Component<Props> {
                 materiais?.map((material: Material) => {
                   return <Card key={material.id}>
                     <CardItem header bordered>
-                      <Text>{material.nome}</Text>
+                      <Text>LÂMPADA</Text>
                     </CardItem>
                     <CardItem>
                       <Body>
@@ -246,7 +246,7 @@ class ManutencaoItem extends Component<Props> {
                       </Body>
                     </CardItem>
                     <CardItem footer bordered style={{ flexDirection: 'column' }}>
-                      <Text style={{ marginVertical: 3 }}>Substituições</Text>
+                      <Text style={{ marginVertical: 3 }}>Trocas</Text>
                       {material.base &&
                         <Item style={style.itemSubstituicao}>
                           <Left>
