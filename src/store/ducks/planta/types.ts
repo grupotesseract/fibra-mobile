@@ -23,6 +23,7 @@ export interface Material {
     base?: string,
     reator?: string,
     tipoMaterial?: string,
+    tipoMaterialTipo?: string,
     quantidadeInstalada?: number,
     quantidade?: number,
     quantidadeBase?: number,
