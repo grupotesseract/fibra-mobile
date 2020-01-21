@@ -238,17 +238,19 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     }
 
                     // Define estado concluido para TRUE
-                    const itensVistoriados = programacaoRealizada.itensVistoriados || [];
+                    let itensVistoriados = programacaoRealizada.itensVistoriados || [];
                     const indexItem = itensVistoriados.findIndex(i => i.id_item === idItem)
+
                     // Subsititui o item que já está armazenado
                     if (indexItem >= 0) {
+                      itensVistoriados.splice(indexItem, 1, {
+                        concluido: true,
+                        id_item: idItem
+                      });
                       return {
                         ...programacaoRealizada,
                         datasManutencoes: datasManutencoes,
-                        itensVistoriados: itensVistoriados.splice(indexItem, 1, {
-                          concluido: true,
-                          id_item: idItem
-                        })
+                        itensVistoriados,
                       }
                     }
                     return {
