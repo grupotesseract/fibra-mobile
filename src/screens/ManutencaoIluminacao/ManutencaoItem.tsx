@@ -299,8 +299,8 @@ class ManutencaoItem extends Component<Props> {
                           small
                           disabled={!permiteAlteracao}
                           rounded={true}
-                          warning={!material.quantidadeConfirmada}
-                          success={material.quantidadeConfirmada}
+                          warning={!material.quantidadeConfirmada && permiteAlteracao}
+                          success={material.quantidadeConfirmada && permiteAlteracao}
                           onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
                           <Text>Confirmar</Text>
                         </Button>

@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 import { ProgramacoesTypes, ProgramacoesState, FotosItem } from './types';
+import programacaoReducer from '../programacao';
 
 const INITIAL_STATE: ProgramacoesState = {
     programacoesRealizadas: [],
@@ -29,28 +30,6 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                                 usuarios,
                             }
                         ]
-                    }
-                })
-            }
-        }
-        case ProgramacoesTypes.CONFIRMA_PERIODO:
-        {
-            const { idProgramacao, dataInicioReal } = action.payload;
-            const { programacoesRealizadas } = state;
-
-            // Modifica a data de inicio da programacao que tem o id recebido
-            return {
-                ...state,
-                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
-                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
-                        return programacaoRealizada;
-                    }
-                    return {
-                        ...programacaoRealizada,
-                        programacao: {
-                            ...programacaoRealizada.programacao,
-                            data_inicio_real: programacaoRealizada.programacao.data_inicio_real || dataInicioReal ,
-                        }
                     }
                 })
             }
@@ -259,17 +238,19 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     }
 
                     // Define estado concluido para TRUE
-                    const itensVistoriados = programacaoRealizada.itensVistoriados || [];
+                    let itensVistoriados = programacaoRealizada.itensVistoriados || [];
                     const indexItem = itensVistoriados.findIndex(i => i.id_item === idItem)
+
                     // Subsititui o item que já está armazenado
                     if (indexItem >= 0) {
+                      itensVistoriados.splice(indexItem, 1, {
+                        concluido: true,
+                        id_item: idItem
+                      });
                       return {
                         ...programacaoRealizada,
                         datasManutencoes: datasManutencoes,
-                        itensVistoriados: itensVistoriados.splice(indexItem, 1, {
-                          concluido: true,
-                          id_item: idItem
-                        })
+                        itensVistoriados,
                       }
                     }
                     return {
@@ -282,27 +263,6 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                           id_item: idItem
                         }
                       ]
-                    }
-                })
-            }
-        }
-        case ProgramacoesTypes.ARMAZENA_COMENTARIOS_GERAIS:
-        {
-          const { idProgramacao, comentario } = action.payload;
-          const { programacoesRealizadas } = state;
-
-          return {
-                ...state,
-                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
-                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
-                        return programacaoRealizada;
-                    }
-                    return {
-                      ...programacaoRealizada,
-                      programacao: {
-                        ...programacaoRealizada.programacao,
-                        comentarioGeral: comentario,
-                      }
                     }
                 })
             }
@@ -351,44 +311,23 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                 })
             }
         }
+        case ProgramacoesTypes.CONFIRMA_PERIODO:
         case ProgramacoesTypes.UPDATE_PROGRAMACAO:
-        {
-          const { idProgramacao, programacao } = action.payload;
-          const { programacoesRealizadas } = state;
-
-          if (programacao) {
-            return {
-              ...state,
-              programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
-                if (programacaoRealizada ?.programacao ?.id !== idProgramacao) {
-                  return programacaoRealizada;
-                }
-                return programacao
-              })
-            }
-          } else {
-            return state;
-          }
-        }
+        case ProgramacoesTypes.ARMAZENA_COMENTARIOS_GERAIS:
         case ProgramacoesTypes.CONCLUI_MANUTENCAO:
         {
-          const { idProgramacao } = action.payload;
           const { programacoesRealizadas } = state;
 
           return {
             ...state,
-            programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
-              if (programacaoRealizada?.programacao ?.id !== idProgramacao) {
-                return programacaoRealizada;
-              }
-              return {
-                ...programacaoRealizada,
-                programacao: {
-                  ...programacaoRealizada.programacao,
-                  data_fim_real: new Date(),
+            programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada =>
+              {
+                const { programacao } = programacaoRealizada;
+                return {
+                  ...programacaoRealizada,
+                  programacao: programacaoReducer(programacao, action)
                 }
-              }
-            })
+              })
           }
         }
         case ProgramacoesTypes.DELETE_ALL:

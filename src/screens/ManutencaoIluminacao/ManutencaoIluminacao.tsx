@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, List, ListItem, Left, Right, Icon, Badge } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, View, ActivityIndicator } from 'react-native';
+import { ScrollView, View, ActivityIndicator, Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -77,6 +77,21 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     concluirManutencao = () => {
+      Alert.alert(
+        'Concluir Manutenção',
+        'Deseja concluir a manutenção de todos os itens?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => this.handleConcluirManutencao() },
+        ],
+      );
+    }
+
+    handleConcluirManutencao = () => {
       this.setState({ loadingConcluir: true }, async () => {
         const { navigation, concluiManutencao } = this.props;
         const idProgramacao = this.props.plantaAtiva.proximaProgramacao.id;
@@ -163,7 +178,7 @@ class ManutencaoIluminacao extends Component<Props> {
               {loadingConcluir ?
                 <ActivityIndicator /> :
                 <>
-                  <Icon name='md-checkmark' style={{ fontSize: 36 }} />
+                  <Icon name='md-checkmark' style={{ fontSize: 40 }} />
                   <View style={{ alignItems: 'center' }}>
                     <Text>CONCLUIR FINAL</Text>
                   </View>
@@ -181,8 +196,8 @@ const style = {
         marginVertical: 5,
     },
     botaoQuadrado: {
-        margin: 5,
-        padding: 10,
+        margin: 4,
+        padding: 5,
         paddingBottom: 10,
         height: 110,
         flex: 1,

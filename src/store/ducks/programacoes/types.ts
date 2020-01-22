@@ -1,3 +1,5 @@
+import { Programacao } from "../programacao/types";
+
 /**
  * Action types
  */
@@ -22,7 +24,6 @@
 /**
  * Data types
 */
-
 export interface QuantidadeSubstituida {
     material_id: number
     item_id: number
@@ -41,15 +42,6 @@ export interface Estoque {
 export interface Entrada {
     material_id: number
     quantidade: number
-}
-
-export interface Programacao {
-    id?: number
-    data_inicio_prevista?: string
-    data_fim_prevista?: string
-    data_inicio_real?: string
-    data_fim_real?: string
-    comentarioGeral?: string
 }
 
 export interface LiberacaoDocumento {
