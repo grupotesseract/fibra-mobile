@@ -14,6 +14,7 @@ import MenuVistoria from "./screens/MenuVistoria/MenuVistoria";
 import EstoqueScreen from "./screens/Estoque/Estoque";
 import EntradaMateriais from "./screens/EntradaMateriais/EntradaMateriais";
 import ManutencaoIluminacao from "./screens/ManutencaoIluminacao/ManutencaoIluminacao";
+import ScanQRCodeReader from "./screens/ManutencaoIluminacao/ScanQRCodeReader";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
 import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import Colaboradores from "./screens/Colaboradores/Colaboradores";
@@ -30,6 +31,7 @@ const AuthStack = createStackNavigator(
     Estoque: { screen: EstoqueScreen },
     EntradaMateriais: { screen: EntradaMateriais },
     ManutencaoIluminacao: { screen: ManutencaoIluminacao },
+    ScanQRCodeReader: { screen: ScanQRCodeReader },
     ManutencaoItem: { screen: ManutencaoItem },
     FotosItem: { screen: FotosItemScreen },
     ComentariosGerais: { screen: ComentariosGerais },

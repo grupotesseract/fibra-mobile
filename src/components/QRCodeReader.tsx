@@ -11,17 +11,14 @@ export function QRCodeReader(props) {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-        console.log('qrcode scanned');
+        alert(`QRCODE ${data} ENCONTRADO. FAVOR AGUARDAR O ITEM SER CARREGADO`);
         const { navigation } = props;
         const qrcode = data;
-        console.log('qrcode', qrcode);        
         navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
     };
 
 
     var {height} = Dimensions.get('window');
-    const { navigation } = props;
 
     return <View style={{zIndex:9, position: 'absolute', backgroundColor: 'black', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'flex-start', height: height}}>
         <BarCodeScanner
