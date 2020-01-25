@@ -195,7 +195,7 @@ class ManutencaoItem extends Component<Props> {
 
     if (error) {
       return <Container>
-        <HeaderNav title={nome} />
+        <HeaderNav title={'MANUTENÇÃO'} />
         <Content padder>
           <Text>{error}</Text>
         </Content>
@@ -205,7 +205,7 @@ class ManutencaoItem extends Component<Props> {
 
     return (
       <Container>
-        <HeaderNav title={nome} />
+        <HeaderNav title={'MANUTENÇÃO'} />
         <Content padder>
           <KeyboardAvoidingView
             behavior="height"
@@ -216,6 +216,7 @@ class ManutencaoItem extends Component<Props> {
                   <Thumbnail source={require('../../../assets/qrcode.png')} />
                   <Body>
                     <Text note>{qrcode}</Text>
+                    <Text note>{nome}</Text>
                     <Badge
                       warning={emergencia}
                       primary={!emergencia}>
