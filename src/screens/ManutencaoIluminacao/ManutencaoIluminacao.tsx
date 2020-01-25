@@ -31,6 +31,7 @@ class ManutencaoIluminacao extends Component<Props> {
         hasCameraPermission: false,
         readingQRCode: false,
         loadingConcluir: false,
+        scanned: false
     }
 
     async componentDidMount() {
@@ -40,7 +41,7 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props) {
-      if (prevProps.isFocused !== this.props.isFocused) {
+      if (prevProps.isFocused !== this.props.isFocused) {        
         this.carregaItens();
       }
     }
@@ -67,12 +68,6 @@ class ManutencaoIluminacao extends Component<Props> {
     ativaQRCodeReader() {
         this.setState({
             readingQRCode: true
-        })
-    }
-
-    handleCloseQRCode() {
-        this.setState({
-            readingQRCode: false,
         })
     }
 
@@ -106,29 +101,18 @@ class ManutencaoIluminacao extends Component<Props> {
       navigation.navigate('Menu');
     }
 
-    handleScan(scannedObj) {
-        console.log('qrcode scanned');
-        const { navigation } = this.props;
-        const qrcode = scannedObj.data;
-        console.log('qrcode', qrcode);
-        this.setState({
-            qrcode,
-            readingQRCode: false,
-        })
-        navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
-    }
-
     openItem = (item: Item) => {
       const { navigation } = this.props;
       navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })
     }
 
     render() {
-      const { readingQRCode, itens, loadingConcluir } = this.state;
+      const { readingQRCode, itens, loadingConcluir, scanned } = this.state;
+      const { navigation } = this.props;
       if (readingQRCode) {
         return <QRCodeReader
-          handleClose={() => this.handleCloseQRCode()}
-          handleScan={e => this.handleScan(e)} />
+          navigation={navigation}
+           />
       }
 
       return (
