@@ -31,8 +31,8 @@ interface State {
 class Login extends Component<Props, State> {
 
   state = {
-    user: 'renato.gomes',
-    password: '12344321',
+    user: '',
+    password: '',
     auth: {
       loading: false,
       error: false,
