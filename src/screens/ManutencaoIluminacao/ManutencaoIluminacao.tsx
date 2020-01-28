@@ -41,7 +41,7 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props) {
-      if (prevProps.isFocused !== this.props.isFocused) {        
+      if (prevProps.isFocused !== this.props.isFocused) {
         this.carregaItens();
       }
     }
@@ -107,7 +107,7 @@ class ManutencaoIluminacao extends Component<Props> {
 
     render() {
       const { itens, loadingConcluir } = this.state;
-      
+
 
       return (
         <Container>
