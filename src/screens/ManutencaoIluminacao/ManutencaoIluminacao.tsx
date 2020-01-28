@@ -8,7 +8,7 @@ import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Planta, Item } from '../../store/ducks/planta/types';
-import { QRCodeReader } from '../../components/QRCodeReader';
+
 import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
@@ -31,6 +31,7 @@ class ManutencaoIluminacao extends Component<Props> {
         hasCameraPermission: false,
         readingQRCode: false,
         loadingConcluir: false,
+        scanned: false
     }
 
     async componentDidMount() {
@@ -40,7 +41,7 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     componentDidUpdate(prevProps: Props) {
-      if (prevProps.isFocused !== this.props.isFocused) {
+      if (prevProps.isFocused !== this.props.isFocused) {        
         this.carregaItens();
       }
     }
@@ -65,15 +66,8 @@ class ManutencaoIluminacao extends Component<Props> {
     }
 
     ativaQRCodeReader() {
-        this.setState({
-            readingQRCode: true
-        })
-    }
-
-    handleCloseQRCode() {
-        this.setState({
-            readingQRCode: false,
-        })
+      const { navigation } = this.props;
+      navigation.navigate('ScanQRCodeReader');
     }
 
     concluirManutencao = () => {
@@ -106,30 +100,14 @@ class ManutencaoIluminacao extends Component<Props> {
       navigation.navigate('Menu');
     }
 
-    handleScan(scannedObj) {
-        console.log('qrcode scanned');
-        const { navigation } = this.props;
-        const qrcode = scannedObj.data;
-        console.log('qrcode', qrcode);
-        this.setState({
-            qrcode,
-            readingQRCode: false,
-        })
-        navigation.navigate({ routeName: 'ManutencaoItem', params: { qrcode }})
-    }
-
     openItem = (item: Item) => {
       const { navigation } = this.props;
       navigation.navigate({ routeName: 'ManutencaoItem', params: { idItem: item.id } })
     }
 
     render() {
-      const { readingQRCode, itens, loadingConcluir } = this.state;
-      if (readingQRCode) {
-        return <QRCodeReader
-          handleClose={() => this.handleCloseQRCode()}
-          handleScan={e => this.handleScan(e)} />
-      }
+      const { itens, loadingConcluir } = this.state;
+      
 
       return (
         <Container>
