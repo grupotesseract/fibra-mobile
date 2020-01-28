@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { View, KeyboardAvoidingView, Image, StyleSheet } from 'react-native'
-import { Label, Form, Input, Item, Text } from 'native-base'
-import { connect } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import React, { Component } from 'react';
+import { View, KeyboardAvoidingView } from 'react-native';
+import { Label, Form, Input, Item, Icon, Text } from 'native-base';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 import { LoginData, AuthState } from '../../store/ducks/auth/types'
 import * as AuthActions from '../../store/ducks/auth/actions'
@@ -58,9 +58,8 @@ class Login extends Component<Props, State> {
   }
 
   render() {
-    const { user, password } = this.state
-    const { auth } = this.props
-
+    const { user, password } = this.state;
+    const { auth } = this.props;
     return (
       <KeyboardAvoidingView
         behavior="padding"
@@ -90,20 +89,18 @@ class Login extends Component<Props, State> {
             </Item>
           </Form>
 
-          { auth.error && <Text>Usuário ou senha incorretos.</Text>}
+          { auth.error && <Text>Usuário ou senha incorretos.</Text> }
 
           <ActionButton
-            block
             onPress={() => this.authLogin()}
             style={style.buttonLogin}
             loading={auth.loading}>
-            
             <Text>Login</Text>
           </ActionButton>
-        </View>
 
+        </View>
       </KeyboardAvoidingView>
-    )
+    );
   }
 }
 
@@ -112,7 +109,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(AuthActions, dispatch)
+  bindActionCreators(AuthActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
