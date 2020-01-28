@@ -7,13 +7,17 @@ import {
   View,
 } from 'react-native'
 
-interface StateProps {
+interface ScanProps {
   navigation: NavigationScreenProp<any, any>,
 }
 
-type Props = StateProps
+type ScanState = {
+  isFocused: boolean;
+}
 
-class ScanQRCodeReader extends Component<Props> {
+type Props = ScanProps
+
+class ScanQRCodeReader extends Component<Props,ScanState> {
 
     constructor(props) {
       super(props);
@@ -33,7 +37,7 @@ class ScanQRCodeReader extends Component<Props> {
         () => this.setState({ isFocused: false }),
       );
     }
-    
+
     componentWillUnmount() {
       this.focusListner.remove();
       this.blurListner.remove();
@@ -53,7 +57,7 @@ class ScanQRCodeReader extends Component<Props> {
       return <QRCodeReader
         navigation={navigation}
           />
-      
+
     }
 }
 
