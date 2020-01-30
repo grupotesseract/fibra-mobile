@@ -198,8 +198,8 @@ export default {
   tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#2d465f',
 
   // Header
-  toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#2d465f',
-  toolbarDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#f9f9f9',
+  toolbarBtnColor: '#f9f9f9',
+  toolbarDefaultBg: '#2d465f',
   toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
   toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : '#fff',
@@ -234,7 +234,7 @@ export default {
     return this.textColor;
   },
   get inputColorPlaceholder() {
-    return '#575757';
+    return '#999999';
   },
 
   // Line Height
@@ -308,7 +308,7 @@ export default {
   // Other
   borderRadiusBase: platform === PLATFORM.IOS ? 5 : 2,
   borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
-  contentPadding: 10,
+  contentPadding: 30,
   dropdownLinkColor: '#414142',
   inputLineHeight: 24,
   deviceWidth,

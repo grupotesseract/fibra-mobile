@@ -5,7 +5,7 @@ export default () => {
     '.focused': {
       width: 0
     },
-    fontSize: 17
+    fontSize: 13,
   };
 
   return labelTheme;

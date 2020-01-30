@@ -19,7 +19,7 @@ export default (variables /* : * */ = variable) => {
       shadowOpacity: null,
       elevation: null
     },
-    marginVertical: 5,
+    marginVertical: 10,
     marginHorizontal: 2,
     borderWidth: variables.borderWidth,
     borderRadius: variables.cardBorderRadius,
@@ -28,7 +28,7 @@ export default (variables /* : * */ = variable) => {
     backgroundColor: variables.cardDefaultBg,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.075,
     shadowRadius: 1.5,
     elevation: 3
   };
