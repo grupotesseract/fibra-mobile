@@ -130,8 +130,7 @@ class ManutencaoItem extends Component<Props> {
     const { navigation, concluiItem, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     await this.salvaQuantidades(idItem);
-    const data = new Date();
-    console.log(idItem, idProgramacao, data);
+    const data = new Date().toISOString();
     await concluiItem({ idItem, idProgramacao, data });
     navigation.navigate({ routeName: 'ManutencaoIluminacao' })
   }
@@ -139,7 +138,7 @@ class ManutencaoItem extends Component<Props> {
   iniciarItem = async (idItem: number) => {
     const { iniciaItem, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const data = new Date();
+    const data = new Date().toISOString();
     await iniciaItem({ idItem, idProgramacao, data });
   }
 

@@ -24,7 +24,7 @@ class LiberarDocumento extends Component<Props> {
 
   state = {
     idsUsuariosSelecionados: [],
-    now: new Date(),
+    now: new Date().toISOString(),
   }
 
   onPressBotaoColaborador = (idColaborador: number) => {
