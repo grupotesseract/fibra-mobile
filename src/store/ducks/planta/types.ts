@@ -1,4 +1,4 @@
-import { Programacao } from "../programacoes/types";
+import { Programacao } from "../programacao/types";
 
 /**
  * Action types
@@ -6,8 +6,6 @@ import { Programacao } from "../programacoes/types";
 
  export enum PlantaTypes {
     SET = '@planta/SET',
-    LIBERAR_DOCUMENTO = '@planta/LIBERAR_DOCUMENTO',
-    CONFIRMAR_PERIODO_MANUTENCAO = '@planta/CONFIRMAR_PERIODO_MANUTENCAO',
  }
 
  /**

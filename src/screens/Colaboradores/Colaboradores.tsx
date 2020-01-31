@@ -9,11 +9,7 @@ interface StateProps {
   usuarios: Usuario[],
 }
 
-interface DispatchProps {
-  liberarDocumentoPlanta(idProgramacao: number, now: Date, usuarios: number[]): void,
-}
-
-type Props = StateProps & DispatchProps
+type Props = StateProps
 
 class Colaboradores extends Component<Props> {
 
