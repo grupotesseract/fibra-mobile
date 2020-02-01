@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import { Header, Left, Right, Button, Icon, Text, View } from 'native-base'
-import { bindActionCreators, Dispatch } from 'redux'
-import { connect } from 'react-redux'
-import * as AuthActions from '../../store/ducks/auth/actions'
-import { checkAuth } from '../../utils/authNavigation'
-import { AuthState } from '../../store/ducks/auth/types'
-import { NavigationAction } from 'react-navigation'
-import Logo from '../../components/Logo'
+import React, { Component } from 'react';
+import { Button, Icon, Text, View } from 'native-base';
+import { NavigationScreenProp } from 'react-navigation';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+
+import HeaderLogo from '../../components/HeaderLogo';
+import * as AuthActions from '../../store/ducks/auth/actions';
+import { AuthState } from '../../store/ducks/auth/types';
+import { checkAuth } from '../../utils/authNavigation';
 
 interface Props {
   auth: AuthState,
@@ -28,52 +29,27 @@ class Menu extends Component<Props> {
 
     return (
       <View>
-        <Header transparent>
-          <Left>
-            <Logo size="xs" />
-          </Left>
-
-          <Right>
-            <Button light
-              onPress={() => this.logoff()}
-              style={style.btnStyle}>
-
-              <Icon name="exit" />
-            </Button>
-          </Right>
-        </Header>
+        <HeaderLogo />
 
         <View padder>
-          <Button
-            onPress={() => navigate('SelecionaPlanta')}
-            style={style.btnStyle}>
-
+          <Button onPress={() => navigate('SelecionaPlanta')}>
             <Icon name="bulb" />
             <Text>Manutenção de iluminação</Text>
           </Button>
 
-          <Button
-            onPress={() => navigate('Colaboradores')}
-            style={style.btnStyle}>
-
+          <Button onPress={() => navigate('Colaboradores')}>
             <Icon name="person" />
             <Text>Colaboradores</Text>
           </Button>
 
           {role === 'admin' &&
             <>
-              <Button
-                onPress={() => navigate('SyncEmpresas')}
-                style={style.btnStyle}>
-
+              <Button onPress={() => navigate('SyncEmpresas')}>
                 <Icon name="cloud-download" />
                 <Text>Empresas, plantas e usuários</Text>
               </Button>
 
-              <Button
-                onPress={() => navigate('Programacoes')}
-                style={style.btnStyle}>
-
+              <Button onPress={() => navigate('Programacoes')}>
                 <Icon name="cube" />
                 <Text>Programações</Text>
               </Button>
@@ -82,12 +58,6 @@ class Menu extends Component<Props> {
         </View>
       </View>
     )
-  }
-}
-
-const style = {
-  btnStyle: {
-    marginVertical: 5,
   }
 }
 
