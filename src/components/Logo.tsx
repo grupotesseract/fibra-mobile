@@ -1,12 +1,29 @@
-import React, { Component } from 'react'
-import { Image, Dimensions } from 'react-native'
+import React from 'react'
+import { Image, StyleSheet } from 'react-native'
+import { View } from 'native-base'
 
-export default class Logo extends Component {
-  render() {
-    return (
+const Logo = (props) => {
+  let size = logoSize[props.size]
+  let style = props.center ? {
+    alignSelf: 'center', ...size
+  } : size
+
+  return (
+    <View>
       <Image
-        resizeMode='cover'
-        source={require('../../assets/fibra-logo.png')} />
-    )
-  }
+        style={style}
+        resizeMode='center'
+        source={require('../../assets/fibra-logo.png')}
+      />
+    </View>
+  )
 }
+
+export default Logo
+
+const logoSize = StyleSheet.create({
+  lg: { width: 224, height: 120 },
+  md: { width: 146, height: 78 },
+  sm: { width: 104, height: 56 },
+  xs: { width: 90, height: 48 }
+})
