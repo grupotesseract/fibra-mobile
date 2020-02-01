@@ -73,14 +73,14 @@ class Login extends Component<Props, State> {
           <Text style={style.text}>Faça login para continuar</Text>
 
           <Form style={style.form}>
-            <Item floatingLabel>
+            <Item stackedLabel>
               <Label style={style.label}>Usuário</Label>
               <Input value={user}
                 autoCapitalize='none'
                 onChangeText={user => this.setState({ user })}/>
             </Item>
 
-            <Item floatingLabel>
+            <Item stackedLabel>
               <Label style={style.label}>Senha</Label>
               <Input value={password}
                 style={style.input}
