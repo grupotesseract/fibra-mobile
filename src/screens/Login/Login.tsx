@@ -76,7 +76,7 @@ class Login extends Component<Props, State> {
             <Item floatingLabel>
               <Label style={style.label}>Usuário</Label>
               <Input value={user}
-                style={style.input}
+                autoCapitalize='none'
                 onChangeText={user => this.setState({ user })}/>
             </Item>
 
