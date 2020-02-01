@@ -1,24 +1,34 @@
-import React from 'react';
-import { Header, Left, Button, Icon, Body, Title, View  } from 'native-base';
-import { withNavigation } from 'react-navigation';
+import React from 'react'
+import { Header, Left, Button, Icon, Body, Title, View } from 'native-base'
+import { withNavigation } from 'react-navigation'
+import { Platform, StatusBar } from 'react-native';
 
-class HeaderNav extends React.Component {
-    render() {
-        return <View style={{backgroundColor: '#101090', paddingTop: 0}}>
-            <Header>
-                <Left>
-                    <Button hasText transparent onPress={() => {
-                        this.props.navigation.goBack()
-                        }}>
-                        <Icon name='arrow-back' />
-                    </Button>
-                </Left>
-                <Body>
-                    <Title>{this.props.title}</Title>
-                </Body>
-            </Header>
-        </View>
-    }
+interface Props {
+  navigation: any,
+  title: string
 }
 
-export default withNavigation(HeaderNav);
+class HeaderNav extends React.Component<Props> {
+  render() {
+    return (
+      <View>
+        <Header>
+          <Left>
+            <Button
+              hasText
+              onPress={() => {this.props.navigation.goBack()}}
+            >
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
+
+          <Body>
+            <Title>{this.props.title}</Title>
+          </Body>
+        </Header>
+      </View>
+    )
+  }
+}
+
+export default withNavigation(HeaderNav)
