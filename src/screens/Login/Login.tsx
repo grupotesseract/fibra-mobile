@@ -60,15 +60,14 @@ class Login extends Component<Props, State> {
   render() {
     const { user, password } = this.state;
     const { auth } = this.props;
+
     return (
       <KeyboardAvoidingView
         behavior="padding"
         style={style.container}>
 
-        <View>
-          <Image
-            style={style.logo}
-            source={require('../../../assets/fibra-logo.png')} />
+        <View padder>
+          <Logo center size="md" />
 
           <Text style={style.text}>Faça login para continuar</Text>
 
