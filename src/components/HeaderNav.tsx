@@ -1,7 +1,7 @@
+import { Body, Button, Header, Icon, Left, Title, View } from 'native-base'
 import React from 'react'
-import { Header, Left, Button, Icon, Body, Title, View } from 'native-base'
+import { Platform, StatusBar } from 'react-native'
 import { withNavigation } from 'react-navigation'
-import { Platform, StatusBar } from 'react-native';
 
 interface Props {
   navigation: any,
@@ -11,14 +11,13 @@ interface Props {
 class HeaderNav extends React.Component<Props> {
   render() {
     return (
-      <View>
+      <View style={styles.view}>
         <Header>
           <Left>
             <Button
               hasText
-              onPress={() => {this.props.navigation.goBack()}}
-            >
-              <Icon name='arrow-back' />
+              onPress={() => {this.props.navigation.goBack()}}>
+              <Icon name="arrow-back"/>
             </Button>
           </Left>
 
@@ -32,3 +31,9 @@ class HeaderNav extends React.Component<Props> {
 }
 
 export default withNavigation(HeaderNav)
+
+const styles = {
+  view: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  }
+}
