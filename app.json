@@ -3,7 +3,7 @@
     "name": "Fibra",
     "slug": "fibra-mobile",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
@@ -35,6 +35,7 @@
       "versionCode": 1,
       "package": "com.tesseract.fibramobile"
     },
+    "androidStatusBarColor": "#2d465f",
     "androidStatusBar": {
       "backgroundColor": "#2d465f",
       "barStyle": "light-content"
