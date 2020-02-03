@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
-import { Label, Form, Input, Item, Icon, Text } from 'native-base';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { Form, Input, Item, Label, Text, View } from 'native-base'
+import React, { Component } from 'react'
+import { KeyboardAvoidingView, StyleSheet } from 'react-native'
+import { NavigationAction } from 'react-navigation'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
-import { LoginData, AuthState } from '../../store/ducks/auth/types'
-import * as AuthActions from '../../store/ducks/auth/actions'
+import ActionButton from '../../components/ActionButton'
+import Logo from '../../components/Logo'
 import { ApplicationState } from '../../store'
-import ActionButton from '../../components/ActionButton';
-import HeaderLogo from '../../components/HeaderLogo';
+import * as AuthActions from '../../store/ducks/auth/actions'
+import { AuthState, LoginData } from '../../store/ducks/auth/types'
 import { checkAuth } from '../../utils/authNavigation'
-import { NavigationAction } from 'react-navigation';
 
 interface StateProps {
   auth: AuthState,
@@ -24,9 +24,9 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps
 
 interface State {
-  user: string;
-  password: string;
-  auth: AuthState;
+  user: string
+  password: string
+  auth: AuthState
 }
 class Login extends Component<Props, State> {
 
@@ -40,26 +40,25 @@ class Login extends Component<Props, State> {
   }
 
   authLogin() {
-    const { authRequest } = this.props;
-    const { user, password } = this.state;
+    const { authRequest } = this.props
+    const { user, password } = this.state
 
-    authRequest({ user, password });
+    authRequest({ user, password })
   }
 
-
   componentDidMount() {
-    const { auth, navigation } = this.props;
-    checkAuth({ auth, navigation });
+    const { auth, navigation } = this.props
+    checkAuth({ auth, navigation })
   }
 
   componentDidUpdate() {
-    const { auth, navigation } = this.props;
-    checkAuth({ auth, navigation });
+    const { auth, navigation } = this.props
+    checkAuth({ auth, navigation })
   }
 
   render() {
-    const { user, password } = this.state;
-    const { auth } = this.props;
+    const { user, password } = this.state
+    const { auth } = this.props
 
     return (
       <KeyboardAvoidingView
@@ -73,24 +72,26 @@ class Login extends Component<Props, State> {
 
           <Form style={style.form}>
             <Item stackedLabel>
-              <Label style={style.label}>Usuário</Label>
-              <Input value={user}
+              <Label>Usuário</Label>
+              <Input
+                value={user}
                 autoCapitalize='none'
-                onChangeText={user => this.setState({ user })}/>
+                onChangeText={user => this.setState({ user })} />
             </Item>
 
             <Item stackedLabel>
-              <Label style={style.label}>Senha</Label>
-              <Input value={password}
-                style={style.input}
+              <Label>Senha</Label>
+              <Input
+                value={password}
                 secureTextEntry={true}
-                onChangeText={password => this.setState({ password })}/>
+                onChangeText={password => this.setState({ password })} />
             </Item>
           </Form>
 
-          { auth.error && <Text>Usuário ou senha incorretos.</Text> }
+          {auth.error && <Text>Usuário ou senha incorretos.</Text>}
 
           <ActionButton
+            block
             onPress={() => this.authLogin()}
             style={style.buttonLogin}
             loading={auth.loading}>
@@ -99,7 +100,7 @@ class Login extends Component<Props, State> {
 
         </View>
       </KeyboardAvoidingView>
-    );
+    )
   }
 }
 
@@ -108,7 +109,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(AuthActions, dispatch);
+  bindActionCreators(AuthActions, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
@@ -123,12 +124,8 @@ const style = StyleSheet.create({
     marginTop: 40,
   },
   buttonLogin: {
-    justifyContent: 'center',
-    borderRadius: 3,
     marginTop: 60,
-  },
-  input: {
-    fontSize: 16
+    justifyContent: 'center',
   },
   text: {
     fontWeight: '300',
@@ -136,9 +133,6 @@ const style = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     textAlign: 'center',
-  },
-  label: {
-    alignSelf: 'flex-start',
   },
   logo: {
     width: 'auto',
