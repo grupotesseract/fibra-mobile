@@ -1,45 +1,33 @@
+import { Header, Left, Right, Text, View } from 'native-base'
 import React from 'react'
-import { Header, Body, View, Left, Right, Button, Icon } from 'native-base'
-import { StyleSheet } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
+
 import Logo from './Logo'
 
 const HeaderLogo = () => {
   return (
-    <View>
+    <View style={style.view}>
       <Header transparent>
         <Left>
-          <Button onPress={() => this.props.navigation.navigate("DrawerOpen")}>
-            <Icon name="menu" />
-          </Button>
-          {/* <Button
-            transparent
-            onPress={() => this.logoff()}
-            style={style.btnStyle}
-          >
-            <Icon name="exit" />
-          </Button> */}
+          <Logo size="xs" />
         </Left>
 
-        <Body>
-          <Logo size="xs" />
-        </Body>
+        <Right>
+          <Text style={style.text}>Serviços Especializados de Engenharia</Text>
+        </Right>
       </Header>
     </View>
   )
 }
 
-export default HeaderLogo
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#aaa',
-    paddingTop: 20,
-    marginBottom: 10
-  }
-})
-
 const style = {
-  btnStyle: {
-    marginVertical: 5,
+  view: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  text: {
+    fontFamily: 'OpenSans_Light',
+    fontSize: 13,
   }
 }
+
+export default HeaderLogo
