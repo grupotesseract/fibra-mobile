@@ -1,12 +1,13 @@
 // @flow
+import variable from './../variables/platform'
 
-export default () => {
+export default (variables /*: * */ = variable) => {
   const labelTheme = {
     '.focused': {
       width: 0
     },
-    fontSize: 13,
-  };
+    fontSize: 17
+  }
 
-  return labelTheme;
-};
+  return labelTheme
+}

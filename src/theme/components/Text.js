@@ -1,8 +1,7 @@
 // @flow
+import variable from './../variables/platform'
 
-import variable from './../variables/platform';
-
-export default (variables /* : * */ = variable) => {
+export default (variables /*: * */ = variable) => {
   const textTheme = {
     fontSize: variables.DefaultFontSize,
     fontFamily: variables.fontFamily,
@@ -11,7 +10,7 @@ export default (variables /* : * */ = variable) => {
       color: '#a7a7a7',
       fontSize: variables.noteFontSize
     }
-  };
+  }
 
-  return textTheme;
-};
+  return textTheme
+}

@@ -1,5 +1,4 @@
 // @flow
-
 export default () => {
   const theme = {
     'NativeBase.Item': {
@@ -82,7 +81,7 @@ export default () => {
       },
       marginLeft: 0
     }
-  };
+  }
 
-  return theme;
-};
+  return theme
+}

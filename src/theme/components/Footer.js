@@ -1,27 +1,25 @@
 // @flow
+import variable from './../variables/platform'
 
-import variable from './../variables/platform';
-import { PLATFORM } from './../variables/commonColor';
-
-export default (variables /* : * */ = variable) => {
-  const platformStyle = variables.platformStyle;
-  const platform = variables.platform;
+export default (variables /*: * */ = variable) => {
+  const platformStyle = variables.platformStyle
+  const platform = variables.platform
 
   const iconCommon = {
     'NativeBase.Icon': {
       color: variables.tabBarActiveTextColor
     }
-  };
+  }
   const iconNBCommon = {
     'NativeBase.IconNB': {
       color: variables.tabBarActiveTextColor
     }
-  };
+  }
   const textCommon = {
     'NativeBase.Text': {
       color: variables.tabBarActiveTextColor
     }
-  };
+  }
   const footerTheme = {
     'NativeBase.Left': {
       'NativeBase.Button': {
@@ -39,7 +37,7 @@ export default (variables /* : * */ = variable) => {
         },
         alignSelf: null,
         ...iconCommon,
-        ...iconNBCommon
+        ...iconNBCommon,
         // ...textCommon
       },
       flex: 1,
@@ -71,7 +69,7 @@ export default (variables /* : * */ = variable) => {
           flex: 1
         },
         ...iconCommon,
-        ...iconNBCommon
+        ...iconNBCommon,
         // ...textCommon
       }
     },
@@ -91,7 +89,7 @@ export default (variables /* : * */ = variable) => {
         },
         alignSelf: null,
         ...iconCommon,
-        ...iconNBCommon
+        ...iconNBCommon,
         // ...textCommon
       },
       flex: 1,
@@ -102,11 +100,11 @@ export default (variables /* : * */ = variable) => {
     flexDirection: 'row',
     justifyContent: 'center',
     borderTopWidth:
-      platform === PLATFORM.IOS && platformStyle !== PLATFORM.MATERIAL
+      platform === 'ios' && platformStyle !== 'material'
         ? variables.borderWidth
         : undefined,
     borderColor:
-      platform === PLATFORM.IOS && platformStyle !== PLATFORM.MATERIAL
+      platform === 'ios' && platformStyle !== 'material'
         ? '#cbcbcb'
         : undefined,
     height: variables.footerHeight,
@@ -114,6 +112,7 @@ export default (variables /* : * */ = variable) => {
     elevation: 3,
     left: 0,
     right: 0
-  };
-  return footerTheme;
-};
+  }
+
+  return footerTheme
+}

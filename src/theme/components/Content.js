@@ -1,5 +1,4 @@
 // @flow
-
 export default () => {
   const contentTheme = {
     flex: 1,
@@ -8,7 +7,7 @@ export default () => {
       borderWidth: 0,
       backgroundColor: 'transparent'
     }
-  };
+  }
 
-  return contentTheme;
-};
+  return contentTheme
+}

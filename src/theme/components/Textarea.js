@@ -1,8 +1,7 @@
 // @flow
+import variable from './../variables/platform'
 
-import variable from './../variables/platform';
-
-export default (variables /* : * */ = variable) => {
+export default (variables /*: * */ = variable) => {
   const textAreaTheme = {
     '.underline': {
       borderBottomWidth: variables.borderWidth,
@@ -19,7 +18,7 @@ export default (variables /* : * */ = variable) => {
     paddingRight: 5,
     fontSize: 15,
     textAlignVertical: 'top'
-  };
+  }
 
-  return textAreaTheme;
-};
+  return textAreaTheme
+}

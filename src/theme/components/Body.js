@@ -1,11 +1,10 @@
 // @flow
-
 export default () => {
   const bodyTheme = {
     flex: 1,
     alignItems: 'center',
-    alignSelf: 'center'
-  };
+    alignSelf: 'center',
+  }
 
-  return bodyTheme;
-};
+  return bodyTheme
+}

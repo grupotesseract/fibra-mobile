@@ -1,8 +1,7 @@
 // @flow
+import variable from './../variables/platform'
 
-import variable from './../variables/platform';
-
-export default (variables /* : * */ = variable) => {
+export default (variables /*: * */ = variable) => {
   const inputGroupTheme = {
     'NativeBase.Icon': {
       fontSize: 24,
@@ -126,7 +125,7 @@ export default (variables /* : * */ = variable) => {
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center'
-  };
+  }
 
-  return inputGroupTheme;
-};
+  return inputGroupTheme
+}

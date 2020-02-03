@@ -1,11 +1,10 @@
 // @flow
+import variable from './../variables/platform'
 
-import variable from './../variables/platform';
-import { PLATFORM } from './../variables/commonColor';
+export default (variables /*: * */ = variable) => {
+  const platformStyle = variables.platformStyle
+  const platform = variables.platform
 
-export default (variables /* : * */ = variable) => {
-  const platformStyle = variables.platformStyle;
-  const platform = variables.platform;
   const darkCommon = {
     'NativeBase.Text': {
       color: variables.brandDark
@@ -16,7 +15,7 @@ export default (variables /* : * */ = variable) => {
     'NativeBase.IconNB': {
       color: variables.brandDark
     }
-  };
+  }
   const lightCommon = {
     'NativeBase.Text': {
       color: variables.brandLight
@@ -27,74 +26,74 @@ export default (variables /* : * */ = variable) => {
     'NativeBase.IconNB': {
       color: variables.brandLight
     }
-  };
+  }
   const primaryCommon = {
     'NativeBase.Text': {
-      color: variables.buttonPrimaryBg
+      color: variables.btnPrimaryBg
     },
     'NativeBase.Icon': {
-      color: variables.buttonPrimaryBg
+      color: variables.btnPrimaryBg
     },
     'NativeBase.IconNB': {
-      color: variables.buttonPrimaryBg
+      color: variables.btnPrimaryBg
     }
-  };
+  }
   const successCommon = {
     'NativeBase.Text': {
-      color: variables.buttonSuccessBg
+      color: variables.btnSuccessBg
     },
     'NativeBase.Icon': {
-      color: variables.buttonSuccessBg
+      color: variables.btnSuccessBg
     },
     'NativeBase.IconNB': {
-      color: variables.buttonSuccessBg
+      color: variables.btnSuccessBg
     }
-  };
+  }
   const infoCommon = {
     'NativeBase.Text': {
-      color: variables.buttonInfoBg
+      color: variables.btnInfoBg
     },
     'NativeBase.Icon': {
-      color: variables.buttonInfoBg
+      color: variables.btnInfoBg
     },
     'NativeBase.IconNB': {
-      color: variables.buttonInfoBg
+      color: variables.btnInfoBg
     }
-  };
+  }
   const warningCommon = {
     'NativeBase.Text': {
-      color: variables.buttonWarningBg
+      color: variables.btnWarningBg
     },
     'NativeBase.Icon': {
-      color: variables.buttonWarningBg
+      color: variables.btnWarningBg
     },
     'NativeBase.IconNB': {
-      color: variables.buttonWarningBg
+      color: variables.btnWarningBg
     }
-  };
+  }
   const dangerCommon = {
     'NativeBase.Text': {
-      color: variables.buttonDangerBg
+      color: variables.btnDangerBg
     },
     'NativeBase.Icon': {
-      color: variables.buttonDangerBg
+      color: variables.btnDangerBg
     },
     'NativeBase.IconNB': {
-      color: variables.buttonDangerBg
+      color: variables.btnDangerBg
     }
-  };
+  }
   const buttonTheme = {
     '.disabled': {
       '.transparent': {
-        backgroundColor: 'transparent',
+        backgroundColor: null,
         'NativeBase.Text': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         },
         'NativeBase.Icon': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         },
         'NativeBase.IconNB': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         }
       },
       'NativeBase.Icon': {
@@ -103,7 +102,7 @@ export default (variables /* : * */ = variable) => {
       'NativeBase.IconNB': {
         color: variables.brandLight
       },
-      backgroundColor: variables.buttonDisabledBg
+      backgroundColor: variables.btnDisabledBg
     },
     '.bordered': {
       '.dark': {
@@ -121,39 +120,39 @@ export default (variables /* : * */ = variable) => {
       '.primary': {
         ...primaryCommon,
         backgroundColor: 'transparent',
-        borderColor: variables.buttonPrimaryBg,
+        borderColor: variables.btnPrimaryBg,
         borderWidth: variables.borderWidth * 2
       },
       '.success': {
         ...successCommon,
         backgroundColor: 'transparent',
-        borderColor: variables.buttonSuccessBg,
+        borderColor: variables.btnSuccessBg,
         borderWidth: variables.borderWidth * 2
       },
       '.info': {
         ...infoCommon,
         backgroundColor: 'transparent',
-        borderColor: variables.buttonInfoBg,
+        borderColor: variables.btnInfoBg,
         borderWidth: variables.borderWidth * 2
       },
       '.warning': {
         ...warningCommon,
         backgroundColor: 'transparent',
-        borderColor: variables.buttonWarningBg,
+        borderColor: variables.btnWarningBg,
         borderWidth: variables.borderWidth * 2
       },
       '.danger': {
         ...dangerCommon,
         backgroundColor: 'transparent',
-        borderColor: variables.buttonDangerBg,
+        borderColor: variables.btnDangerBg,
         borderWidth: variables.borderWidth * 2
       },
       '.disabled': {
-        backgroundColor: 'transparent',
-        borderColor: variables.buttonDisabledBg,
+        backgroundColor: null,
+        borderColor: variables.btnDisabledBg,
         borderWidth: variables.borderWidth * 2,
         'NativeBase.Text': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         }
       },
       ...primaryCommon,
@@ -175,7 +174,7 @@ export default (variables /* : * */ = variable) => {
     '.light': {
       '.transparent': {
         ...lightCommon,
-        backgroundColor: 'transparent'
+        backgroundColor: null
       },
       '.bordered': {
         ...lightCommon
@@ -188,39 +187,39 @@ export default (variables /* : * */ = variable) => {
       '.bordered': {
         ...primaryCommon
       },
-      backgroundColor: variables.buttonPrimaryBg
+      backgroundColor: variables.btnPrimaryBg
     },
 
     '.success': {
       '.bordered': {
         ...successCommon
       },
-      backgroundColor: variables.buttonSuccessBg
+      backgroundColor: variables.btnSuccessBg
     },
 
     '.info': {
       '.bordered': {
         ...infoCommon
       },
-      backgroundColor: variables.buttonInfoBg
+      backgroundColor: variables.btnInfoBg
     },
 
     '.warning': {
       '.bordered': {
         ...warningCommon
       },
-      backgroundColor: variables.buttonWarningBg
+      backgroundColor: variables.btnWarningBg
     },
 
     '.danger': {
       '.bordered': {
         ...dangerCommon
       },
-      backgroundColor: variables.buttonDangerBg
+      backgroundColor: variables.btnDangerBg
     },
 
     '.block': {
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       alignSelf: 'stretch'
     },
 
@@ -244,37 +243,44 @@ export default (variables /* : * */ = variable) => {
       ...primaryCommon,
       '.dark': {
         ...darkCommon,
+        backgroundColor: null
       },
       '.danger': {
         ...dangerCommon,
+        backgroundColor: null
       },
       '.warning': {
         ...warningCommon,
+        backgroundColor: null
       },
       '.info': {
         ...infoCommon,
+        backgroundColor: null
       },
       '.primary': {
         ...primaryCommon,
+        backgroundColor: null
       },
       '.success': {
         ...successCommon,
+        backgroundColor: null
       },
       '.light': {
         ...lightCommon,
+        backgroundColor: null
       },
       '.disabled': {
         backgroundColor: 'transparent',
-        borderColor: variables.buttonDisabledBg,
+        borderColor: variables.btnDisabledBg,
         borderWidth: variables.borderWidth * 2,
         'NativeBase.Text': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         },
         'NativeBase.Icon': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         },
         'NativeBase.IconNB': {
-          color: variables.buttonDisabledBg
+          color: variables.btnDisabledBg
         }
       }
     },
@@ -297,7 +303,7 @@ export default (variables /* : * */ = variable) => {
     '.large': {
       height: 60,
       'NativeBase.Text': {
-        fontSize: 22
+        fontSize: 22,
       }
     },
 
@@ -309,31 +315,32 @@ export default (variables /* : * */ = variable) => {
     },
 
     'NativeBase.Text': {
-      fontFamily: variables.buttonFontFamily,
+      fontFamily: variables.btnFontFamily,
       marginLeft: 0,
       marginRight: 0,
       color: variables.inverseTextColor,
-      fontSize: variables.buttonTextSize,
+      fontSize: variables.btnTextSize,
       paddingHorizontal: 16,
       backgroundColor: 'transparent'
+      // childPosition: 1
     },
 
     'NativeBase.Icon': {
       color: variables.inverseTextColor,
       fontSize: 24,
       marginHorizontal: 16,
-      paddingTop: platform === PLATFORM.IOS ? 2 : undefined
+      paddingTop: platform === 'ios' ? 2 : undefined
     },
     'NativeBase.IconNB': {
       color: variables.inverseTextColor,
       fontSize: 24,
       marginHorizontal: 16,
-      paddingTop: platform === PLATFORM.IOS ? 2 : undefined
+      paddingTop: platform === 'ios' ? 2 : undefined
     },
 
     '.iconLeft': {
       'NativeBase.Text': {
-        marginLeft: 0
+        marginLeft: 0,
       },
       'NativeBase.IconNB': {
         marginRight: 0,
@@ -365,22 +372,25 @@ export default (variables /* : * */ = variable) => {
         }
       }
     },
+
     paddingVertical: variables.buttonPadding,
-    backgroundColor: variables.buttonPrimaryBg,
+    // paddingHorizontal: variables.buttonPadding + 10,
+    backgroundColor: variables.btnPrimaryBg,
     borderRadius: variables.borderRadiusBase,
-    borderColor: variables.buttonPrimaryBg,
+    borderColor: variables.btnPrimaryBg,
     borderWidth: null,
     height: 45,
+    alignSelf: 'flex-start',
     flexDirection: 'row',
     elevation: 2,
-    shadowColor:
-      platformStyle === PLATFORM.MATERIAL ? variables.brandDark : undefined,
+    shadowColor: platformStyle === 'material' ? variables.brandDark : undefined,
     shadowOffset:
-      platformStyle === PLATFORM.MATERIAL ? { width: 2, height: 2 } : undefined,
-    shadowOpacity: platformStyle === PLATFORM.MATERIAL ? 0.25 : undefined,
-    shadowRadius: platformStyle === PLATFORM.MATERIAL ? 1.25 : undefined,
+      platformStyle === 'material' ? { width: 0, height: 2 } : undefined,
+    shadowOpacity: platformStyle === 'material' ? 0.2 : undefined,
+    shadowRadius: platformStyle === 'material' ? 1.2 : undefined,
     alignItems: 'center',
     justifyContent: 'space-between'
-  };
-  return buttonTheme;
-};
+  }
+
+  return buttonTheme
+}

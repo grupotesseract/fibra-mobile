@@ -1,13 +1,12 @@
 // @flow
+import { PixelRatio, Platform } from 'react-native'
 
-import { Platform, PixelRatio } from 'react-native';
+import variable from './../variables/platform'
+import pickerTheme from './Picker'
 
-import pickerTheme from './Picker';
-import variable from './../variables/platform';
-import { PLATFORM } from './../variables/commonColor';
 
-export default (variables /* : * */ = variable) => {
-  const platform = variables.platform;
+export default (variables /*: * */ = variable) => {
+  const platform = variables.platform
   const selectedStyle = {
     'NativeBase.Text': {
       color: variables.listItemSelected
@@ -15,7 +14,7 @@ export default (variables /* : * */ = variable) => {
     'NativeBase.Icon': {
       color: variables.listItemSelected
     }
-  };
+  }
 
   const listItemTheme = {
     'NativeBase.InputGroup': {
@@ -39,7 +38,7 @@ export default (variables /* : * */ = variable) => {
           backgroundColor: 'transparent',
           color: variables.dropdownLinkColor,
           fontSize:
-            platform === PLATFORM.IOS
+            platform === 'ios'
               ? variables.iconFontSize - 10
               : variables.iconFontSize - 5,
           alignItems: 'center',
@@ -58,7 +57,7 @@ export default (variables /* : * */ = variable) => {
         alignItems: 'center',
         justifyContent: 'flex-start',
         flex: 1,
-        height: platform === PLATFORM.IOS ? 30 : 40,
+        height: platform === 'ios' ? 30 : 40,
         borderColor: 'transparent',
         backgroundColor: '#fff',
         borderRadius: 5
@@ -69,11 +68,11 @@ export default (variables /* : * */ = variable) => {
             fontWeight: '500'
           },
           paddingHorizontal: null,
-          paddingLeft: platform === PLATFORM.IOS ? 10 : null
+          paddingLeft: platform === 'ios' ? 10 : null
         },
-        paddingHorizontal: platform === PLATFORM.IOS ? undefined : null,
-        width: platform === PLATFORM.IOS ? undefined : 0,
-        height: platform === PLATFORM.IOS ? undefined : 0
+        paddingHorizontal: platform === 'ios' ? undefined : null,
+        width: platform === 'ios' ? undefined : 0,
+        height: platform === 'ios' ? undefined : 0
       },
       backgroundColor: variables.toolbarInputColor,
       padding: 10,
@@ -92,20 +91,19 @@ export default (variables /* : * */ = variable) => {
       '.first': {
         paddingTop: variables.listItemPadding + 3
       },
-      borderBottomWidth:
-        platform === PLATFORM.IOS ? variables.borderWidth : null,
+      borderBottomWidth: platform === 'ios' ? variables.borderWidth : null,
       marginLeft: null,
       padding: variables.listItemPadding,
       paddingLeft: variables.listItemPadding + 5,
       paddingTop:
-        platform === PLATFORM.IOS ? variables.listItemPadding + 25 : undefined,
+        platform === 'ios' ? variables.listItemPadding + 25 : undefined,
       paddingBottom:
-        platform === PLATFORM.ANDROID ? variables.listItemPadding + 20 : undefined,
+        platform === 'android' ? variables.listItemPadding + 20 : undefined,
       flexDirection: 'row',
       borderColor: variables.listBorderColor,
       'NativeBase.Text': {
         fontSize: 14,
-        color: platform === PLATFORM.IOS ? undefined : variables.listNoteColor
+        color: platform === 'ios' ? undefined : variables.listNoteColor
       }
     },
     '.itemDivider': {
@@ -283,7 +281,7 @@ export default (variables /* : * */ = variable) => {
           marginLeft: null
         },
         flex: 1,
-        paddingVertical: variables.listItemPadding + 8,
+        paddingVertical: variables.listItemPadding + 5,
         borderBottomWidth: variables.borderWidth,
         borderColor: variables.listBorderColor,
         marginLeft: variables.listItemPadding + 5
@@ -394,7 +392,7 @@ export default (variables /* : * */ = variable) => {
           paddingTop: 3
         },
         'NativeBase.Switch': {
-          marginRight: Platform.OS === PLATFORM.IOS ? undefined : -5,
+          marginRight: Platform.OS === 'ios' ? undefined : -5,
           alignSelf: null
         },
         'NativeBase.PickerNB': {
@@ -430,17 +428,17 @@ export default (variables /* : * */ = variable) => {
     '.noIndent': {
       marginLeft: null,
       padding: variables.listItemPadding,
-      paddingLeft: variables.listItemPadding + 6
+      paddingLeft: variables.listItemPadding + 6,
     },
     alignItems: 'center',
     flexDirection: 'row',
     paddingRight: variables.listItemPadding + 6,
+    paddingLeft: 0,
     paddingVertical: variables.listItemPadding + 3,
-    marginLeft: variables.listItemPadding + 6,
     borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     backgroundColor: variables.listBg,
     borderColor: variables.listBorderColor
-  };
+  }
 
-  return listItemTheme;
-};
+  return listItemTheme
+}
