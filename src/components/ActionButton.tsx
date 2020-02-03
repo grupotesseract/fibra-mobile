@@ -1,5 +1,5 @@
+import { Button, Spinner } from 'native-base'
 import React from 'react'
-import { Header, Left, Button, Icon, Body, Title, Right, Text, View, Spinner } from 'native-base'
 
 const ActionButton = (props) => {
   const {
