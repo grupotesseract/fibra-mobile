@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Button, Icon, Text, View } from 'native-base';
-import { NavigationScreenProp } from 'react-navigation';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import React, { Component } from 'react'
+import { Button, Icon, Text, View } from 'native-base'
+import { NavigationScreenProp } from 'react-navigation'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
 
-import HeaderLogo from '../../components/HeaderLogo';
-import * as AuthActions from '../../store/ducks/auth/actions';
-import { AuthState } from '../../store/ducks/auth/types';
-import { checkAuth } from '../../utils/authNavigation';
+import HeaderLogo from '../../components/HeaderLogo'
+import * as AuthActions from '../../store/ducks/auth/actions'
+import { AuthState } from '../../store/ducks/auth/types'
+import { checkAuth } from '../../utils/authNavigation'
 
 interface Props {
   auth: AuthState,
@@ -29,32 +29,53 @@ class Menu extends Component<Props> {
 
     return (
       <View>
-        <HeaderLogo />
+        <HeaderLogo/>
 
         <View padder>
-          <Button onPress={() => navigate('SelecionaPlanta')}>
-            <Icon name="bulb" />
-            <Text>Manutenção de iluminação</Text>
+          <Button
+            block
+            onPress={() => navigate('SelecionaPlanta')}
+            style={style.btnStyle}>
+            <Icon name="bulb"/>
+            <Text>Manutenção de Iluminação</Text>
           </Button>
 
-          <Button onPress={() => navigate('Colaboradores')}>
-            <Icon name="person" />
+          <Button
+            block
+            onPress={() => navigate('Colaboradores')}
+            style={style.btnStyle}>
+            <Icon name="person"/>
             <Text>Colaboradores</Text>
           </Button>
 
           {role === 'admin' &&
             <>
-              <Button onPress={() => navigate('SyncEmpresas')}>
-                <Icon name="cloud-download" />
-                <Text>Empresas, plantas e usuários</Text>
+              <Button
+                block
+                onPress={() => navigate('SyncEmpresas')}
+                style={style.btnStyle}>
+                <Icon name="cloud-download"/>
+                <Text>Sincronização</Text>
               </Button>
 
-              <Button onPress={() => navigate('Programacoes')}>
-                <Icon name="cube" />
+              <Button
+                block
+                onPress={() => navigate('Programacoes')}
+                style={style.btnStyle}>
+                <Icon name="cube"/>
                 <Text>Programações</Text>
               </Button>
             </>
           }
+
+          <Button
+            block
+            bordered
+            onPress={() => this.logoff()}
+            style={style.btnStyle}>
+            <Icon name="exit"/>
+            <Text>Sair</Text>
+          </Button>
         </View>
       </View>
     )
@@ -69,3 +90,9 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(AuthActions, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)
+
+const style = {
+  btnStyle: {
+    marginVertical: 5
+  }
+}

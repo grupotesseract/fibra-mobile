@@ -1,14 +1,23 @@
-import React, { Component } from 'react';
-import { Container, Content, Text, Button, View, Textarea, Form } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import React, { Component } from 'react'
+import {
+  Button,
+  Container,
+  Content,
+  Form,
+  Text,
+  Textarea,
+  View,
+} from 'native-base'
+import { KeyboardAvoidingView, ScrollView } from 'react-native'
+import { NavigationScreenProp } from 'react-navigation'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import HeaderNav from '../../components/HeaderNav'
+import { ApplicationState } from '../../store'
+import { Planta } from '../../store/ducks/planta/types'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { ApplicationState } from '../../store';
-import { NavigationScreenProp } from 'react-navigation';
-import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { Planta } from '../../store/ducks/planta/types';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -68,22 +77,20 @@ class ComentariosGerais extends Component<Props> {
     return <Container>
       <HeaderNav title={"Comentários"} />
       <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-        <KeyboardAvoidingView
-          behavior="height"
-        >
-          <ScrollView>
-            <Form>
+        <KeyboardAvoidingView behavior="height">
+          <Form>
+            <ScrollView>
               <Textarea
                 rowSpan={50}
                 bordered
                 value={comentario}
-                onChangeText={(comentario) => this.setState({comentario})}
-              />
-            </Form>
-          </ScrollView>
+                onChangeText={(comentario) => this.setState({comentario})}/>
+            </ScrollView>
+          </Form>
         </KeyboardAvoidingView>
       </Content>
-      <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+
+      <View style={{ flexDirection: 'row', padding: 20 }}>
         <Button
           block
           onPress={() => this.salvaComentario()}
@@ -91,17 +98,17 @@ class ComentariosGerais extends Component<Props> {
           <Text>Concluído</Text>
         </Button>
       </View>
+
     </Container>
   };
 }
 
 const style = {
-    btnStyle: {
-        marginVertical: 5,
-        flex: 1
-    }
+  btnStyle: {
+    marginVertical: 5,
+    flex: 1
+  }
 }
-
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
