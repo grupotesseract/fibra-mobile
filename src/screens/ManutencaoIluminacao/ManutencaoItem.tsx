@@ -202,7 +202,7 @@ class ManutencaoItem extends Component<Props> {
     }
 
     return (
-      <View padder>
+      <Container padder>
         <HeaderNav title={'Manutenção'} />
         <Content padder>
           <KeyboardAvoidingView
@@ -350,7 +350,7 @@ class ManutencaoItem extends Component<Props> {
             </Button>
           </KeyboardAvoidingView>
         </Content>
-      </View>
+      </Container>
     );
   }
 }

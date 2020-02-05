@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   Badge,
   Button,
+  Container,
   Icon,
   Left,
   List,
@@ -9,6 +10,7 @@ import {
   Right,
   Text,
   View,
+  Content,
 } from 'native-base'
 import * as Permissions from 'expo-permissions'
 import { ActivityIndicator, Alert, ScrollView } from 'react-native'
@@ -117,10 +119,10 @@ class ManutencaoIluminacao extends Component<Props> {
     const { itens, loadingConcluir } = this.state
 
     return (
-      <View>
+      <Container>
         <HeaderNav title="Manutenção Iluminação" />
 
-        <View padder>
+        <Content padder contentContainerStyle={{ flex: 1 }}>
           <ScrollView>
             <List>
               {
@@ -150,29 +152,27 @@ class ManutencaoIluminacao extends Component<Props> {
               }
             </List>
           </ScrollView>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', marginRight: -10, marginLeft: -10 }}>
           <Button style={style.botaoQuadrado} onPress={() => this.ativaQRCodeReader()}>
             <Icon name='md-qr-scanner' style={{ fontSize: 48 }} />
-            <Text>LER QRCODE</Text>
+            <Text style={style.txtBtn}>LER QRCODE</Text>
           </Button>
           <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencaoDia()}>
             <Icon name='md-stopwatch' style={{ fontSize: 48 }} />
-            <Text>CONCLUIR DIA</Text>
+            <Text style={style.txtBtn}>CONCLUIR DIA</Text>
           </Button>
           <Button style={style.botaoQuadrado} onPress={() => this.concluirManutencao()}>
             {loadingConcluir ?
               <ActivityIndicator /> :
               <>
                 <Icon name='md-checkmark' style={{ fontSize: 40 }} />
-                <View style={{ alignItems: 'center' }}>
-                  <Text>CONCLUIR FINAL</Text>
-                </View>
+                <Text style={style.txtBtn}>CONCLUIR FINAL</Text>
               </>
             }
           </Button>
         </View>
-      </View>
+        </Content>
+      </Container>
     )
   }
 }
@@ -181,9 +181,17 @@ const style = {
   btnStyle: {
     marginVertical: 5,
   },
+  txtBtn : {
+    fontSize: 13,
+    textAlign: 'center',
+    marginRight: -2,
+    marginLeft: -2,
+    padding: 0,
+  },
   botaoQuadrado: {
     margin: 4,
-    padding: 5,
+    marginTop: 20,
+    padding: 4,
     paddingBottom: 10,
     height: 110,
     flex: 1,
