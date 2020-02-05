@@ -194,21 +194,20 @@ class ManutencaoItem extends Component<Props> {
 
     if (error) {
       return <Container>
-        <HeaderNav title={'MANUTENÇÃO'} />
+        <HeaderNav title={'Manutenção'} />
         <Content padder>
           <Text>{error}</Text>
         </Content>
       </Container>
     }
-    console.log('render Manutencao Item')
 
     return (
-      <Container>
-        <HeaderNav title={'MANUTENÇÃO'} />
+      <Container padder>
+        <HeaderNav title={'Manutenção'} />
         <Content padder>
           <KeyboardAvoidingView
-            behavior="height"
-          >
+            behavior="height">
+
             <Card>
               <CardItem>
                 <Left>

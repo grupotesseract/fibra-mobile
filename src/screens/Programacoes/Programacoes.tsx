@@ -1,13 +1,25 @@
-import React, { Component } from 'react';
-import { Container, Content, Text, Card, CardItem, Body, Left, Badge, View, Button, Icon, Spinner } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
+import React, { Component } from 'react'
+import {
+  Badge,
+  Body,
+  Button,
+  Card,
+  CardItem,
+  Container,
+  Content,
+  Left,
+  Text,
+  View,
+} from 'native-base'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import HeaderNav from '../../components/HeaderNav'
+import { uploadFotos, uploadProgramacao } from '../../services/api'
+import { ApplicationState } from '../../store'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { ApplicationState } from '../../store';
-import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { uploadProgramacao, uploadFotos } from '../../services/api';
-import { iso2ddmmaaaa } from '../../utils/utils';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
+import { iso2ddmmaaaa } from '../../utils/utils'
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -108,7 +120,7 @@ class Programacoes extends Component<Props> {
 
     return (
       <Container>
-        <HeaderNav title="Listagem de Programações" />
+        <HeaderNav title="Programações" />
 
         <Content padder>
           {
@@ -129,12 +141,6 @@ class Programacoes extends Component<Props> {
                       <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
                       <Text>Itens com fotos armazenadas: {fotosItens.length}</Text>
                       <Text>Itens com fotos enviadas: {fotosEnviadas}</Text>
-                      {/* <Text>data_inicio_prevista {programacaoRealizada.programacao.data_inicio_prevista}</Text>
-                      <Text>data_fim_prevista {programacaoRealizada.programacao.data_fim_prevista}</Text>
-                      <Text>data_inicio_real {programacaoRealizada.programacao.data_inicio_real}</Text>
-                      <Text>data_fim_real {programacaoRealizada.programacao.data_fim_real}</Text>
-                      <Text>comentarioGeral {programacaoRealizada.programacao.comentarioGeral}</Text>
-                      <Text>qtdFotos {programacaoRealizada.fotosItens.length}</Text> */}
 
                   <View style={{ flexDirection: "row" }}>
                     <Badge

@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { Container, Content, Button, Text, Card, CardItem, Body, Spinner, View } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { bindActionCreators, Dispatch } from 'redux';
-import * as EmpresasActions from '../../store/ducks/empresas/actions'
-import { connect } from 'react-redux';
-import { EmpresasState, Empresa } from '../../store/ducks/empresas/types';
+import React, { Component } from 'react'
+import { Body, Card, CardItem, Container, Content, Text } from 'native-base'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import ActionButton from '../../components/ActionButton'
+import HeaderNav from '../../components/HeaderNav'
 import { ApplicationState } from '../../store'
-import ActionButton from '../../components/ActionButton';
-import { UsuariosState } from '../../store/ducks/usuarios/types';
+import * as EmpresasActions from '../../store/ducks/empresas/actions'
+import { Empresa, EmpresasState } from '../../store/ducks/empresas/types'
+import { UsuariosState } from '../../store/ducks/usuarios/types'
 
 interface StateProps {
   empresasReducer: EmpresasState
@@ -44,49 +45,52 @@ class SyncEmpresas extends Component<Props, State> {
     return (
       <Container>
         <HeaderNav title="Sincronizar Empresas"/>
+
         <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
-          <View>
-            <Card>
-              <CardItem header>
-                <Text>Empresas</Text>
-              </CardItem>
-              <CardItem>
-                <Body>
-                  <Text>
-                    {listaEmpresas.length} empresas armazenadas neste dispositivo
-                  </Text>
-                </Body>
-              </CardItem>
-            </Card>
-            <Card>
-              <CardItem header>
-                <Text>Plantas</Text>
-              </CardItem>
-              <CardItem>
-                <Body>
-                  <Text>
-                    {totalPlantas} plantas armazenadas no total
-                  </Text>
-                </Body>
-              </CardItem>
-            </Card>
-            <Card>
-              <CardItem header>
-                <Text>Usuários</Text>
-              </CardItem>
-              <CardItem>
-                <Body>
-                  <Text>
-                    {totalUsuarios} usuários armazenados e autorizados a utilizarem este dispostivo
-                  </Text>
-                </Body>
-              </CardItem>
-            </Card>
-          </View>
+          <Card>
+            <CardItem header>
+              <Text>Empresas</Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  {listaEmpresas.length} empresas armazenadas neste dispositivo
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem header>
+              <Text>Plantas</Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  {totalPlantas} plantas armazenadas no total
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem header>
+              <Text>Usuários</Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  {totalUsuarios} usuários armazenados e autorizados a utilizarem este dispostivo
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+
           <ActionButton
             block
             loading={loading}
             disabled={(role !== 'admin')}
+            style={style.button}
             onPress={() => this.atualizarEmpresas()}>
             <Text>Atualizar empresas e usuários</Text>
           </ActionButton>
@@ -105,3 +109,10 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(EmpresasActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SyncEmpresas)
+
+const style = {
+  button: {
+    marginTop: 'auto',
+    justifyContent: 'center'
+  }
+}

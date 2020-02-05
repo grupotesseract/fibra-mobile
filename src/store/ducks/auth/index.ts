@@ -2,9 +2,9 @@ import { Reducer } from 'redux';
 import { AuthState, AuthTypes } from './types';
 
 const INITIAL_STATE: AuthState = {
-    data: {},
-    error: false,
-    loading: false,
+  data: {},
+  error: false,
+  loading: false,
 }
 
 const auth: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
@@ -12,8 +12,8 @@ const auth: Reducer<AuthState> = (state = INITIAL_STATE,action) => {
         case AuthTypes.AUTH_REQUEST:
             return { ...state, loading: true };
         case AuthTypes.AUTH_SUCCESS:
-            return { 
-                ...state, loading: false, error: false, data: action.data, 
+            return {
+                ...state, loading: false, error: false, data: action.data,
             };
         case AuthTypes.AUTH_FAILURE:
             return {
