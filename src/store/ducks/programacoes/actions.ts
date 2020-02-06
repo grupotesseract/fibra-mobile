@@ -3,7 +3,7 @@ import { ProgramacoesTypes, ProgramacaoRealizada, QuantidadeSubstituida, Entrada
 
 export const armazenaEstoque = (idProgramacao: number, estoque: Estoque[]) => action(ProgramacoesTypes.ARMAZENA_ESTOQUE, { idProgramacao, estoque })
 export const armazenaEntrada = (idProgramacao: number, entrada: Entrada[]) => action(ProgramacoesTypes.ARMAZENA_ENTRADA, { idProgramacao, entrada })
-export const updateProgramacao = ({ idProgramacao, programacao }) => action(ProgramacoesTypes.UPDATE_PROGRAMACAO, { idProgramacao, programacao })
+export const updateProgramacao = ({ idProgramacao, programacao }) => action(ProgramacoesTypes.UPDATE_PROGRAMACAO_REALIZADA, { idProgramacao, programacao })
 export const iniciaItem = ({ idItem, idProgramacao, data}) => action(ProgramacoesTypes.INICIA_ITEM, { idProgramacao, idItem, data })
 export const concluiManutencao = ({ idProgramacao }) => action(ProgramacoesTypes.CONCLUI_MANUTENCAO, { idProgramacao })
 export const concluiItem = ({ idItem, idProgramacao, data }) => action(ProgramacoesTypes.CONCLUI_ITEM, { idProgramacao, idItem, data })
