@@ -149,12 +149,13 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                     const indexComentario = comentarios.findIndex(c => c.item_id === idItem)
                     // Subsititui o comentario que já está armazenado
                     if (indexComentario >= 0) {
+                      comentarios.splice(indexComentario, 1, {
+                        comentario,
+                        item_id: idItem
+                      })
                       return {
                         ...programacaoRealizada,
-                        comentarios: comentarios.splice(indexComentario, 1, {
-                          comentario,
-                          item_id: idItem
-                        })
+                        comentarios,
                       }
                     }
                     return {
