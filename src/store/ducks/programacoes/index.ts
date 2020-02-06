@@ -312,8 +312,26 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                 })
             }
         }
+        case ProgramacoesTypes.UPDATE_PROGRAMACAO_REALIZADA:
+        {
+            const { idProgramacao, programacao } = action.payload;
+            const { programacoesRealizadas } = state;
+
+            return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    // Subsititui os estoques
+                    return {
+                      ...programacaoRealizada,
+                      ...programacao,
+                    };
+                })
+            }
+        }
         case ProgramacoesTypes.CONFIRMA_PERIODO:
-        case ProgramacoesTypes.UPDATE_PROGRAMACAO:
         case ProgramacoesTypes.ARMAZENA_COMENTARIOS_GERAIS:
         case ProgramacoesTypes.CONCLUI_MANUTENCAO:
         {

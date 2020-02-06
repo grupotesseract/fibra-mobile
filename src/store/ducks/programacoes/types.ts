@@ -17,7 +17,7 @@ import { Programacao } from "../programacao/types";
     INICIA_ITEM = '@programacoes/INICIA_ITEM',
     CONCLUI_ITEM = '@programacoes/CONCLUI_ITEM',
     CONCLUI_MANUTENCAO = '@programacoes/CONCLUI_MANUTENCAO',
-    UPDATE_PROGRAMACAO = '@programacoes/UPDATE_PROGRAMACAO',
+    UPDATE_PROGRAMACAO_REALIZADA = '@programacoes/UPDATE_PROGRAMACAO_REALIZADA',
     DELETE_ALL = '@programacoes/DELETE_ALL',
  }
 
