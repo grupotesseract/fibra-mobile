@@ -10,6 +10,7 @@ import {
   Left,
   Text,
   View,
+  Toast,
 } from 'native-base'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
@@ -37,7 +38,6 @@ class Programacoes extends Component<Props> {
 
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
-    console.log( programacoesRealizadas );
   }
 
   syncProgramacao = async (idProgramacao: number) => {
@@ -51,10 +51,14 @@ class Programacoes extends Component<Props> {
       // Envia dados de programacao
       if (!dadosEnviados) {
         uploadProgramacao({ idProgramacao, programacao })
-          .then(res => {
+          .then(async res => {
             if (res.error) {
               errorSync = true;
-              console.log("Erro ao tentar upload", res.error);
+              Toast.show({
+                text: res.error,
+                buttonText: 'Ok',
+                type: "danger"
+              })
             } else {
               dadosEnviados = true;
               console.log("Dados enviados!", res)
@@ -70,48 +74,55 @@ class Programacoes extends Component<Props> {
                 }
               }
             );
+
+            //Envia fotos item por item
+            const { fotosItens } = programacao;
+            const promisesFotos = fotosItens.map(async fotoItem => {
+              const idItem = fotoItem.id_item;
+              const fotos = fotoItem.fotos || [];
+              let fotosEnviadas = fotoItem.fotosEnviadas || false;
+
+              if (!fotosEnviadas) {
+                try {
+                  const res = await uploadFotos({ idProgramacao, idItem, fotos });
+                  if (res.error) {
+                    Toast.show({
+                      text: res.error,
+                      buttonText: 'Ok',
+                      type: "danger"
+                    })
+                  } else {
+                    fotosEnviadas = true;
+                    console.log("Dados enviados!", res)
+                  }
+                } catch (err) {
+                  Toast.show({
+                    text: err,
+                    buttonText: 'Ok',
+                    type: "danger"
+                  });
+                }
+              }
+
+              return {
+                ...fotoItem,
+                fotosEnviadas
+              }
+            });
+
+            const fotosItensAtualizadas = await Promise.all(promisesFotos);
+            updateProgramacao(
+              {
+                idProgramacao,
+                programacao: {
+                  ...programacao,
+                  fotosItens: fotosItensAtualizadas,
+                  errorSync
+                },
+              }
+            );
           });
       }
-
-      //Envia fotos item por item
-      const { fotosItens } = programacao;
-      const promisesFotos = fotosItens.map(async fotoItem => {
-        const idItem = fotoItem.id_item;
-        const fotos = fotoItem.fotos || [];
-        let fotosEnviadas = fotoItem.fotosEnviadas || false;
-
-        console.log("FotoItem", fotoItem)
-        if (!fotosEnviadas) {
-          try {
-            const res = await uploadFotos({ idProgramacao, idItem, fotos });
-            if (res.error) {
-              console.log("Erro ao subir fotos", res.error);
-            } else {
-              fotosEnviadas = true;
-              console.log("Dados enviados!", res)
-            }
-          } catch(err) {
-            console.log("Erro ao subir fotos", err);
-          }
-        }
-
-        return {
-          ...fotoItem,
-          fotosEnviadas
-        }
-      });
-      const fotosItensAtualizadas = await Promise.all(promisesFotos);
-      updateProgramacao(
-        {
-          idProgramacao,
-          programacao: {
-            ...programacao,
-            fotosItens: fotosItensAtualizadas,
-            dadosEnviados,
-            errorSync
-          },
-        }
-      );
     }
   }
 

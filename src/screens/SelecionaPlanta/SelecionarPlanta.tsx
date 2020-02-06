@@ -110,6 +110,11 @@ class SelecionaPlanta extends Component<Props, State> {
                 selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
+                <Picker.Item
+                  label="Selecione uma empresa"
+                  value='0'
+                  key={0}
+                />
                 { Array.isArray(listaEmpresas) &&
                   listaEmpresas.length > 0
                   ?

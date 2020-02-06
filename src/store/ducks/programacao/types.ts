@@ -4,7 +4,6 @@
 
  export enum ProgramacaoTypes {
     CONFIRMA_PERIODO = '@programacoes/CONFIRMA_PERIODO',
-    UPDATE_PROGRAMACAO = '@programacoes/UPDATE_PROGRAMACAO',
     ARMAZENA_COMENTARIOS_GERAIS = '@programacoes/ARMAZENA_COMENTARIOS_GERAIS',
     CONCLUI_MANUTENCAO = '@programacoes/CONCLUI_MANUTENCAO',
  }

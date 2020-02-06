@@ -30,19 +30,6 @@ const programacaoReducer: Reducer<Programacao> = (state = {},action) => {
             data_fim_real: now,
           }
         }
-        case ProgramacaoTypes.UPDATE_PROGRAMACAO:
-        {
-          const { idProgramacao, programacao } = action.payload;
-
-          if(state.id !== idProgramacao || !programacao) {
-            return state;
-          }
-
-          return {
-            ...state,
-            ...programacao,
-          }
-        }
         case ProgramacaoTypes.CONFIRMA_PERIODO:
         {
           const { idProgramacao, dataInicioReal } = action.payload;

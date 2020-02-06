@@ -34,7 +34,7 @@ class ManutencaoItem extends Component<Props> {
     qrcode: 'FIBRA-#',
     error: false,
     idItem: null,
-    permiteAlteracao: false
+    permiteAlteracao: false,
   }
 
   onChangeQuantidade = (idMaterial: number, quantidade: number) => {
@@ -192,6 +192,14 @@ class ManutencaoItem extends Component<Props> {
   render() {
     const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
 
+    const { plantaAtiva, programacoesRealizadas } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+
+    const { fotosItens } = programacao;
+    const fotosItem = fotosItens ?.find(fotoItem => fotoItem.id_item === idItem);
+    const qtdFotos = fotosItem ?.fotos ?.length || 0;
+
     if (error) {
       return <Container>
         <HeaderNav title={'Manutenção'} />
@@ -344,7 +352,7 @@ class ManutencaoItem extends Component<Props> {
               disabled={!materiais.reduce((tudoConfirmado, material) => {
                 return tudoConfirmado
                   && material.quantidadeConfirmada
-              }, true)}
+              }, true) || qtdFotos === 0}
             >
               <Text>Concluído</Text>
             </Button>
