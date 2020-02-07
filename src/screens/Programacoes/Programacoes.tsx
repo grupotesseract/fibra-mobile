@@ -1,13 +1,26 @@
-import React, { Component } from 'react';
-import { Container, Content, Text, Card, CardItem, Body, Left, Badge, View, Button, Icon, Spinner } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
+import React, { Component } from 'react'
+import {
+  Badge,
+  Body,
+  Button,
+  Card,
+  CardItem,
+  Container,
+  Content,
+  Left,
+  Text,
+  View,
+  Toast,
+} from 'native-base'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import HeaderNav from '../../components/HeaderNav'
+import { uploadFotos, uploadProgramacao } from '../../services/api'
+import { ApplicationState } from '../../store'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { ApplicationState } from '../../store';
-import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { uploadProgramacao, uploadFotos } from '../../services/api';
-import { iso2ddmmaaaa } from '../../utils/utils';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
+import { iso2ddmmaaaa } from '../../utils/utils'
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -25,7 +38,6 @@ class Programacoes extends Component<Props> {
 
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
-    console.log( programacoesRealizadas );
   }
 
   syncProgramacao = async (idProgramacao: number) => {
@@ -39,10 +51,14 @@ class Programacoes extends Component<Props> {
       // Envia dados de programacao
       if (!dadosEnviados) {
         uploadProgramacao({ idProgramacao, programacao })
-          .then(res => {
+          .then(async res => {
             if (res.error) {
               errorSync = true;
-              console.log("Erro ao tentar upload", res.error);
+              Toast.show({
+                text: res.error,
+                buttonText: 'Ok',
+                type: "danger"
+              })
             } else {
               dadosEnviados = true;
               console.log("Dados enviados!", res)
@@ -58,48 +74,55 @@ class Programacoes extends Component<Props> {
                 }
               }
             );
+
+            //Envia fotos item por item
+            const { fotosItens } = programacao;
+            const promisesFotos = fotosItens.map(async fotoItem => {
+              const idItem = fotoItem.id_item;
+              const fotos = fotoItem.fotos || [];
+              let fotosEnviadas = fotoItem.fotosEnviadas || false;
+
+              if (!fotosEnviadas) {
+                try {
+                  const res = await uploadFotos({ idProgramacao, idItem, fotos });
+                  if (res.error) {
+                    Toast.show({
+                      text: res.error,
+                      buttonText: 'Ok',
+                      type: "danger"
+                    })
+                  } else {
+                    fotosEnviadas = true;
+                    console.log("Dados enviados!", res)
+                  }
+                } catch (err) {
+                  Toast.show({
+                    text: err,
+                    buttonText: 'Ok',
+                    type: "danger"
+                  });
+                }
+              }
+
+              return {
+                ...fotoItem,
+                fotosEnviadas
+              }
+            });
+
+            const fotosItensAtualizadas = await Promise.all(promisesFotos);
+            updateProgramacao(
+              {
+                idProgramacao,
+                programacao: {
+                  ...programacao,
+                  fotosItens: fotosItensAtualizadas,
+                  errorSync
+                },
+              }
+            );
           });
       }
-
-      //Envia fotos item por item
-      const { fotosItens } = programacao;
-      const promisesFotos = fotosItens.map(async fotoItem => {
-        const idItem = fotoItem.id_item;
-        const fotos = fotoItem.fotos || [];
-        let fotosEnviadas = fotoItem.fotosEnviadas || false;
-
-        console.log("FotoItem", fotoItem)
-        if (!fotosEnviadas) {
-          try {
-            const res = await uploadFotos({ idProgramacao, idItem, fotos });
-            if (res.error) {
-              console.log("Erro ao subir fotos", res.error);
-            } else {
-              fotosEnviadas = true;
-              console.log("Dados enviados!", res)
-            }
-          } catch(err) {
-            console.log("Erro ao subir fotos", err);
-          }
-        }
-
-        return {
-          ...fotoItem,
-          fotosEnviadas
-        }
-      });
-      const fotosItensAtualizadas = await Promise.all(promisesFotos);
-      updateProgramacao(
-        {
-          idProgramacao,
-          programacao: {
-            ...programacao,
-            fotosItens: fotosItensAtualizadas,
-            dadosEnviados,
-            errorSync
-          },
-        }
-      );
     }
   }
 
@@ -108,7 +131,7 @@ class Programacoes extends Component<Props> {
 
     return (
       <Container>
-        <HeaderNav title="Listagem de Programações" />
+        <HeaderNav title="Programações" />
 
         <Content padder>
           {
@@ -129,12 +152,6 @@ class Programacoes extends Component<Props> {
                       <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
                       <Text>Itens com fotos armazenadas: {fotosItens.length}</Text>
                       <Text>Itens com fotos enviadas: {fotosEnviadas}</Text>
-                      {/* <Text>data_inicio_prevista {programacaoRealizada.programacao.data_inicio_prevista}</Text>
-                      <Text>data_fim_prevista {programacaoRealizada.programacao.data_fim_prevista}</Text>
-                      <Text>data_inicio_real {programacaoRealizada.programacao.data_inicio_real}</Text>
-                      <Text>data_fim_real {programacaoRealizada.programacao.data_fim_real}</Text>
-                      <Text>comentarioGeral {programacaoRealizada.programacao.comentarioGeral}</Text>
-                      <Text>qtdFotos {programacaoRealizada.fotosItens.length}</Text> */}
 
                   <View style={{ flexDirection: "row" }}>
                     <Badge

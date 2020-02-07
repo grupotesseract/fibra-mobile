@@ -24,22 +24,10 @@ const programacaoReducer: Reducer<Programacao> = (state = {},action) => {
             return state;
           }
 
+          const now = new Date().toISOString();
           return {
             ...state,
-            data_fim_real: String(new Date()),
-          }
-        }
-        case ProgramacaoTypes.UPDATE_PROGRAMACAO:
-        {
-          const { idProgramacao, programacao } = action.payload;
-
-          if(state.id !== idProgramacao || !programacao) {
-            return state;
-          }
-
-          return {
-            ...state,
-            ...programacao,
+            data_fim_real: now,
           }
         }
         case ProgramacaoTypes.CONFIRMA_PERIODO:

@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  liberarDocumentoPlanta(idProgramacao: number, now: Date, usuarios: number[]): void,
+  liberarDocumentoPlanta(idProgramacao: number, now: string, usuarios: number[]): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -24,7 +24,7 @@ class LiberarDocumento extends Component<Props> {
 
   state = {
     idsUsuariosSelecionados: [],
-    now: new Date(),
+    now: new Date().toISOString(),
   }
 
   onPressBotaoColaborador = (idColaborador: number) => {
@@ -43,8 +43,10 @@ class LiberarDocumento extends Component<Props> {
 
   liberarDocumento = async () => {
     const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
-    const { now, idsUsuariosSelecionados } = this.state;
+    const { idsUsuariosSelecionados } = this.state;
+    const now = new Date().toISOString();
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    this.setState({ now });
 
     await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
     navigation.navigate({ routeName: 'MenuVistoria' })
@@ -53,8 +55,9 @@ class LiberarDocumento extends Component<Props> {
   render() {
     const { usuarios } = this.props;
     const { now, idsUsuariosSelecionados } = this.state;
-    const hora = now.getHours();
-    const minuto = now.getMinutes();
+    const nowDateObj = new Date();
+    const hora = nowDateObj.getHours();
+    const minuto = nowDateObj.getMinutes();
 
     const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico');
     return (

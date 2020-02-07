@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import { Image, ActivityIndicator } from 'react-native';
-import { Container, Icon, Content, Button, Text } from 'native-base';
+import React, { Component } from 'react'
+import { Button, Icon, Text, View } from 'native-base'
+import { ActivityIndicator } from 'react-native'
+import { NavigationScreenProp } from 'react-navigation'
+import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+
+import HeaderLogo from '../../components/HeaderLogo'
+import { ApplicationState } from '../../store'
+import { Planta } from '../../store/ducks/planta/types'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { Planta } from '../../store/ducks/planta/types';
-import { NavigationScreenProp } from 'react-navigation';
-import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { ApplicationState } from '../../store';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -30,46 +32,46 @@ class MenuVistoria extends Component<Props> {
     const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
     const { estoqueConcluido, entradaConcluida } = programacao;
 
-    console.log('Renderizando menuVistoria');
     return (
-        <Container>
-            <Content padder>
-                <Image
-                  style={{ width: 300, height: 87 }}
-                  resizeMode="contain"
-                  source={require('../../../assets/fibraheader.png')}/>
-                <Button
-                  disabled={estoqueConcluido}
-                  onPress={() => this.props.navigation.navigate('Estoque')}
-                  style={style.btnStyle}
-                >
-                  <Icon name="cube"/>
-                  <Text>Estoque de Material</Text>
-                </Button>
-                <Button
-                  disabled={entradaConcluida}
-                  onPress={() => this.props.navigation.navigate('EntradaMateriais')}
-                  style={style.btnStyle}
-                  >
-                  <Icon name="download"/>
-                  <Text>Entrada de materiais</Text>
-                </Button>
-                <Button
-                  onPress={() => this.props.navigation.navigate('ComentariosGerais')}
-                  style={style.btnStyle}
-                  >
-                  <Icon name="md-chatboxes"/>
-                  <Text>Comentários Gerais</Text>
-                </Button>
-                <Button
-                  onPress={() => this.props.navigation.navigate('ManutencaoIluminacao')}
-                  style={style.btnStyle}
-                  >
-                  <Icon name="bulb"/>
-                  <Text>Manutenção Iluminação</Text>
-                </Button>
-            </Content>
-        </Container>
+      <View>
+        <HeaderLogo/>
+
+        <View padder>
+          <Button
+            block
+            disabled={estoqueConcluido}
+            onPress={() => this.props.navigation.navigate('Estoque')}
+            style={style.btnStyle}>
+            <Icon name="cube"/>
+            <Text>Estoque de Material</Text>
+          </Button>
+
+          <Button
+            block
+            disabled={entradaConcluida}
+            onPress={() => this.props.navigation.navigate('EntradaMateriais')}
+            style={style.btnStyle}>
+            <Icon name="download"/>
+            <Text>Entrada de materiais</Text>
+          </Button>
+
+          <Button
+            block
+            onPress={() => this.props.navigation.navigate('ComentariosGerais')}
+            style={style.btnStyle}>
+            <Icon name="md-chatboxes"/>
+            <Text>Comentários Gerais</Text>
+          </Button>
+
+          <Button
+            block
+            onPress={() => this.props.navigation.navigate('ManutencaoIluminacao')}
+            style={style.btnStyle}>
+            <Icon name="bulb"/>
+            <Text>Manutenção Iluminação</Text>
+          </Button>
+        </View>
+      </View>
     );
   }
 }
@@ -83,7 +85,7 @@ const style = {
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
-  programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  confirmaPeriodoProgramacao(idProgramacao: number, dataInicioReal: Date): void,
+  confirmaPeriodoProgramacao(idProgramacao: number, dataInicioReal: string): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -26,7 +26,8 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
   confirmarPeriodo = async () => {
     const { navigation, confirmaPeriodoProgramacao, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    await confirmaPeriodoProgramacao(idProgramacao, new Date());
+    const now = new Date().toISOString();
+    await confirmaPeriodoProgramacao(idProgramacao, now);
     navigation.navigate('LiberarDocumento');
   }
 
