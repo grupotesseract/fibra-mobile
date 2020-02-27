@@ -44,7 +44,7 @@ class Programacoes extends Component<Props> {
     const { updateProgramacao, programacoesRealizadas } = this.props;
     const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
 
-    let dadosEnviados = programacao.dadosEnviados || false;
+    let dadosEnviados = false;
     let errorSync = false;
 
     if (programacao) {
@@ -80,7 +80,7 @@ class Programacoes extends Component<Props> {
             const promisesFotos = fotosItens.map(async fotoItem => {
               const idItem = fotoItem.id_item;
               const fotos = fotoItem.fotos || [];
-              let fotosEnviadas = fotoItem.fotosEnviadas || false;
+              let fotosEnviadas = false;
 
               if (!fotosEnviadas) {
                 try {
