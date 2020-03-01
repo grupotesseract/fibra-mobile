@@ -31,7 +31,6 @@ class FotosItemScreen extends Component<Props> {
     };
 
     setPhotos = (photos) => {
-        console.log('photos', photos);
         this.setState({
             photos,
         })
@@ -40,11 +39,11 @@ class FotosItemScreen extends Component<Props> {
     pickImage = async () => {
         const { photos } = this.state;
         ImagePicker.launchCameraAsync({quality: 0.2})
-        .then(img => {            
+        .then(img => {
             this.setPhotos([
                 ...photos,
                 img
-            ]);                
+            ])
         })
         .catch(err => {
             console.log("ERRO NA IMG", err)
@@ -81,7 +80,6 @@ class FotosItemScreen extends Component<Props> {
         const { idItem } = navigation.state.params;
         const { photos } = this.state;
         const idProgramacao = plantaAtiva.proximaProgramacao.id;
-        console.log('photos ', photos);
         await armazenaFotos(idProgramacao, idItem, photos);
 
         navigation.navigate({
