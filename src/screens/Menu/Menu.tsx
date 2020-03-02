@@ -8,6 +8,7 @@ import HeaderLogo from '../../components/HeaderLogo'
 import * as AuthActions from '../../store/ducks/auth/actions'
 import { AuthState } from '../../store/ducks/auth/types'
 import { checkAuth } from '../../utils/authNavigation'
+import { AntDesign } from '@expo/vector-icons';
 
 interface Props {
   auth: AuthState,
@@ -38,6 +39,14 @@ class Menu extends Component<Props> {
             style={style.btnStyle}>
             <Icon name="bulb"/>
             <Text>Manutenção de Iluminação</Text>
+          </Button>
+
+          <Button
+            block
+            onPress={() => navigate('ManutencaoEletricaSelecionaPlanta')}
+            style={style.btnStyle}>
+            <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
+            <Text>Manutenção Elétrica ou Civil</Text>
           </Button>
 
           <Button

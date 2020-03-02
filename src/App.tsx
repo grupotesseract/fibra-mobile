@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
 import SelecionaPlanta from './screens/SelecionaPlanta/SelecionarPlanta';
+import ManutencaoEletricaSelecionaPlanta from './screens/ManutencaoEletrica/SelecionaPlanta/SelecionarPlanta';
+import ManutencaoEletricaLiberarDocumento from './screens/ManutencaoEletrica/LiberarDocumento';
 import ConfirmarPeriodoManutencao from './screens/ConfirmarPeriodoManutencao';
 import LiberarDocumento from './screens/LiberarDocumento';
 import MenuVistoria from "./screens/MenuVistoria/MenuVistoria";
@@ -22,6 +24,7 @@ import { store, persistor } from "./store";
 import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
 import FotosItemScreen from "./screens/FotosItem/FotosItem";
+import MenuManutencaoEletrica from "./screens/ManutencaoEletrica/MenuManutencaoEletrica/MenuManutencaoEletrica";
 
 const AuthStack = createStackNavigator(
   {
@@ -41,6 +44,9 @@ const AuthStack = createStackNavigator(
     Colaboradores: { screen: Colaboradores },
     SyncEmpresas: { screen: SyncEmpresas },
     Programacoes: { screen: Programacoes },
+    ManutencaoEletricaSelecionaPlanta: { screen: ManutencaoEletricaSelecionaPlanta },
+    ManutencaoEletricaLiberarDocumento: { screen: ManutencaoEletricaLiberarDocumento },
+    MenuManutencaoEletrica: { screen: MenuManutencaoEletrica },
   },
   {
     headerMode: 'none',
