@@ -21,6 +21,7 @@ import { ApplicationState } from '../../store'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
 import { iso2ddmmaaaa } from '../../utils/utils'
+import { ActivityIndicator } from 'react-native'
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -36,6 +37,11 @@ type Props = StateProps & DispatchProps
 
 class Programacoes extends Component<Props> {
 
+  state = {
+    isSyncing: false
+  } 
+  
+  
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
   }
@@ -44,95 +50,88 @@ class Programacoes extends Component<Props> {
     const { updateProgramacao, programacoesRealizadas } = this.props;
     const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
 
-    let dadosEnviados = false;
-    let errorSync = false;
+    let dadosEnviados = programacao.dadosEnviados || false;
+    let errorSync = programacao.errorSync || false;
 
     if (programacao) {
       // Envia dados de programacao
+      this.setState({isSyncing : true});
       if (!dadosEnviados) {
-        uploadProgramacao({ idProgramacao, programacao })
-          .then(async res => {
+        const res = await uploadProgramacao({ idProgramacao, programacao });
+        if (res.error) {
+          programacao.errorSync = true;
+
+          Toast.show({
+            text: String(res.error),
+            buttonText: 'Ok',
+            type: "danger"
+          })
+        } else {
+          programacao.dadosEnviados = true;
+          console.log("Dados enviados!", res)
+        }
+
+        await updateProgramacao({ idProgramacao, programacao });
+      }
+
+      //Envia fotos item por item
+      const { fotosItens } = programacao;
+      const promisesFotos = fotosItens.map(async fotoItem => {
+        const idItem = fotoItem.id_item;
+        const fotos = fotoItem.fotos || [];
+        let fotosEnviadas = fotoItem.fotosEnviadas || false;
+
+        if (!fotosEnviadas) {
+          try {
+            const res = await uploadFotos({ idProgramacao, idItem, fotos });
             if (res.error) {
-              errorSync = true;
               Toast.show({
-                text: res.error,
+                text: String(res.error),
                 buttonText: 'Ok',
                 type: "danger"
               })
             } else {
-              dadosEnviados = true;
+              fotoItem.fotosEnviadas = true;
               console.log("Dados enviados!", res)
             }
-
-            updateProgramacao(
-              {
-                idProgramacao,
-                programacao: {
-                  ...programacao,
-                  dadosEnviados,
-                  errorSync
-                }
-              }
-            );
-
-            //Envia fotos item por item
-            const { fotosItens } = programacao;
-            const promisesFotos = fotosItens.map(async fotoItem => {
-              const idItem = fotoItem.id_item;
-              const fotos = fotoItem.fotos || [];
-              let fotosEnviadas = false;
-
-              if (!fotosEnviadas) {
-                try {
-                  const res = await uploadFotos({ idProgramacao, idItem, fotos });
-                  if (res.error) {
-                    Toast.show({
-                      text: res.error,
-                      buttonText: 'Ok',
-                      type: "danger"
-                    })
-                  } else {
-                    fotosEnviadas = true;
-                    console.log("Dados enviados!", res)
-                  }
-                } catch (err) {
-                  Toast.show({
-                    text: err,
-                    buttonText: 'Ok',
-                    type: "danger"
-                  });
-                }
-              }
-
-              return {
-                ...fotoItem,
-                fotosEnviadas
-              }
+          } catch (err) {
+            Toast.show({
+              text: String(err),
+              buttonText: 'Ok',
+              type: "danger"
             });
+          }
+        }
 
-            const fotosItensAtualizadas = await Promise.all(promisesFotos);
-            updateProgramacao(
-              {
-                idProgramacao,
-                programacao: {
-                  ...programacao,
-                  fotosItens: fotosItensAtualizadas,
-                  errorSync
-                },
-              }
-            );
-          });
-      }
+        return fotoItem
+      });
+
+      const fotosItensAtualizadas = await Promise.all(promisesFotos);
+      await updateProgramacao(
+        {
+          idProgramacao,
+          programacao: {
+            ...programacao,
+            fotosItens: fotosItensAtualizadas,
+            errorSync
+          },
+        }
+      );
+      this.setState({isSyncing : false});
     }
   }
 
   render() {
     const { programacoesRealizadas } = this.props;
+    const { isSyncing } = this.state;
 
     return (
       <Container>
         <HeaderNav title="Programações" />
-
+        {
+          isSyncing ? <ActivityIndicator size='large' /> : null          
+        }
+        
         <Content padder>
           {
             programacoesRealizadas?.map((programacaoRealizada: ProgramacaoRealizada) => {
@@ -150,28 +149,15 @@ class Programacoes extends Component<Props> {
                     <Body>
                       <Text>Manutenção prevista para</Text>
                       <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
-                      <Text>Itens com fotos armazenadas: {fotosItens.length}</Text>
-                      <Text>Itens com fotos enviadas: {fotosEnviadas}</Text>
 
-                  <View style={{ flexDirection: "row" }}>
-                    <Badge
-                      style={style.badgeSync}
-                      primary={!errorSync && !dadosEnviados}
-                      warning={errorSync}
-                      success={dadosEnviados && !errorSync}>
-                      <Text>Informações</Text>
-                    </Badge>
-                    <Badge
-                      style={style.badgeSync}
-                      primary={fotosEnviadas === 0}
-                      warning={fotosEnviadas > 0 && fotosEnviadas < fotosItens.length}
-                      success={fotosEnviadas === fotosItens.length}>
-                      <Text>Fotos</Text>
-                    </Badge>
-                  </View>
+                      <Text style={{marginVertical: 5, fontWeight: 'bold'}}> Sincronização </Text>
+
+                      <Text> Informações: { errorSync ? 'reenvio pendente' : dadosEnviados ? 'sincronizadas' : 'pendente' } </Text>
+                      <Text> Fotos de itens: { fotosEnviadas } de { fotosItens.length } sincronizadas </Text>
 
                       <Button
                         full
+                        style={{ marginTop: 12 }}
                         onPress={() => this.syncProgramacao(programacaoRealizada.programacao.id)}
                       >
                         <Text>Sincronizar</Text>
@@ -182,7 +168,7 @@ class Programacoes extends Component<Props> {
 
                 { programacaoRealizada.errorSync &&
                 <CardItem footer bordered>
-                  <Text>Ocorreu um erro ao sincronizar os dados, tente novamente.</Text>
+                  <Text>Ocorreu um erro ao sincronizar, tente novamente.</Text>
                 </CardItem>
                 }
               </Card>
