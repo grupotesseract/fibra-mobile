@@ -25,6 +25,10 @@ import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
 import FotosItemScreen from "./screens/FotosItem/FotosItem";
 import MenuManutencaoEletrica from "./screens/ManutencaoEletrica/MenuManutencaoEletrica/MenuManutencaoEletrica";
+import ManutencaoEletricaComentarios from "./screens/ManutencaoEletrica/Comentarios/Comentarios";
+import FotosManutencaoEletrica from "./screens/ManutencaoEletrica/FotosManutencaoEletrica/FotosManutencaoEletrica";
+import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCliente";
+import ManutencaoClienteComentarios from "./screens/Cliente/Comentarios/Comentarios";
 
 const AuthStack = createStackNavigator(
   {
@@ -47,6 +51,10 @@ const AuthStack = createStackNavigator(
     ManutencaoEletricaSelecionaPlanta: { screen: ManutencaoEletricaSelecionaPlanta },
     ManutencaoEletricaLiberarDocumento: { screen: ManutencaoEletricaLiberarDocumento },
     MenuManutencaoEletrica: { screen: MenuManutencaoEletrica },
+    ManutencaoEletricaComentarios: { screen: ManutencaoEletricaComentarios },
+    FotosManutencaoEletrica: { screen: FotosManutencaoEletrica },
+    ManutencaoCliente: { screen: ManutencaoCliente },
+    ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios },
   },
   {
     headerMode: 'none',

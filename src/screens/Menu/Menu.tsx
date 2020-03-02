@@ -51,6 +51,14 @@ class Menu extends Component<Props> {
 
           <Button
             block
+            onPress={() => navigate('ManutencaoCliente')}
+            style={style.btnStyle}>
+            <AntDesign name="user" size={28} color="white" style={{marginLeft: 10}}/>
+            <Text>Manutenção Cliente</Text>
+          </Button>
+
+          <Button
+            block
             onPress={() => navigate('Colaboradores')}
             style={style.btnStyle}>
             <Icon name="person"/>

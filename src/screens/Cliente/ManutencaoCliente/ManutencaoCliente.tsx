@@ -24,7 +24,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class MenuManutencaoEletrica extends Component<Props> {
+class ManutencaoCliente extends Component<Props> {
 
   concluirManutencao = () => {
     Alert.alert(
@@ -68,25 +68,10 @@ class MenuManutencaoEletrica extends Component<Props> {
           <Button
             block
             disabled={estoqueConcluido}
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
-              params: {tipo:'atividade_realizada'},
-            })}
+            onPress={() => this.props.navigation.navigate('QRCodeCliente')}
             style={style.btnStyle}>
-            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 10 }}/>
-            <Text>Atividade Realizada</Text>
-          </Button>
-
-          <Button
-            block
-            disabled={entradaConcluida}
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
-              params: {tipo:'problemas_encontrados'},
-            })}
-            style={style.btnStyle}>
-            <Icon name="alert"/>
-            <Text>Problemas Encontrados</Text>
+            <AntDesign name="qrcode" color="white" size={28} style={{ marginLeft: 10 }}/>
+            <Text>QR Code</Text>
           </Button>
 
           <Button
@@ -99,13 +84,10 @@ class MenuManutencaoEletrica extends Component<Props> {
 
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
-              params: {tipo:'comentarios_gerais'},
-            })}
+            onPress={() => this.props.navigation.navigate('ManutencaoClienteComentarios')}
             style={style.btnStyle}>
             <Icon name="md-chatboxes"/>
-            <Text>Comentários Adicionais</Text>
+            <Text>Comentários</Text>
           </Button>
         </View>
 
@@ -138,4 +120,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuManutencaoEletrica)
+export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoCliente)
