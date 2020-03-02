@@ -21,6 +21,7 @@ import { ApplicationState } from '../../store'
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types'
 import { iso2ddmmaaaa } from '../../utils/utils'
+import { ActivityIndicator } from 'react-native'
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[],
@@ -36,6 +37,11 @@ type Props = StateProps & DispatchProps
 
 class Programacoes extends Component<Props> {
 
+  state = {
+    isSyncing: false
+  } 
+  
+  
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
   }
@@ -49,6 +55,7 @@ class Programacoes extends Component<Props> {
 
     if (programacao) {
       // Envia dados de programacao
+      this.setState({isSyncing : true});
       if (!dadosEnviados) {
         const res = await uploadProgramacao({ idProgramacao, programacao });
         if (res.error) {
@@ -110,16 +117,21 @@ class Programacoes extends Component<Props> {
           },
         }
       );
+      this.setState({isSyncing : false});
     }
   }
 
   render() {
     const { programacoesRealizadas } = this.props;
+    const { isSyncing } = this.state;
 
     return (
       <Container>
         <HeaderNav title="Programações" />
-
+        {
+          isSyncing ? <ActivityIndicator size='large' /> : null          
+        }
+        
         <Content padder>
           {
             programacoesRealizadas?.map((programacaoRealizada: ProgramacaoRealizada) => {
