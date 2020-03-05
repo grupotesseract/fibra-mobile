@@ -26,7 +26,6 @@ class Menu extends Component<Props> {
   render() {
     const { navigation, auth } = this.props
     const { navigate } = navigation
-    const { role } = auth.data
 
     return (
       <View>

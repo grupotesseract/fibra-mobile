@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as PlantaActions from '../../../store/ducks/planta/actions'
-import * as ProgramacoesActions from '../../../store/ducks/programacoes/actions'
+import * as ManutencaoEletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
 import { ApplicationState } from '../../../store'
 import { Planta } from '../../../store/ducks/planta/types';
-import { ProgramacaoRealizada } from '../../../store/ducks/programacoes/types';
 import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
@@ -17,8 +15,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setPlantaAtiva(planta: Planta): void,
-  addProgramacao(programacao: ProgramacaoRealizada): void,
+  setPlantaManutencaoEletrica(planta: Planta): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -63,12 +60,9 @@ class ManutencaoEletricaSelecionaPlanta extends Component<Props, State> {
   }
 
   iniciaManutencao = async () => {
-    const { navigation, setPlantaAtiva, addProgramacao } = this.props;
+    const { navigation, setPlantaManutencaoEletrica, addProgramacaoEletrica } = this.props;
     const { plantaSelecionada } = this.state;
     const { proximaProgramacao } = plantaSelecionada;
-
-    navigation.navigate('ManutencaoEletricaLiberarDocumento');
-    return;
 
     if (!proximaProgramacao) {
       Toast.show({
@@ -76,19 +70,9 @@ class ManutencaoEletricaSelecionaPlanta extends Component<Props, State> {
         position: 'top',
       });
     } else {
-      await setPlantaAtiva(plantaSelecionada);
-      await addProgramacao({
-        programacao: plantaSelecionada.proximaProgramacao,
-        liberacoesDocumentos: [],
-        entradas: [],
-        quantidadesSubstituidas: [],
-        itensVistoriados: [],
-        estoques: [],
-        comentarios: [],
-        fotosItens: [],
-      });
+      await setPlantaManutencaoEletrica(plantaSelecionada);
 
-      navigation.navigate('ConfirmarPeriodoManutencao');
+      navigation.navigate('ManutencaoEletricaLiberarDocumento');
     }
   }
 
@@ -177,6 +161,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(Object.assign({}, PlantaActions, ProgramacoesActions), dispatch);
+  bindActionCreators(ManutencaoEletricaOuCivilActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaSelecionaPlanta)

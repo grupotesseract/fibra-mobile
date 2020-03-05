@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  liberarDocumentoPlanta(idProgramacao: number, now: string, usuarios: number[]): void,
+  liberarDocumento(now: string, usuarios: number[]): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -42,13 +42,12 @@ class ManutencaoEletricaLiberarDocumento extends Component<Props> {
   }
 
   liberarDocumento = async () => {
-    const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
+    const { navigation, liberarDocumento} = this.props;
     const { idsUsuariosSelecionados } = this.state;
     const now = new Date().toISOString();
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
     this.setState({ now });
 
-    await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
+    await liberarDocumento(now, idsUsuariosSelecionados);
     navigation.navigate({ routeName: 'MenuManutencaoEletrica' })
   }
 
