@@ -65,12 +65,13 @@ export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
 
     let uriParts = uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
-    let filePathAndName = uriParts[uriParts.length - 2].split('/');
-    let fileName = filePathAndName[filePathAndName.length - 1];
+    const firstPart = uriParts[uriParts.lenght - 2]
+    // let filePathAndName = uriParts[uriParts.length - 2].split('/');
+    // let fileName = filePathAndName[filePathAndName.length - 1];
 
     formData.append('fotos[]', {
       uri,
-      name: `${fileName}.${fileType}`,
+      name: `${firstPart}.${fileType}`,
       type: `image/${fileType}`,
     });
   })
