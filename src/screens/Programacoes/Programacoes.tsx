@@ -39,9 +39,9 @@ class Programacoes extends Component<Props> {
 
   state = {
     isSyncing: false
-  } 
-  
-  
+  }
+
+
   componentDidMount() {
     const { programacoesRealizadas } = this.props;
   }
@@ -129,9 +129,9 @@ class Programacoes extends Component<Props> {
       <Container>
         <HeaderNav title="Programações" />
         {
-          isSyncing ? <ActivityIndicator size='large' /> : null          
+          isSyncing ? <ActivityIndicator size='large' /> : null
         }
-        
+
         <Content padder>
           {
             programacoesRealizadas?.map((programacaoRealizada: ProgramacaoRealizada) => {
