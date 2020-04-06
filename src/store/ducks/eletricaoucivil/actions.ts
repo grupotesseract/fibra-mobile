@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions';
 import { EletricaOuCivilTypes } from './types';
 
-export const liberarDocumento = (now: string, usuarios: number[]) => action(EletricaOuCivilTypes.LIBERAR_DOCUMENTO, { now, usuarios })
+export const liberarDocumentoManutencao = (now: string, usuarios: number[]) => action(EletricaOuCivilTypes.LIBERAR_DOCUMENTO, { now, usuarios })
 export const armazenaFotos = (fotos) => action(EletricaOuCivilTypes.ARMAZENA_FOTOS, { fotos })
 export const atualizaComentariosAdicionais = ({ comentario }) => action(EletricaOuCivilTypes.ATUALIZA_COMENTARIOS_ADICIONAIS, { comentario })
 export const atualizaAtividaddeRealizada = ({ comentario }) => action(EletricaOuCivilTypes.ATUALIZA_ATIVIDADE_REALIZADA, { comentario })

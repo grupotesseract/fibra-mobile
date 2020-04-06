@@ -2,7 +2,14 @@ import { Reducer } from 'redux';
 import { EletricaOuCivilTypes, EletricaOuCivilState } from './types';
 
 const INITIAL_STATE: EletricaOuCivilState = {
-    manutencoesEletricaOuCivil: [],
+  manutencaoAtual: {
+    fotos: [],
+
+    fotosEnviadas: false,
+    dadosEnviados: false,
+    errorSync : false,
+  },
+  manutencoesEletricaOuCivil: [],
 }
 
 const manutencaoEletricaOuCivilReducer: Reducer<EletricaOuCivilState> = (state = INITIAL_STATE,action) => {
@@ -17,12 +24,10 @@ const manutencaoEletricaOuCivilReducer: Reducer<EletricaOuCivilState> = (state =
             ...state,
             manutencaoAtual: {
               ...manutencaoAtual,
-              liberacaoDocumento: [
-                {
-                  data_hora: now,
-                  usuarios,
-                }
-              ]
+              liberacaoDocumento: {
+                data_hora: now,
+                usuarios,
+              }
             }
           }
         }

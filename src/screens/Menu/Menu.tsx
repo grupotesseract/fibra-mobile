@@ -46,7 +46,7 @@ class Menu extends Component<Props> {
             onPress={() => navigate('ManutencaoEletricaSelecionaPlanta')}
             style={style.btnStyle}>
             <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
-            <Text>Manutenção Elétrica ou Civil</Text>
+            <Text>RDO</Text>
           </Button>
 
           <Button

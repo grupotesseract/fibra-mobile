@@ -52,13 +52,12 @@ class MenuManutencaoEletrica extends Component<Props> {
   }
 
   render() {
-    const { plantaAtiva, programacoesRealizadas } = this.props;
+    const { plantaAtiva } = this.props;
     if (!plantaAtiva) {
       return <ActivityIndicator />
     }
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find(p => p.programacao.id === idProgramacao)
-    const { estoqueConcluido, entradaConcluida } = programacao;
+
+    const idProgramacao = plantaAtiva.proximaProgramacao?.id;
 
     return (
       <View style={{flexGrow: 1}}>
@@ -67,26 +66,46 @@ class MenuManutencaoEletrica extends Component<Props> {
         <View padder>
           <Button
             block
-            disabled={estoqueConcluido}
             onPress={() => this.props.navigation.navigate({
               routeName: 'ManutencaoEletricaComentarios',
               params: {tipo:'atividade_realizada'},
             })}
             style={style.btnStyle}>
-            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 10 }}/>
-            <Text>Atividade Realizada</Text>
+            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
+            <Text>Atividades Realizadas no dia</Text>
           </Button>
 
           <Button
             block
-            disabled={entradaConcluida}
             onPress={() => this.props.navigation.navigate({
               routeName: 'ManutencaoEletricaComentarios',
               params: {tipo:'problemas_encontrados'},
             })}
             style={style.btnStyle}>
-            <Icon name="alert"/>
+            <AntDesign name="warning" color="white" size={24} style={{ marginLeft: 14 }}/>
             <Text>Problemas Encontrados</Text>
+          </Button>
+
+          <Button
+            block
+            onPress={() => this.props.navigation.navigate({
+              routeName: 'ManutencaoEletricaComentarios',
+              params: {tipo:'informacoes_adicionais'},
+            })}
+            style={style.btnStyle}>
+            <AntDesign name="infocirlceo" color="white" size={24} style={{ marginLeft: 14 }}/>
+            <Text>Informações Adicionais</Text>
+          </Button>
+
+          <Button
+            block
+            onPress={() => this.props.navigation.navigate({
+              routeName: 'ManutencaoEletricaComentarios',
+              params: {tipo:'observacoes'},
+            })}
+            style={style.btnStyle}>
+            <Icon name="md-chatboxes"/>
+            <Text>Observações</Text>
           </Button>
 
           <Button
@@ -95,17 +114,6 @@ class MenuManutencaoEletrica extends Component<Props> {
             style={style.btnStyle}>
             <Icon name="camera"/>
             <Text>Fotos</Text>
-          </Button>
-
-          <Button
-            block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
-              params: {tipo:'comentarios_gerais'},
-            })}
-            style={style.btnStyle}>
-            <Icon name="md-chatboxes"/>
-            <Text>Comentários Adicionais</Text>
           </Button>
         </View>
 

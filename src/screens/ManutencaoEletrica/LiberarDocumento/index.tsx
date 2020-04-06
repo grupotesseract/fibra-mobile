@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Button, Icon, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
+import { Container, Content, Text, Button, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as ProgramacoesActions from '../../../store/ducks/programacoes/actions'
+import * as EletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store'
-import { Planta } from '../../../store/ducks/planta/types';
 import { Usuario } from '../../../store/ducks/usuarios/types';
 import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
-  plantaAtiva: Planta,
   usuarios: Usuario[],
   navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
-  liberarDocumento(now: string, usuarios: number[]): void,
+  liberarDocumentoManutencao(now: string, usuarios: number[]): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -42,12 +40,12 @@ class ManutencaoEletricaLiberarDocumento extends Component<Props> {
   }
 
   liberarDocumento = async () => {
-    const { navigation, liberarDocumento} = this.props;
+    const { navigation, liberarDocumentoManutencao} = this.props;
     const { idsUsuariosSelecionados } = this.state;
     const now = new Date().toISOString();
     this.setState({ now });
 
-    await liberarDocumento(now, idsUsuariosSelecionados);
+    await liberarDocumentoManutencao(now, idsUsuariosSelecionados);
     navigation.navigate({ routeName: 'MenuManutencaoEletrica' })
   }
 
@@ -118,10 +116,9 @@ class ManutencaoEletricaLiberarDocumento extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   usuarios: state.usuariosReducer.listaUsuarios,
-  plantaAtiva: state.plantaReducer.plantaAtiva,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ProgramacoesActions, dispatch);
+  bindActionCreators(EletricaOuCivilActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaLiberarDocumento)
