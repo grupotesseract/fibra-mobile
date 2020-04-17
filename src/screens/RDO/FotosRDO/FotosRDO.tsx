@@ -25,7 +25,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class FotosManutencaoEletrica extends Component<Props> {
+class FotosRDO extends Component<Props> {
     state = {
         photos: []
     };
@@ -126,4 +126,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(FotosManutencaoEletrica)
+export default connect(mapStateToProps, mapDispatchToProps)(FotosRDO)

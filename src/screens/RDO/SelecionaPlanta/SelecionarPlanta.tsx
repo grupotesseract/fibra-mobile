@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast } from 'native-base';
+import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast, Input } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as ManutencaoEletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
@@ -21,15 +21,17 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps
 
 interface State {
-  empresaSelecionada: number
-  plantaSelecionada: Planta
+  empresaSelecionada: number;
+  plantaSelecionada: Planta;
+  obraAtividade: string;
 }
 
-class ManutencaoEletricaSelecionaPlanta extends Component<Props, State> {
+class SelecionaPlantaRDO extends Component<Props, State> {
   state = {
     empresaSelecionada: 0,
     plantaSelecionada: null,
-    empresas: []
+    empresas: [],
+    obraAtividade: '',
   }
 
   selectEmpresa = (empresaSelecionada: number) => {
@@ -72,12 +74,12 @@ class ManutencaoEletricaSelecionaPlanta extends Component<Props, State> {
     } else {
       await setPlantaManutencaoEletrica(plantaSelecionada);
 
-      navigation.navigate('ManutencaoEletricaLiberarDocumento');
+      navigation.navigate('RDOLiberarDocumentoEquipe');
     }
   }
 
   render() {
-    const { empresaSelecionada, plantaSelecionada } = this.state;
+    const { empresaSelecionada, plantaSelecionada, obraAtividade } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
 
@@ -143,6 +145,12 @@ class ManutencaoEletricaSelecionaPlanta extends Component<Props, State> {
                 )}
               </Picker>
             </Item>
+            <Item>
+              <Label>Obra/Atividade</Label>
+              <Input
+                value={obraAtividade}
+                onChangeText={obraAtividade => this.setState({ obraAtividade })} />
+            </Item>
           </Form>
           <Button
             block
@@ -163,4 +171,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ManutencaoEletricaOuCivilActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaSelecionaPlanta)
+export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlantaRDO)
