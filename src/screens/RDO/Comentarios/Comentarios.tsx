@@ -31,7 +31,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class ManutencaoEletricaComentarios extends Component<Props> {
+class ComentariosRDO extends Component<Props> {
 
   state = {
     comentario: '',
@@ -52,9 +52,10 @@ class ManutencaoEletricaComentarios extends Component<Props> {
   }
 
   render() {
+    const tipoComentario = this.props.navigation.state.params?.tipo || null;
     const { comentario } = this.state;
     return <Container>
-      <HeaderNav title={"Comentários"} />
+      <HeaderNav title={'Comentários ' + tipoComentario} />
       <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView behavior="height">
           <Form>
@@ -96,4 +97,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaComentarios)
+export default connect(mapStateToProps, mapDispatchToProps)(ComentariosRDO)

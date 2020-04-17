@@ -24,7 +24,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class MenuManutencaoEletrica extends Component<Props> {
+class MenuRDO extends Component<Props> {
 
   concluirManutencao = () => {
     Alert.alert(
@@ -146,4 +146,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuManutencaoEletrica)
+export default connect(mapStateToProps, mapDispatchToProps)(MenuRDO)
