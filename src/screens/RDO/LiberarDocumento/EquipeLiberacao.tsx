@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Text, Button, ListItem, List, View, Input, H3, CheckBox, Item, Label } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as EletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store'
 import { Usuario } from '../../../store/ducks/usuarios/types';
@@ -15,11 +15,11 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  liberarDocumentoManutencao(now: string, usuarios: number[]): void,
+  selecionarEquipe({ colaboradores, equipeFiscalizacao }): void,
 }
 
 type Props = StateProps & DispatchProps
-class ManutencaoEletricaLiberarDocumento extends Component<Props> {
+class EquipeLiberacao extends Component<Props> {
 
   state = {
     idsUsuariosSelecionados: [],
@@ -42,12 +42,13 @@ class ManutencaoEletricaLiberarDocumento extends Component<Props> {
   }
 
   liberarDocumento = async () => {
-    const { navigation, liberarDocumentoManutencao} = this.props;
-    const { idsUsuariosSelecionados } = this.state;
-    const now = new Date().toISOString();
-    this.setState({ now });
+    const { navigation, selecionarEquipe } = this.props;
+    const { idsUsuariosSelecionados, equipeFiscalizacao } = this.state;
 
-    await liberarDocumentoManutencao(now, idsUsuariosSelecionados);
+    await selecionarEquipe({
+      colaboradores: idsUsuariosSelecionados,
+      equipeFiscalizacao,
+    });
     navigation.navigate({ routeName: 'RDOLiberarDocumentoRegistro' })
   }
 
@@ -97,7 +98,7 @@ class ManutencaoEletricaLiberarDocumento extends Component<Props> {
             disabled={idsUsuariosSelecionados.length <= 0}
             onPress={() => this.liberarDocumento()}
           >
-            <Text>Registrar Liberações</Text>
+            <Text>Registrar Equipe</Text>
           </Button>
         </Content>
       </Container>
@@ -110,6 +111,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(EletricaOuCivilActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaLiberarDocumento)
+export default connect(mapStateToProps, mapDispatchToProps)(EquipeLiberacao)

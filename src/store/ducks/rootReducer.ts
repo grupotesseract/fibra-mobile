@@ -4,6 +4,7 @@ import empresasReducer from './empresas';
 import usuariosReducer from './usuarios';
 import plantaReducer from './planta';
 import programacoesReducer from './programacoes';
+import manutencaoRDOReducer from './rdo';
 
 export default combineReducers({
     auth,
@@ -11,4 +12,5 @@ export default combineReducers({
     usuariosReducer,
     plantaReducer,
     programacoesReducer,
+    manutencaoRDOReducer,
 })

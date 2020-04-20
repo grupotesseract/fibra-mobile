@@ -12,21 +12,18 @@ import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-
 import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
-import { Planta } from '../../../store/ducks/planta/types'
-import * as ProgramacoesActions from '../../../store/ducks/programacoes/actions'
-import { ProgramacaoRealizada } from '../../../store/ducks/programacoes/types'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
+import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  programacoesRealizadas: ProgramacaoRealizada[],
+  rdoAtual: ManutencaoRDO,
   navigation: NavigationScreenProp<any, any>,
 }
 
 interface DispatchProps {
-  armazenaComentarioManutencaoEletrica({ tipoComentario, comentario }): void
+  atualizaComentario({ tipoComentario, comentario }): void
 }
 
 type Props = StateProps & DispatchProps
@@ -38,24 +35,64 @@ class ComentariosRDO extends Component<Props> {
   }
 
   salvaComentario = async () => {
-    const { navigation, armazenaComentarioManutencaoEletrica } = this.props;
+    const { navigation, atualizaComentario } = this.props;
     const tipoComentario = navigation.state.params?.tipo || null;
 
     const { comentario } = this.state;
 
-    await armazenaComentarioManutencaoEletrica({ tipoComentario, comentario });
+    await atualizaComentario({ tipoComentario, comentario });
     navigation.goBack();
   }
 
   componentDidMount() {
-    // Carregar comentario do redux?
-  }
+    const { navigation, rdoAtual } = this.props;
+    const tipoComentario = navigation.state.params?.tipo || null;
+    const comentario = ((tipoComentario: String) => {
+      switch (tipoComentario) {
+        case 'IT':
+          return rdoAtual.liberacaoIT;
+        case 'OS':
+          return  rdoAtual.liberacaoOS;
+        case 'LEM':
+          return  rdoAtual.liberacaoLEM;
+        case 'LET':
+          return rdoAtual.liberacaoLET;
+        case 'problemas_encontrados':
+          return rdoAtual.problemasEncontrados;
+        case 'informacoes_adicionais':
+          return rdoAtual.infosAdicionais;
+        case 'observacoes':
+          return rdoAtual.observacoes;
+      }
+    })(tipoComentario);
+
+    this.setState({
+      comentario
+    })
+  };
 
   render() {
     const tipoComentario = this.props.navigation.state.params?.tipo || null;
     const { comentario } = this.state;
+
+    const title = ((tipoComentario: String) => {
+      switch (tipoComentario) {
+        case 'IT':
+        case 'OS':
+        case 'LEM':
+        case 'LET':
+          return 'Registrar '+tipoComentario;
+        case 'problemas_encontrados':
+          return 'Problemas Encontrados';
+        case 'informacoes_adicionais':
+          return 'Informações Adicionais';
+        case 'observacoes':
+          return 'Observações';
+      }
+    })(tipoComentario);
+
     return <Container>
-      <HeaderNav title={'Comentários ' + tipoComentario} />
+      <HeaderNav title={title} />
       <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView behavior="height">
           <Form>
@@ -92,9 +129,10 @@ const style = {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
+  rdoAtual: state.manutencaoRDOReducer.rdoAtual
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ProgramacoesActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ComentariosRDO)

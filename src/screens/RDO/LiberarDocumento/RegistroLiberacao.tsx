@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Text, Button, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as EletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store'
 import { Usuario } from '../../../store/ducks/usuarios/types';
@@ -17,7 +17,7 @@ interface DispatchProps {
 }
 
 type Props = StateProps & DispatchProps
-class ManutencaoEletricaLiberarDocumento extends Component<Props> {
+class RegistroLiberacao extends Component<Props> {
 
   state = {
   }
@@ -97,6 +97,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(EletricaOuCivilActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoEletricaLiberarDocumento)
+export default connect(mapStateToProps, mapDispatchToProps)(RegistroLiberacao)
