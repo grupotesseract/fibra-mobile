@@ -57,10 +57,7 @@ class MenuRDO extends Component<Props> {
         <View padder>
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ComentariosRDO',
-              params: {tipo:'atividade_realizada'},
-            })}
+            onPress={() => this.props.navigation.navigate('AtividadesRealizadas')}
             style={style.btnStyle}>
             <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
             <Text>Atividades Realizadas no dia</Text>

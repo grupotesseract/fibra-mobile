@@ -30,6 +30,8 @@ import ComentariosRDO from "./screens/RDO/Comentarios/Comentarios";
 import FotosRDO from "./screens/RDO/FotosRDO/FotosRDO";
 import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCliente";
 import ManutencaoClienteComentarios from "./screens/Cliente/Comentarios/Comentarios";
+import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesRealizadas";
+import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
 
 const AuthStack = createStackNavigator(
   {
@@ -57,6 +59,8 @@ const AuthStack = createStackNavigator(
     FotosRDO: { screen: FotosRDO },
     ManutencaoCliente: { screen: ManutencaoCliente },
     ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios },
+    AtividadesRealizadas: { screen: AtividadesRealizadas },
+    EditaAtividade: { screen: EditaAtividade },
   },
   {
     headerMode: 'none',

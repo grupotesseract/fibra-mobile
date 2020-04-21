@@ -6,6 +6,9 @@
     SELECIONAR_PLANTA = '@rdo/SELECIONAR_PLANTA',
     SELECIONAR_EQUIPE = '@rdo/SELECIONAR_EQUIPE',
     ATUALIZA_COMENTARIO = '@rdo/ATUALIZA_COMENTARIO',
+    ADICIONA_ATIVIDADE = '@rdo/ADICIONA_ATIVIDADE',
+    ATUALIZA_ATIVIDADE = '@rdo/ATUALIZA_ATIVIDADE',
+    DELETE_ATIVIDADE = '@rdo/DELETE_ATIVIDADE',
     ARMAZENA_FOTOS = '@rdo/ARMAZENA_FOTOS',
     DELETE_ATUAL = '@rdo/DELETE_ATUAL',
     DELETE_ALL = '@rdo/DELETE_ALL',
@@ -15,6 +18,12 @@
 /**
  * Data types
 */
+
+export interface AtividadeRealizada {
+  id: number;
+  descricao: string;
+  concluido: boolean;
+}
 
 export interface ManutencaoRDO {
     plantaSelecionadaId?: number;
@@ -30,7 +39,7 @@ export interface ManutencaoRDO {
     fotos: string[];
     observacoes?: string;
     infosAdicionais?: string;
-    atividadesRealizadas?: string[];
+    atividadesRealizadas?: AtividadeRealizada[];
     problemasEncontrados?: string;
 
     fotosEnviadas?: boolean

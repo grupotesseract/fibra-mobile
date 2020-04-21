@@ -84,6 +84,79 @@ const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) 
           }
         }
       }
+    case RDOTypes.ADICIONA_ATIVIDADE:
+      {
+        const { rdoAtual } = state;
+        const { atividadesRealizadas } = rdoAtual;
+        let maxId = 0;
+        atividadesRealizadas.forEach(atividade => {
+          if(atividade.id >= maxId) {
+            maxId = atividade.id;
+          }
+        });
+        maxId++;
+        return {
+          ...state,
+          rdoAtual: {
+            ...rdoAtual,
+            atividadesRealizadas: [
+              ...atividadesRealizadas,
+              {
+                id: maxId,
+                concluido: false,
+              }
+            ]
+          }
+        }
+      }
+    case RDOTypes.ATUALIZA_ATIVIDADE:
+      {
+        const { id, descricao, concluido } = action.payload;
+        const { rdoAtual } = state;
+        const { atividadesRealizadas } = rdoAtual;
+        const indexAtividade = atividadesRealizadas.findIndex(atividade => atividade.id === id)
+
+        if(indexAtividade === -1) {
+          return state;
+        }
+
+        const atividadeAtualizada = {
+          id,
+          descricao,
+          concluido,
+        }
+
+        atividadesRealizadas.splice(indexAtividade, 1, atividadeAtualizada);
+
+        return {
+          ...state,
+          rdoAtual: {
+            ...rdoAtual,
+            atividadesRealizadas,
+          }
+        }
+      }
+    case RDOTypes.DELETE_ATIVIDADE:
+      {
+        const { id } = action.payload;
+        const { rdoAtual } = state;
+        const { atividadesRealizadas } = rdoAtual;
+        const indexAtividade = atividadesRealizadas.findIndex(atividade => atividade.id === id)
+
+        if(indexAtividade === -1) {
+          return state;
+        }
+
+        atividadesRealizadas.splice(indexAtividade, 1);
+
+        return {
+          ...state,
+          rdoAtual: {
+            ...rdoAtual,
+            atividadesRealizadas,
+          }
+        }
+      }
     case RDOTypes.SALVA_RDO:
       const { rdos, rdoAtual } = state;
       return {
