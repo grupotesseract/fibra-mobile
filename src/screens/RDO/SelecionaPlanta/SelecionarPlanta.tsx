@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast, Input } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as ManutencaoEletricaOuCivilActions from '../../../store/ducks/eletricaoucivil/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
 import { ApplicationState } from '../../../store'
@@ -15,7 +15,11 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setPlantaManutencaoEletrica(planta: Planta): void,
+  deleteRDOAtual(): void,
+  selecionarPlanta({
+    plantaSelecionadaId: number,
+    obraAtividade: string
+  }): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -61,21 +65,17 @@ class SelecionaPlantaRDO extends Component<Props, State> {
     return empresa.plantas;
   }
 
-  iniciaManutencao = async () => {
-    const { navigation, setPlantaManutencaoEletrica, addProgramacaoEletrica } = this.props;
-    const { plantaSelecionada } = this.state;
-    const { proximaProgramacao } = plantaSelecionada;
+  iniciaRDO = async () => {
+    const { navigation, selecionarPlanta, deleteRDOAtual } = this.props;
+    const { plantaSelecionada: { id }, obraAtividade } = this.state;
 
-    if (!proximaProgramacao) {
-      Toast.show({
-        text: 'Sem programação armazenada para esta planta!',
-        position: 'top',
-      });
-    } else {
-      await setPlantaManutencaoEletrica(plantaSelecionada);
+    await deleteRDOAtual();
+    await selecionarPlanta({
+      plantaSelecionadaId: id,
+      obraAtividade,
+    });
 
-      navigation.navigate('RDOLiberarDocumentoEquipe');
-    }
+    navigation.navigate('RDOLiberarDocumentoEquipe');
   }
 
   render() {
@@ -155,8 +155,8 @@ class SelecionaPlantaRDO extends Component<Props, State> {
           <Button
             block
             disabled={(empresaSelecionada === null)}
-            onPress={() => this.iniciaManutencao()}>
-            <Text>Iniciar manutenção</Text>
+            onPress={() => this.iniciaRDO()}>
+            <Text>Iniciar RDO</Text>
           </Button>
         </Content>
       </Container>
@@ -169,6 +169,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ManutencaoEletricaOuCivilActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlantaRDO)

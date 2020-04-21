@@ -8,8 +8,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import HeaderLogo from '../../../components/HeaderLogo'
 import { ApplicationState } from '../../../store'
 import { Planta } from '../../../store/ducks/planta/types'
-import * as ProgramacoesActions from '../../../store/ducks/programacoes/actions'
-import { ProgramacaoRealizada } from '../../../store/ducks/programacoes/types'
+import * as RDOActions from '../../../store/ducks/programacoes/actions'
 import { AntDesign } from '@expo/vector-icons';
 
 interface StateProps {
@@ -19,7 +18,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  concluiManutencaoEletrica({ idProgramacao }): void
+  salvaRDO(): void
 }
 
 type Props = StateProps & DispatchProps
@@ -43,22 +42,14 @@ class MenuRDO extends Component<Props> {
 
   handleConcluirManutencao = () => {
     this.setState({ loadingConcluir: true }, async () => {
-      const { navigation, concluiManutencaoEletrica } = this.props
-      const idProgramacao = this.props.plantaAtiva.proximaProgramacao.id
-      // await concluiManutencaoEletrica({ idProgramacao })
+      const { navigation, salvaRDO } = this.props;
+      await salvaRDO();
       this.setState({ loadingConcluir: false })
       navigation.navigate('Menu')
     })
   }
 
   render() {
-    const { plantaAtiva } = this.props;
-    if (!plantaAtiva) {
-      return <ActivityIndicator />
-    }
-
-    const idProgramacao = plantaAtiva.proximaProgramacao?.id;
-
     return (
       <View style={{flexGrow: 1}}>
         <HeaderLogo/>
@@ -67,7 +58,7 @@ class MenuRDO extends Component<Props> {
           <Button
             block
             onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
+              routeName: 'ComentariosRDO',
               params: {tipo:'atividade_realizada'},
             })}
             style={style.btnStyle}>
@@ -78,7 +69,7 @@ class MenuRDO extends Component<Props> {
           <Button
             block
             onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
+              routeName: 'ComentariosRDO',
               params: {tipo:'problemas_encontrados'},
             })}
             style={style.btnStyle}>
@@ -89,7 +80,7 @@ class MenuRDO extends Component<Props> {
           <Button
             block
             onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
+              routeName: 'ComentariosRDO',
               params: {tipo:'informacoes_adicionais'},
             })}
             style={style.btnStyle}>
@@ -100,7 +91,7 @@ class MenuRDO extends Component<Props> {
           <Button
             block
             onPress={() => this.props.navigation.navigate({
-              routeName: 'ManutencaoEletricaComentarios',
+              routeName: 'ComentariosRDO',
               params: {tipo:'observacoes'},
             })}
             style={style.btnStyle}>
@@ -139,11 +130,9 @@ const style = {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-  plantaAtiva: state.plantaReducer.plantaAtiva,
-  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ProgramacoesActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuRDO)

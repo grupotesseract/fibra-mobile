@@ -8,8 +8,8 @@ import { EmpresasState } from './ducks/empresas/types';
 import { AsyncStorage } from 'react-native';
 import { UsuariosState } from './ducks/usuarios/types';
 import { PlantaState } from './ducks/planta/types';
-import programacoesReducer from './ducks/programacoes';
 import { ProgramacoesState } from './ducks/programacoes/types';
+import { RDOState } from './ducks/rdo/types';
 
 const persistConfig = {
     key: 'root',
@@ -23,6 +23,7 @@ export interface ApplicationState {
     plantaReducer: PlantaState,
     empresasReducer: EmpresasState,
     programacoesReducer: ProgramacoesState,
+    manutencaoRDOReducer: RDOState,
 }
 
 const sagaMiddleware = createSagaMiddleware();
