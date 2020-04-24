@@ -15,7 +15,6 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  deleteRDOAtual(): void,
   selecionarPlanta({
     plantaSelecionadaId: number,
     obraAtividade: string
@@ -66,10 +65,9 @@ class SelecionaPlantaRDO extends Component<Props, State> {
   }
 
   iniciaRDO = async () => {
-    const { navigation, selecionarPlanta, deleteRDOAtual } = this.props;
+    const { navigation, selecionarPlanta } = this.props;
     const { plantaSelecionada: { id }, obraAtividade } = this.state;
 
-    await deleteRDOAtual();
     await selecionarPlanta({
       plantaSelecionadaId: id,
       obraAtividade,

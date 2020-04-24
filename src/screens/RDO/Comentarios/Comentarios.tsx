@@ -24,6 +24,8 @@ interface StateProps {
 
 interface DispatchProps {
   atualizaComentario({ tipoComentario, comentario }): void
+  salvaHoraFinalLEM(): void
+  salvaHoraFinalLET(): void
 }
 
 type Props = StateProps & DispatchProps
@@ -35,10 +37,18 @@ class ComentariosRDO extends Component<Props> {
   }
 
   salvaComentario = async () => {
-    const { navigation, atualizaComentario } = this.props;
+    const { navigation, atualizaComentario, salvaHoraFinalLEM, salvaHoraFinalLET } = this.props;
     const tipoComentario = navigation.state.params?.tipo || null;
 
     const { comentario } = this.state;
+
+    if(tipoComentario === 'LEM') {
+      await salvaHoraFinalLEM();
+    }
+
+    if(tipoComentario === 'LET') {
+      await salvaHoraFinalLET();
+    }
 
     await atualizaComentario({ tipoComentario, comentario });
     navigation.goBack();

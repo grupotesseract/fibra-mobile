@@ -16,6 +16,7 @@ interface StateProps {
 
 interface DispatchProps {
   selecionarEquipe({ colaboradores, equipeFiscalizacao }): void,
+  salvaHoraInicioAtividades(): void
 }
 
 type Props = StateProps & DispatchProps
@@ -42,13 +43,14 @@ class EquipeLiberacao extends Component<Props> {
   }
 
   liberarDocumento = async () => {
-    const { navigation, selecionarEquipe } = this.props;
+    const { navigation, selecionarEquipe, salvaHoraInicioAtividades } = this.props;
     const { idsUsuariosSelecionados, equipeFiscalizacao } = this.state;
 
     await selecionarEquipe({
       colaboradores: idsUsuariosSelecionados,
       equipeFiscalizacao,
     });
+    await salvaHoraInicioAtividades();
     navigation.navigate({ routeName: 'RDOLiberarDocumentoRegistro' })
   }
 

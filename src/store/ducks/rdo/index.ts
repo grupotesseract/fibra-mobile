@@ -11,6 +11,15 @@ const INITIAL_RDO: ManutencaoRDO = {
   liberacaoOS: null,
   liberacaoLEM: null,
   liberacaoLET: null,
+
+  dataHoraEntrada: '',
+  dataHoraSaida: '',
+  dataHoraInicioAtividades: '',
+  dataHoraInicioLET: '',
+  dataHoraInicioLEM: '',
+  dataHoraFinalLET: '',
+  dataHoraFinalLEM: '',
+
   observacoes: null,
   infosAdicionais: null,
   atividadesRealizadas: [],
@@ -34,7 +43,53 @@ const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) 
           rdoAtual: {
             ...rdoAtual,
             plantaSelecionadaId,
-            obraAtividade
+            obraAtividade,
+          }
+        }
+      }
+    case RDOTypes.SALVA_HORA:
+      {
+        const { tipo } = action.payload;
+        const { rdoAtual } = state;
+
+        const now = new Date().toISOString();
+        //Retorna o objeto de acordo com o tipo de hora
+        const registroHora = ((tipo: String) => {
+          switch (tipo) {
+            case 'entrada':
+              if(rdoAtual.dataHoraEntrada !== ''){
+                return null;
+              }
+              return { dataHoraEntrada: now };
+            case 'saida':
+              return { dataHoraSaida: now };
+            case 'inicioLEM':
+              if(rdoAtual.dataHoraInicioLEM !== ''){
+                return null;
+              }
+              return { dataHoraInicioLEM: now };
+            case 'inicioLET':
+              if(rdoAtual.dataHoraInicioLET !== ''){
+                return null;
+              }
+              return { dataHoraInicioLET: now };
+            case 'finalLEM':
+              return { dataHoraFinalLEM: now };
+            case 'finalLET':
+              return { dataHoraFinalLET: now };
+            case 'inicioatividades':
+              if(rdoAtual.dataHoraInicioAtividades !== ''){
+                return null;
+              }
+              return { dataHoraInicioAtividades: now };
+          }
+        })(tipo);
+
+        return {
+          ...state,
+          rdoAtual: {
+            ...rdoAtual,
+            ...registroHora,
           }
         }
       }

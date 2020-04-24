@@ -1,24 +1,22 @@
 import React, { Component } from 'react'
 import { Button, Icon, Text, View } from 'native-base'
-import { ActivityIndicator, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 
 import HeaderLogo from '../../../components/HeaderLogo'
 import { ApplicationState } from '../../../store'
-import { Planta } from '../../../store/ducks/planta/types'
-import * as RDOActions from '../../../store/ducks/programacoes/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { AntDesign } from '@expo/vector-icons';
 
 interface StateProps {
-  plantaAtiva: Planta,
   navigation: NavigationScreenProp<any, any>,
-  programacoesRealizadas: ProgramacaoRealizada[],
 }
 
 interface DispatchProps {
   salvaRDO(): void
+  salvaHoraSaida(): void
 }
 
 type Props = StateProps & DispatchProps
@@ -42,7 +40,8 @@ class MenuRDO extends Component<Props> {
 
   handleConcluirManutencao = () => {
     this.setState({ loadingConcluir: true }, async () => {
-      const { navigation, salvaRDO } = this.props;
+      const { navigation, salvaRDO, salvaHoraSaida } = this.props;
+      await salvaHoraSaida();
       await salvaRDO();
       this.setState({ loadingConcluir: false })
       navigation.navigate('Menu')
