@@ -26,6 +26,8 @@ import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
 import FotosItemScreen from "./screens/FotosItem/FotosItem";
 import MenuRDO from "./screens/RDO/MenuRDO/MenuRDO";
+import MenuPrincipalRDO from "./screens/RDO/MenuRDO/MenuPrincipalRDO";
+import SincronizacaoRDO from "./screens/RDO/Sincronizacao/Sincronizacao";
 import ComentariosRDO from "./screens/RDO/Comentarios/Comentarios";
 import FotosRDO from "./screens/RDO/FotosRDO/FotosRDO";
 import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCliente";
@@ -61,6 +63,8 @@ const AuthStack = createStackNavigator(
     ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios },
     AtividadesRealizadas: { screen: AtividadesRealizadas },
     EditaAtividade: { screen: EditaAtividade },
+    MenuPrincipalRDO: { screen: MenuPrincipalRDO },
+    SincronizacaoRDO: { screen: SincronizacaoRDO },
   },
   {
     headerMode: 'none',

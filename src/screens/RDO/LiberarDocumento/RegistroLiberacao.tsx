@@ -13,7 +13,9 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  liberarDocumentoManutencao(now: string, usuarios: number[]): void,
+  salvaHoraInicioAtividades(): void,
+  salvaHoraInicioLEM(): void,
+  salvaHoraInicioLET(): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -23,9 +25,31 @@ class RegistroLiberacao extends Component<Props> {
   }
 
   liberarDocumento = async () => {
-    const { navigation } = this.props;
+    const { navigation, salvaHoraInicioAtividades } = this.props;
 
+    await salvaHoraInicioAtividades();
     navigation.navigate({ routeName: 'MenuRDO' })
+  }
+
+  handlePressButton = async (tipoComentario: string) => {
+    const { navigation, salvaHoraInicioLET, salvaHoraInicioLEM } = this.props;
+
+    switch(tipoComentario) {
+      case 'LET':
+        await salvaHoraInicioLET();
+        break;
+      case 'LEM':
+        await salvaHoraInicioLEM();
+        break;
+      case 'IT':
+      case 'OS':
+      default:
+       break;
+    }
+    navigation.navigate({
+      routeName: 'ComentariosRDO',
+      params: { tipo: tipoComentario },
+    })
   }
 
   render() {
@@ -38,37 +62,25 @@ class RegistroLiberacao extends Component<Props> {
 
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ComentariosRDO',
-              params: {tipo:'IT'},
-            })}
+            onPress={() => this.handlePressButton('IT')}
             style={style.btnStyle}>
             <Text>IT</Text>
           </Button>
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ComentariosRDO',
-              params: {tipo:'OS'},
-            })}
+            onPress={() => this.handlePressButton('OS')}
             style={style.btnStyle}>
             <Text>OS</Text>
           </Button>
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ComentariosRDO',
-              params: {tipo:'LEM'},
-            })}
+            onPress={() => this.handlePressButton('LEM')}
             style={style.btnStyle}>
             <Text>LEM</Text>
           </Button>
           <Button
             block
-            onPress={() => this.props.navigation.navigate({
-              routeName: 'ComentariosRDO',
-              params: {tipo:'LET'},
-            })}
+            onPress={() => this.handlePressButton('LET')}
             style={style.btnStyle}>
             <Text>LET</Text>
           </Button>
@@ -93,7 +105,6 @@ const style = {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-  usuarios: state.usuariosReducer.listaUsuarios,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

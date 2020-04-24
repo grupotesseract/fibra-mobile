@@ -43,9 +43,9 @@ class Menu extends Component<Props> {
 
           <Button
             block
-            onPress={() => navigate('SelecionaPlantaRDO')}
+            onPress={() => navigate('MenuPrincipalRDO')}
             style={style.btnStyle}>
-            <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
+            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
             <Text>RDO</Text>
           </Button>
 
@@ -53,7 +53,7 @@ class Menu extends Component<Props> {
             block
             onPress={() => navigate('ManutencaoCliente')}
             style={style.btnStyle}>
-            <AntDesign name="user" size={28} color="white" style={{marginLeft: 10}}/>
+            <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
             <Text>Manutenção Cliente</Text>
           </Button>
 

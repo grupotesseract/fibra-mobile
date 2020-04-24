@@ -10,6 +10,7 @@
     ATUALIZA_ATIVIDADE = '@rdo/ATUALIZA_ATIVIDADE',
     DELETE_ATIVIDADE = '@rdo/DELETE_ATIVIDADE',
     ARMAZENA_FOTOS = '@rdo/ARMAZENA_FOTOS',
+    SALVA_HORA = '@rdo/SALVA_HORA',
     DELETE_ATUAL = '@rdo/DELETE_ATUAL',
     DELETE_ALL = '@rdo/DELETE_ALL',
     SALVA_RDO = '@rdo/SALVA_RDO'
@@ -21,7 +22,7 @@
 
 export interface AtividadeRealizada {
   id: number;
-  descricao: string;
+  descricao?: string;
   concluido: boolean;
 }
 
@@ -35,6 +36,14 @@ export interface ManutencaoRDO {
     liberacaoOS?: string;
     liberacaoLEM?: string;
     liberacaoLET?: string;
+
+    dataHoraEntrada?: string;
+    dataHoraSaida?: string;
+    dataHoraInicioAtividades?: string;
+    dataHoraInicioLET?: string;
+    dataHoraInicioLEM?: string;
+    dataHoraFinalLET?: string;
+    dataHoraFinalLEM?: string;
 
     fotos: string[];
     observacoes?: string;
