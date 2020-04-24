@@ -7,7 +7,7 @@ export const atualizaComentario = ({ comentario, tipoComentario }) => action(RDO
 export const adicionaAtividade = () => action(RDOTypes.ADICIONA_ATIVIDADE);
 export const atualizaAtividade = ({ id, descricao, concluido }) => action(RDOTypes.ATUALIZA_ATIVIDADE, { id, descricao, concluido })
 export const deleteAtividade = ({ id }) => action(RDOTypes.DELETE_ATIVIDADE, { id })
-export const armazenaFotos = (fotos) => action(RDOTypes.ARMAZENA_FOTOS, { fotos })
+export const armazenaFotos = ({ fotos }) => action(RDOTypes.ARMAZENA_FOTOS, { fotos })
 export const salvaHoraEntrada = () => action(RDOTypes.SALVA_HORA, { tipo: 'entrada'});
 export const salvaHoraSaida = () => action(RDOTypes.SALVA_HORA, { tipo: 'saida'});
 export const salvaHoraInicioAtividades = () => action(RDOTypes.SALVA_HORA, { tipo: 'inicioatividades'});
