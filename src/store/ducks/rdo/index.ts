@@ -32,6 +32,7 @@ const INITIAL_STATE: RDOState = {
 }
 
 const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) => {
+  console.log("rdoAtual", state.rdoAtual, action);
   switch (action.type) {
     case RDOTypes.SELECIONAR_PLANTA:
       {
@@ -90,6 +91,18 @@ const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) 
           rdoAtual: {
             ...rdoAtual,
             ...registroHora,
+          }
+        }
+      }
+    case RDOTypes.ARMAZENA_FOTOS:
+      {
+        const { fotos } = action.payload;
+        const { rdoAtual } = state;
+        return {
+          ...state,
+          rdoAtual: {
+            ...rdoAtual,
+            fotos,
           }
         }
       }

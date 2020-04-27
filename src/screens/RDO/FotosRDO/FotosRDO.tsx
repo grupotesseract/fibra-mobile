@@ -3,24 +3,19 @@ import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-b
 import HeaderNav from '../../../components/HeaderNav';
 import { Image, View, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import { Planta } from '../../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
-import * as ProgramacoesActions from '../../../store/ducks/programacoes/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store';
-import { ProgramacaoRealizada } from '../../../store/ducks/programacoes/types';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  programacoesRealizadas: ProgramacaoRealizada[],
   navigation: NavigationScreenProp<any, any>,
 }
 
 
 interface DispatchProps {
-    armazenaFotos(idProgramacao: number, idItem: number, fotos): void,
+    armazenaFotos({ fotos }): void,
 }
 
 type Props = StateProps & DispatchProps
@@ -50,39 +45,20 @@ class FotosRDO extends Component<Props> {
         })
     };
 
-    componentDidMount() {
-        this.getPermissionAsync();
-    }
-
-    getPermissionAsync = async () => {
-        const platform = '';
-        if (platform === 'ios') {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
-            }
-        }
-    }
-
     storePhotos = async () => {
-        const { navigation, plantaAtiva, armazenaFotos } = this.props;
-        const { idItem } = navigation.state.params;
+        const { navigation, armazenaFotos } = this.props;
         const { photos } = this.state;
-        const idProgramacao = plantaAtiva.proximaProgramacao.id;
-        await armazenaFotos(idProgramacao, idItem, photos);
+        await armazenaFotos({ fotos: photos });
 
         navigation.navigate({
-            routeName: 'ManutencaoItem',
-            params: {
-                idItem
-            }
+            routeName: 'MenuRDO',
         })
     }
 
     render() {
         const { photos } = this.state;
         return <Container>
-            <HeaderNav title={"Fotos manutenção Elétrica ou Civil"} />
+            <HeaderNav title={"Fotos RDO"} />
             <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
                 <FlatList
                     data={photos}
@@ -119,11 +95,9 @@ class FotosRDO extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  plantaAtiva: state.plantaReducer.plantaAtiva,
-  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ProgramacoesActions, dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(FotosRDO)

@@ -97,7 +97,7 @@ class MenuRDO extends Component<Props> {
 
           <Button
             block
-            onPress={() => this.props.navigation.navigate('FotosManutencaoEletrica')}
+            onPress={() => this.props.navigation.navigate('FotosRDO')}
             style={style.btnStyle}>
             <Icon name="camera"/>
             <Text>Fotos</Text>
