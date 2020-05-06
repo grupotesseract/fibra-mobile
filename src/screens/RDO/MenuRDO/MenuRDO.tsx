@@ -25,8 +25,8 @@ class MenuRDO extends Component<Props> {
 
   concluirManutencao = () => {
     Alert.alert(
-      'Concluir Manutenção',
-      'Deseja concluir esta manutenção?',
+      'Concluir RDO',
+      'Deseja concluir o RDO?',
       [
         {
           text: 'Cancel',

@@ -93,6 +93,17 @@ class SelecionaPlanta extends Component<Props, State> {
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
 
+    if((listaEmpresas || []).length === 0) {
+      return (
+        <Container>
+          <HeaderNav title="Selecionar Planta"/>
+          <Content padder >
+            <Text> Nenhuma planta disponível para seleção </Text>
+          </Content>
+        </Container>
+      );
+    }
+
     return (
       <Container>
 

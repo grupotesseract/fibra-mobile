@@ -2,15 +2,16 @@ import { Reducer } from 'redux';
 import { RDOTypes, RDOState, ManutencaoRDO } from './types';
 
 const INITIAL_RDO: ManutencaoRDO = {
+  id: 0,
   fotos: [],
   colaboradores: [],
   fotosEnviadas: false,
   dadosEnviados: false,
   errorSync: false,
-  liberacaoIT: null,
-  liberacaoOS: null,
-  liberacaoLEM: null,
-  liberacaoLET: null,
+  liberacaoIT: '',
+  liberacaoOS: '',
+  liberacaoLEM: '',
+  liberacaoLET: '',
 
   dataHoraEntrada: '',
   dataHoraSaida: '',
@@ -20,10 +21,10 @@ const INITIAL_RDO: ManutencaoRDO = {
   dataHoraFinalLET: '',
   dataHoraFinalLEM: '',
 
-  observacoes: null,
-  infosAdicionais: null,
+  observacoes: '',
+  infosAdicionais: '',
   atividadesRealizadas: [],
-  problemasEncontrados: null,
+  problemasEncontrados: '',
 };
 
 const INITIAL_STATE: RDOState = {
@@ -32,7 +33,6 @@ const INITIAL_STATE: RDOState = {
 }
 
 const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) => {
-  console.log("rdoAtual", state.rdoAtual, action);
   switch (action.type) {
     case RDOTypes.SELECIONAR_PLANTA:
       {
@@ -226,15 +226,44 @@ const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) 
         }
       }
     case RDOTypes.SALVA_RDO:
+    {
       const { rdos, rdoAtual } = state;
+      let maxId = 0;
+      rdos.forEach(rdo => {
+        if (rdo.id >= maxId) {
+          maxId = rdo.id;
+        }
+      })
       return {
         ...state,
         rdos: [
           ...rdos,
-          rdoAtual
+          {
+            ...rdoAtual,
+            id: maxId++,
+          },
         ],
         rdoAtual: INITIAL_RDO,
       }
+    }
+    case RDOTypes.UPDATE_RDO:
+    {
+      const { rdos } = state;
+      const { rdo } = action.payload;
+
+      return {
+        ...state,
+        rdos: rdos.map(rdoAtual => {
+          if(rdoAtual.id !== rdo.id) {
+            return rdoAtual;
+          }
+          return {
+            ...rdoAtual,
+            ...rdo,
+          }
+        })
+      }
+    }
     case RDOTypes.DELETE_ATUAL:
       return {
         ...state,

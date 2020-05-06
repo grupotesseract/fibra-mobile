@@ -13,7 +13,8 @@
     SALVA_HORA = '@rdo/SALVA_HORA',
     DELETE_ATUAL = '@rdo/DELETE_ATUAL',
     DELETE_ALL = '@rdo/DELETE_ALL',
-    SALVA_RDO = '@rdo/SALVA_RDO'
+    SALVA_RDO = '@rdo/SALVA_RDO',
+    UPDATE_RDO = '@rdo/UPDATE_RDO',
  }
 
 /**
@@ -27,6 +28,8 @@ export interface AtividadeRealizada {
 }
 
 export interface ManutencaoRDO {
+    id: number;
+
     plantaSelecionadaId?: number;
     obraAtividade?: string;
     equipeFiscalizacao?: string;
@@ -45,7 +48,7 @@ export interface ManutencaoRDO {
     dataHoraFinalLET?: string;
     dataHoraFinalLEM?: string;
 
-    fotos: string[];
+    fotos: {}[];
     observacoes?: string;
     infosAdicionais?: string;
     atividadesRealizadas?: AtividadeRealizada[];

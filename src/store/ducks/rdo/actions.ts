@@ -16,6 +16,7 @@ export const salvaHoraInicioLET = () => action(RDOTypes.SALVA_HORA, { tipo: 'ini
 export const salvaHoraFinalLEM = () => action(RDOTypes.SALVA_HORA, { tipo: 'finalLEM'});
 export const salvaHoraFinalLET = () => action(RDOTypes.SALVA_HORA, { tipo: 'finalLET'});
 export const salvaRDO = () => action(RDOTypes.SALVA_RDO)
+export const updateRDO = ({ rdo }) => action(RDOTypes.UPDATE_RDO, { rdo } );
 export const deleteRDOAtual = () => action(RDOTypes.DELETE_ATUAL)
 export const deleteRDOs = () => action(RDOTypes.DELETE_ALL)
 

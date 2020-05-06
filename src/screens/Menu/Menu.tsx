@@ -49,13 +49,13 @@ class Menu extends Component<Props> {
             <Text>RDO</Text>
           </Button>
 
-          <Button
+          {/* <Button
             block
             onPress={() => navigate('ManutencaoCliente')}
             style={style.btnStyle}>
             <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
             <Text>Manutenção Cliente</Text>
-          </Button>
+          </Button> */}
 
           <Button
             block

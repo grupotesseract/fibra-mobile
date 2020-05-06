@@ -49,7 +49,7 @@ class MenuPrincipalRDO extends Component<Props> {
 
           <Button
             block
-            onPress={() => this.props.navigation.navigate('SyncRDO')}
+            onPress={() => this.props.navigation.navigate('SincronizacaoRDO')}
             style={style.btnStyle}>
             <Icon name="cloud-upload"/>
             <Text>Sincronização</Text>
