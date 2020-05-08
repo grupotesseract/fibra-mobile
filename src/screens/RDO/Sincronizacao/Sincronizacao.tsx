@@ -7,7 +7,7 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, ActivityIndicator } from 'react-native';
 import { iso2ddmmaaaa } from '../../../utils/utils';
 import { uploadInfosRDO, uploadFotos, uploadFotosRDO } from '../../../services/api';
 
@@ -34,11 +34,13 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
     fotos,
     dataHoraEntrada,
     dataHoraSaida,
+    loading,
   } = rdo;
 
   return <Card key={rdo.id}>
     <CardItem header bordered>
-      <Text>RDO Planta #{id}</Text>
+      { loading && <ActivityIndicator /> }
+      <Text> RDO Planta #{id}</Text>
     </CardItem>
     <CardItem>
       <Left>
@@ -48,7 +50,9 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
           <Text>Saída:</Text>
           <Text note>{iso2ddmmaaaa(dataHoraSaida)}</Text>
 
-          <Text style={{ marginVertical: 7, fontWeight: 'bold' }}> Sincronização </Text>
+          <Text style={{ marginVertical: 7, fontWeight: 'bold' }}> 
+            Sincronização
+          </Text>
 
           <Text> Informações: {errorSync ? 'reenvio pendente' : dadosEnviados ? 'sincronizadas' : 'pendente'} </Text>
           <Text> Fotos: {fotos.length} fotos {fotosEnviadas ? 'sincronizadas' : 'pendentes'} </Text>
@@ -58,7 +62,10 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
             style={{ marginTop: 12 }}
             onPress={() => sincronizarRDO(rdo)}
           >
-            <Text>Sincronizar</Text>
+            { loading ? 
+              <ActivityIndicator /> :
+              <Text>Sincronizar</Text>
+            }
           </Button>
         </Body>
       </Left>
@@ -92,6 +99,15 @@ class SincronizacaoRDO extends Component<Props, State> {
 
   syncRDO = async (rdo) => {
     const { updateRDO } = this.props;
+    let idRDOServer: number;
+
+    updateRDO({ 
+      rdo: {
+        ...rdo,
+        loading: true,
+      }
+    });
+    
     const res = await uploadInfosRDO(rdo);
     if (res.error) {
       rdo.errorSync = true;
@@ -103,14 +119,14 @@ class SincronizacaoRDO extends Component<Props, State> {
       })
     } else {
       rdo.dadosEnviados = true;
-      rdo.id = res.id;
-      console.log("Dados enviados!", res)
+      idRDOServer = res.id;
+      console.log("Dados enviados!")
     }
 
-    if(rdo.id) {
+    if(idRDOServer) {
       const resFotos = await uploadFotosRDO({
         fotos: rdo.fotos,
-        idRDO: rdo.id,
+        idRDO: idRDOServer,
       });
       if (resFotos.error) {
         rdo.fotosEnviadas = false;
@@ -122,9 +138,10 @@ class SincronizacaoRDO extends Component<Props, State> {
         })
       } else {
         rdo.fotosEnviadas = true;
-        console.log("Fotos enviadas!", res)
+        console.log("Fotos enviadas!")
       }
     }
+    rdo.loading = false;
     await updateRDO({ rdo });
   }
 
