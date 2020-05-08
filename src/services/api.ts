@@ -142,7 +142,6 @@ export const uploadInfosRDO = async (rdo: ManutencaoRDO) => {
         usuario_id: colaboradorId
       })),
     };
-    console.log("objeto Manutenção", objetoManutencao);
     const res = await api.post('sync/plantas/rdo/'+plantaSelecionadaId, objetoManutencao)
 
     return res.data.data;

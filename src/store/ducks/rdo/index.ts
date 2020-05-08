@@ -25,6 +25,8 @@ const INITIAL_RDO: ManutencaoRDO = {
   infosAdicionais: '',
   atividadesRealizadas: [],
   problemasEncontrados: '',
+
+  loading: false,
 };
 
 const INITIAL_STATE: RDOState = {

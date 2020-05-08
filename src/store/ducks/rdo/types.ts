@@ -54,9 +54,10 @@ export interface ManutencaoRDO {
     atividadesRealizadas?: AtividadeRealizada[];
     problemasEncontrados?: string;
 
-    fotosEnviadas?: boolean
-    dadosEnviados?: boolean
-    errorSync?: boolean
+    fotosEnviadas?: boolean;
+    dadosEnviados?: boolean;
+    errorSync?: boolean;
+    loading?: boolean;
 }
 
 /**
