@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
+import { Text, Container, Button, Content, Icon, Fab } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { Image, View, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,11 +8,12 @@ import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store';
+import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 
 interface StateProps {
+  rdoAtual: ManutencaoRDO,
   navigation: NavigationScreenProp<any, any>,
 }
-
 
 interface DispatchProps {
     armazenaFotos({ fotos }): void,
@@ -55,6 +56,14 @@ class FotosRDO extends Component<Props> {
         })
     }
 
+  componentDidMount() {
+    const { rdoAtual } = this.props;
+    const photos = rdoAtual.fotos;
+    this.setState({
+      photos
+    })
+  };
+
     render() {
         const { photos } = this.state;
         return <Container>
@@ -95,6 +104,7 @@ class FotosRDO extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
+  rdoAtual: state.manutencaoRDOReducer.rdoAtual
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
