@@ -65,24 +65,22 @@ class Menu extends Component<Props> {
             <Text>Colaboradores</Text>
           </Button>
 
-          {role === 'admin' &&
-            <>
-              <Button
-                block
-                onPress={() => navigate('SyncEmpresas')}
-                style={style.btnStyle}>
-                <Icon name="cloud-download"/>
-                <Text>Sincronização</Text>
-              </Button>
+          <Button
+            block
+            onPress={() => navigate('SyncEmpresas')}
+            style={style.btnStyle}>
+            <Icon name="cloud-download"/>
+            <Text>Atualizar Empresas</Text>
+          </Button>
 
-              <Button
-                block
-                onPress={() => navigate('Programacoes')}
-                style={style.btnStyle}>
-                <Icon name="cube"/>
-                <Text>Programações</Text>
-              </Button>
-            </>
+          {role === 'admin' &&
+            <Button
+              block
+              onPress={() => navigate('Programacoes')}
+              style={style.btnStyle}>
+              <Icon name="cube"/>
+              <Text>Programações</Text>
+            </Button>
           }
 
           <Button
