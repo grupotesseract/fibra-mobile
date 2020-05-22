@@ -5,9 +5,12 @@ import { connect } from 'react-redux'
 import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import { Usuario } from '../../../store/ducks/usuarios/types'
+import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
+import { EmpresasState } from '../../../store/ducks/empresas/types';
 
 interface StateProps {
-  usuarios: Usuario[],
+  empresas: EmpresasState,
+  rdoAtual: ManutencaoRDO,
 }
 
 type Props = StateProps
@@ -15,8 +18,20 @@ type Props = StateProps
 class AtividadesPendentes extends Component<Props> {
 
   render() {
-    const { usuarios } = this.props
-    const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico')
+    const { rdoAtual, empresas } = this.props
+    const plantaSelecionaId = rdoAtual.plantaSelecionadaId;
+
+    const empresa = empresas.listaEmpresas.find(empresa => {
+      return empresa.plantas.find(planta => {
+        return planta.id === plantaSelecionaId
+      })
+    })
+
+    const planta = empresa.plantas.find(planta => {
+      return planta.id === plantaSelecionaId
+    })
+
+    const atividadesPendentes = planta.atividadesPendentes;
 
     return (
       <Container>
@@ -24,10 +39,10 @@ class AtividadesPendentes extends Component<Props> {
 
         <Content padder>
           <List>
-            {colaboradores.map(colaborador => {
+            {atividadesPendentes.map(atividadePendente => {
               return (
-                <ListItem key={colaborador.id}>
-                  <Text>{colaborador.nome}</Text>
+                <ListItem key={atividadePendente.id}>
+                  <Text>{atividadePendente.texto}</Text>
                 </ListItem>
               )
             })}
@@ -40,7 +55,8 @@ class AtividadesPendentes extends Component<Props> {
 
 
 const mapStateToProps = (state: ApplicationState) => ({
-  usuarios: state.usuariosReducer.listaUsuarios,
+  rdoAtual: state.manutencaoRDOReducer.rdoAtual,
+  empresas: state.empresasReducer,
 })
 
 export default connect(mapStateToProps)(AtividadesPendentes)
