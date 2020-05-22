@@ -31,6 +31,11 @@ class RegistroLiberacao extends Component<Props> {
     navigation.navigate({ routeName: 'MenuRDO' })
   }
 
+  handleAtividadesPendentes = async () => {
+    const { navigation } = this.props;
+    navigation.navigate('AtividadesPendentes');
+  }
+
   handlePressButton = async (tipoComentario: string) => {
     const { navigation, salvaHoraInicioLET, salvaHoraInicioLEM } = this.props;
 
@@ -83,6 +88,12 @@ class RegistroLiberacao extends Component<Props> {
             onPress={() => this.handlePressButton('LET')}
             style={style.btnStyle}>
             <Text>LET</Text>
+          </Button>
+          <Button
+            block
+            onPress={() => this.handleAtividadesPendentes()}
+            style={style.btnStyle}>
+            <Text>ATIVIDADES PENDENTES</Text>
           </Button>
 
           <Button
