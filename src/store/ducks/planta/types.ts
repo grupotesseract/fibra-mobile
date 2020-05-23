@@ -6,6 +6,7 @@ import { Programacao } from "../programacao/types";
 
  export enum PlantaTypes {
     SET = '@planta/SET',
+    SET_TODOS_MATERIAIS_ITEM = '@planta/SET_TODOS_MATERIAIS_ITEM',
  }
 
  /**

@@ -4,12 +4,14 @@ import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import * as PlantaActions from '../../store/ducks/planta/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { Planta, Item as ItemPlanta, Material } from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
 import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import IncluirMaterialAoItem from './IncluirMaterialAoItem';
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -18,9 +20,8 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
-  concluiItem({ idItem, idProgramacao, data }): void
-  iniciaItem({ idItem, idProgramacao, data }): void
+  setItemAlterado({ idProgramacao, idItem, materiaisAlterados }): void
+  setTodosMateriaisItem({ idItem, todosMateriais }): void
 }
 
 type Props = StateProps & DispatchProps
@@ -35,6 +36,7 @@ class TodosMateriaisItem extends Component<Props> {
     error: false,
     idItem: null,
     permiteAlteracao: false,
+    incluindoMaterial: false,
   }
 
   onChangeQuantidadeInstalada = (idMaterial: number, quantidadeInstalada: number) => {
@@ -65,41 +67,30 @@ class TodosMateriaisItem extends Component<Props> {
     this.setState({ materiais: novosMateriais })
   }
 
-  salvaQuantidades = async (idItem: number) => {
-    const { armazenaQuantidades, plantaAtiva } = this.props;
+  salvaQuantidades = async () => {
+    const { setItemAlterado, plantaAtiva, navigation } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const { materiais } = this.state;
+    const { materiais, idItem } = this.state;
 
-    let quantidadesSubstituidas: QuantidadeSubstituida[];
-    quantidadesSubstituidas = materiais.map( material => {
-      return {
-        material_id: material.id,
-        item_id: idItem,
-        reator_id: material.reator_id,
-        base_id: material.base_id,
-        quantidade_substituida: material.quantidade || 0,
-        quantidade_substituida_base: material.quantidadeBase || 0,
-        quantidade_substituida_reator: material.quantidadeReator || 0,
-      }
+    await setItemAlterado({
+      idProgramacao,
+      idItem,
+      materiaisAlterados: materiais
+    });
+
+    navigation.goBack();
+  }
+
+  handleIncluirMaterial = async (material) => {
+    const { materiais, idItem } = this.state;
+    const { setTodosMateriaisItem } = this.props;
+    materiais.push(material);
+    await setTodosMateriaisItem({
+      idItem,
+      todosMateriais: materiais,
     })
 
-    await armazenaQuantidades(idProgramacao, quantidadesSubstituidas);
-  }
-
-  concluirItem = async (idItem: number) => {
-    const { navigation, concluiItem, plantaAtiva } = this.props;
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    await this.salvaQuantidades(idItem);
-    const data = new Date().toISOString();
-    await concluiItem({ idItem, idProgramacao, data });
-    navigation.navigate({ routeName: 'ManutencaoIluminacao' })
-  }
-
-  iniciarItem = async (idItem: number) => {
-    const { iniciaItem, plantaAtiva } = this.props;
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const data = new Date().toISOString();
-    await iniciaItem({ idItem, idProgramacao, data });
+    this.setState({ incluindoMaterial: false })
   }
 
   componentDidMount() {
@@ -122,7 +113,6 @@ class TodosMateriaisItem extends Component<Props> {
         nome,
         idItem: item.id
       });
-      this.iniciarItem(id);
     } else {
       this.setState({
         error: 'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.'
@@ -131,7 +121,16 @@ class TodosMateriaisItem extends Component<Props> {
   }
 
   render() {
-    const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
+    const {
+      error,
+      materiais,
+      qrcode,
+      emergencia,
+      nome,
+      idItem,
+      permiteAlteracao,
+      incluindoMaterial,
+    } = this.state;
 
     if (error) {
       return <Container>
@@ -169,12 +168,11 @@ class TodosMateriaisItem extends Component<Props> {
                 materiais?.map((material: Material) => {
                   return <Card key={material.id}>
                     <CardItem header bordered>
-                      <Text>LÂMPADA</Text>
+                      <Text>{material.tipoMaterialTipo} {material.tipoMaterial}</Text>
                     </CardItem>
                     <CardItem>
                       <Body>
                         <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
-                          <Text>Tipo: {material.tipoMaterial}</Text>
                           {material.base && <Text>Base: {material.base}</Text>}
                           {material.reator && <Text>Reator : {material.reator}</Text>}
                         </View>
@@ -216,14 +214,26 @@ class TodosMateriaisItem extends Component<Props> {
                 })
             }
             </ScrollView>
+            {incluindoMaterial ?
+              <IncluirMaterialAoItem incluirMaterial={this.handleIncluirMaterial}/>
+              :
+              <Button
+                block
+                light
+                onPress={() => this.setState({ incluindoMaterial: true })}
+                style={style.btnStyle}
+              >
+                <Text>Incluir Material</Text>
+              </Button>
+            }
             <Button
               block
-              onPress={() => this.concluirMateriaisItem(idItem)}
+              onPress={() => this.salvaQuantidades()}
               style={style.btnStyle}
               disabled={!materiais.reduce((tudoConfirmado, material) => {
                 return tudoConfirmado
                   && material.quantidadeConfirmada
-              }, true)}
+              }, true) || incluindoMaterial}
             >
               <Text>Concluído</Text>
             </Button>
@@ -250,6 +260,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(ProgramacoesActions, dispatch);
+  bindActionCreators({ ...ProgramacoesActions, ...PlantaActions }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodosMateriaisItem)

@@ -13,6 +13,25 @@ const plantaReducer: Reducer<PlantaState> = (state = INITIAL_STATE,action) => {
             return {
                 ...state, plantaAtiva: action.payload.data,
             };
+        case PlantaTypes.SET_TODOS_MATERIAIS_ITEM:
+            const { idItem, todosMateriais } = action.payload;
+            const { plantaAtiva } = state;
+            const itens = plantaAtiva.itens.map(item => {
+              if(item.id !== idItem) {
+                return item
+              }
+              return {
+                ...item,
+                todosMateriais
+              }
+            })
+            return {
+                ...state,
+                plantaAtiva: {
+                  ...plantaAtiva,
+                  itens,
+                },
+            };
         default:
             return state;
     }
