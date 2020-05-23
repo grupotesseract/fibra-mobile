@@ -36,6 +36,7 @@ export interface Item {
     qrcode?: string
     circuito?: string
     materiais?: Material[],
+    todosMateriais?: Material[],
     concluido?: boolean
 }
 

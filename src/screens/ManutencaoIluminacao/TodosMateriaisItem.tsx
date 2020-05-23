@@ -25,7 +25,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-class ManutencaoItem extends Component<Props> {
+class TodosMateriaisItem extends Component<Props> {
 
   state = {
     materiais: [],
@@ -37,7 +37,7 @@ class ManutencaoItem extends Component<Props> {
     permiteAlteracao: false,
   }
 
-  onChangeQuantidade = (idMaterial: number, quantidade: number) => {
+  onChangeQuantidadeInstalada = (idMaterial: number, quantidadeInstalada: number) => {
     const { materiais } = this.state;
     const novosMateriais = materiais.map((material: Material) => {
       if (material.id !== idMaterial) {
@@ -45,35 +45,7 @@ class ManutencaoItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidade
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
-
-  onChangeQuantidadeBase = (idMaterial: number, quantidadeBase: number) => {
-    const { materiais } = this.state;
-    const novosMateriais = materiais.map((material: Material) => {
-      if (material.id !== idMaterial) {
-        return material;
-      }
-      return {
-        ...material,
-        quantidadeBase
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
-
-  onChangeQuantidadeReator = (idMaterial: number, quantidadeReator: number) => {
-    const { materiais } = this.state;
-    const novosMateriais = materiais.map((material: Material) => {
-      if (material.id !== idMaterial) {
-        return material;
-      }
-      return {
-        ...material,
-        quantidadeReator
+        quantidadeInstalada
       }
     })
     this.setState({ materiais: novosMateriais })
@@ -114,18 +86,6 @@ class ManutencaoItem extends Component<Props> {
     await armazenaQuantidades(idProgramacao, quantidadesSubstituidas);
   }
 
-  verFotosItem = async (idItem: number) => {
-    const { navigation } = this.props;
-    await this.salvaQuantidades(idItem);
-    navigation.navigate({ routeName: 'FotosItem', params: { idItem: idItem } })
-  }
-
-  editarComentarioItem = async (idItem: number) => {
-    const { navigation } = this.props;
-    await this.salvaQuantidades(idItem);
-    navigation.navigate({ routeName: 'ComentariosGerais', params: { idItem: idItem } })
-  }
-
   concluirItem = async (idItem: number) => {
     const { navigation, concluiItem, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
@@ -143,9 +103,7 @@ class ManutencaoItem extends Component<Props> {
   }
 
   componentDidMount() {
-    const { plantaAtiva, programacoesRealizadas, navigation } = this.props;
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+    const { plantaAtiva, navigation } = this.props;
     const { idItem, qrcode } = navigation.state.params;
     const { itens } = plantaAtiva;
     let item: ItemPlanta;
@@ -153,29 +111,12 @@ class ManutencaoItem extends Component<Props> {
       item = itens.find(item => item.id === idItem);
     } else if (qrcode) {
       item = itens.find(item => item.qrcode === qrcode);
-      this.setState({permiteAlteracao : true});
     }
+    this.setState({permiteAlteracao : true});
     if (item) {
-      const { materiais, circuito, qrcode, nome, id } = item;
-      let materiaisComQuantidade = materiais;
-      if (programacao) {
-        materiaisComQuantidade = materiais.map( (m: Material) => {
-          const materialPreenchido = programacao.quantidadesSubstituidas
-            .find( q => q.material_id === m.id && q.item_id === id);
-          if (!materialPreenchido) {
-            return m;
-          }
-          return {
-            ...m,
-            quantidade: materialPreenchido.quantidade_substituida,
-            quantidadeConfirmada: true,
-            quantidadeBase: materialPreenchido.quantidade_substituida_base,
-            quantidadeReator: materialPreenchido.quantidade_substituida_reator,
-          }
-        })
-      }
+      const { todosMateriais, circuito, qrcode, nome, id } = item;
       this.setState({
-        materiais: materiaisComQuantidade,
+        materiais: todosMateriais.map(m => ({ ...m, quantidadeConfirmada: false})),
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
@@ -189,41 +130,12 @@ class ManutencaoItem extends Component<Props> {
     }
   }
 
-  verTodosMateriais = () => {
-    const { navigation } = this.props;
-    const { idItem } = this.state;
-    navigation.navigate('TodosMateriaisItem', { idItem });
-  }
-
-  botaoTodosMateriais = (
-    <Button
-      transparent
-      style={{
-        paddingRight:0,
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
-      onPress={this.verTodosMateriais}
-      >
-      <Icon name="md-git-compare" style={{color: 'white'}}/>
-      <Text style={{fontSize: 10, marginLeft: -12 }}>Editar</Text>
-    </Button>
-  );
-
   render() {
     const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
 
-    const { plantaAtiva, programacoesRealizadas } = this.props;
-    const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
-
-    const { fotosItens } = programacao;
-    const fotosItem = fotosItens ?.find(fotoItem => fotoItem.id_item === idItem);
-    const qtdFotos = fotosItem ?.fotos ?.length || 0;
-
     if (error) {
       return <Container>
-        <HeaderNav title={'Manutenção'} />
+        <HeaderNav title={nome + ' - Materiais'} />
         <Content padder>
           <Text>{error}</Text>
         </Content>
@@ -232,11 +144,10 @@ class ManutencaoItem extends Component<Props> {
 
     return (
       <Container padder>
-        <HeaderNav title={'Manutenção'} rightContent={this.botaoTodosMateriais}/>
+        <HeaderNav title={nome + ' - Materiais'}/>
         <Content padder>
           <KeyboardAvoidingView
             behavior="height">
-
             <Card>
               <CardItem>
                 <Left>
@@ -267,61 +178,28 @@ class ManutencaoItem extends Component<Props> {
                           {material.base && <Text>Base: {material.base}</Text>}
                           {material.reator && <Text>Reator : {material.reator}</Text>}
                         </View>
-
                         {material.potencia && <Text>Potência: {material.potencia}</Text>}
                         {material.tensao && <Text>Tensão: {material.tensao}</Text>}
-                        <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
                       </Body>
                     </CardItem>
                     <CardItem footer bordered style={{ flexDirection: 'column' }}>
                       <Text style={{ marginVertical: 3 }}>Trocas</Text>
-                      {material.base &&
+                      {material.quantidadeInstalada &&
                         <Item style={style.itemSubstituicao}>
                           <Left>
-                            <Label>Bases:</Label>
+                            <Label>Qtd. Instalada:</Label>
                           </Left>
                           <Right>
                             <NumericInput
                               minValue={0}
-                              step={+!material.quantidadeConfirmada}
+                              step={Number(!material.quantidadeConfirmada)}
                               editable={false}
                               rounded={true}
-                              value={material.quantidadeBase}
-                              onChange={quantidade => this.onChangeQuantidadeBase(material.id, quantidade)} />
+                              value={material.quantidadeInstalada}
+                              onChange={quantidade => this.onChangeQuantidadeInstalada(material.id, quantidade)} />
                           </Right>
                         </Item>
                       }
-                      {material.reator &&
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Reatores:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={+!material.quantidadeConfirmada}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeReator}
-                              onChange={quantidade => this.onChangeQuantidadeReator(material.id, quantidade)} />
-                          </Right>
-                        </Item>
-                      }
-                      <Item style={style.itemSubstituicao}>
-                        <Left>
-                          <Label>Lâmpadas:</Label>
-                        </Left>
-                        <Right>
-                          <NumericInput
-                            minValue={0}
-                            step={+!material.quantidadeConfirmada}
-                            editable={false}
-                            rounded={true}
-                            value={material.quantidade}
-                            onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
-                        </Right>
-
-                      </Item>
                       <Item style={style.itemSubstituicao}>
                         <Button
                           small
@@ -338,42 +216,14 @@ class ManutencaoItem extends Component<Props> {
                 })
             }
             </ScrollView>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <Button
-                onPress={() => this.verFotosItem(idItem)}
-                style={{ flex: 1, marginRight: 3 }}
-                iconLeft
-                bordered
-                disabled={!materiais.reduce((tudoConfirmado, material) => {
-                  return tudoConfirmado
-                    && material.quantidadeConfirmada
-                }, true)}
-              >
-                <Icon name="md-photos" />
-                <Text>Fotos</Text>
-              </Button>
-              <Button
-                onPress={() => this.editarComentarioItem(idItem)}
-                style={{ flex: 1, marginLeft: 3 }}
-                iconLeft
-                bordered
-                disabled={!materiais.reduce((tudoConfirmado, material) => {
-                  return tudoConfirmado
-                    && material.quantidadeConfirmada
-                }, true)}
-              >
-                <Icon name="md-chatboxes" />
-                <Text>Comentário</Text>
-              </Button>
-            </View>
             <Button
               block
-              onPress={() => this.concluirItem(idItem)}
+              onPress={() => this.concluirMateriaisItem(idItem)}
               style={style.btnStyle}
               disabled={!materiais.reduce((tudoConfirmado, material) => {
                 return tudoConfirmado
                   && material.quantidadeConfirmada
-              }, true) || qtdFotos === 0}
+              }, true)}
             >
               <Text>Concluído</Text>
             </Button>
@@ -402,4 +252,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoItem)
+export default connect(mapStateToProps, mapDispatchToProps)(TodosMateriaisItem)
