@@ -129,7 +129,6 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial }) => {
 const mapStateToProps = (state: ApplicationState) => {
   const { plantaAtiva } = state.plantaReducer;
   const { estoque } = plantaAtiva;
-  console.log(estoque);
   return {
     estoque,
   };
