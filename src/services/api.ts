@@ -48,13 +48,29 @@ export const loginOffline = ({ email, password }) =>
     })
     .catch(error => ({ error }));
 
-export const uploadProgramacao = ({ idProgramacao, programacao }) =>
-    api.post('sync/programacoes/'+idProgramacao, programacao)
+export const uploadProgramacao = ({ idProgramacao, programacao }) => {
+
+  const { itensAlterados } = programacao;
+  if(itensAlterados) {
+    let itensArrayUnico = [];
+    itensAlterados.forEach(item => {
+      const materiais = item.materiais || [];
+      const materiaisArray = materiais.map(material => ({
+        material_id: material.id,
+        item_id: item.item_id,
+        quantidade_instalada: material.quantidadeInstalada,
+      }))
+      itensArrayUnico.push(...materiaisArray);
+    });
+    programacao.itensAlterados = itensArrayUnico;
+  }
+  return api.post('sync/programacoes/'+idProgramacao, programacao)
     .then(response => {
         const data = response.data.data;
         return data;
     })
     .catch(error => ({ error }));
+  }
 
 export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
   const url = 'sync/programacoes/'+idProgramacao+'/item/'+idItem+'/fotos';

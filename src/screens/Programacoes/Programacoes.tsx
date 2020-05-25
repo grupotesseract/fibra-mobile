@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  Badge,
   Body,
   Button,
   Card,
@@ -9,7 +8,6 @@ import {
   Content,
   Left,
   Text,
-  View,
   Toast,
 } from 'native-base'
 import { connect } from 'react-redux'
@@ -39,11 +37,6 @@ class Programacoes extends Component<Props> {
 
   state = {
     isSyncing: false
-  }
-
-
-  componentDidMount() {
-    const { programacoesRealizadas } = this.props;
   }
 
   syncProgramacao = async (idProgramacao: number) => {

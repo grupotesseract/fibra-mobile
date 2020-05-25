@@ -21,14 +21,12 @@ class AtividadesPendentes extends Component<Props> {
     const { rdoAtual, empresas } = this.props
     const plantaSelecionaId = rdoAtual.plantaSelecionadaId;
 
+    let planta;
     const empresa = empresas.listaEmpresas.find(empresa => {
-      return empresa.plantas.find(planta => {
+      planta = empresa.plantas.find(planta => {
         return planta.id === plantaSelecionaId
       })
-    })
-
-    const planta = empresa.plantas.find(planta => {
-      return planta.id === plantaSelecionaId
+      return planta;
     })
 
     const atividadesPendentes = planta.atividadesPendentes;

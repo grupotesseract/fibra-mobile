@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Planta, Item as ItemPlanta, Material } from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
-import { QuantidadeSubstituida, Programacao, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -189,6 +189,27 @@ class ManutencaoItem extends Component<Props> {
     }
   }
 
+  verTodosMateriais = () => {
+    const { navigation } = this.props;
+    const { idItem } = this.state;
+    navigation.navigate('TodosMateriaisItem', { idItem });
+  }
+
+  botaoTodosMateriais = (
+    <Button
+      transparent
+      style={{
+        paddingRight:0,
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+      onPress={this.verTodosMateriais}
+      >
+      <Icon name="md-git-compare" style={{color: 'white'}}/>
+      <Text style={{fontSize: 10, marginLeft: -12 }}>Editar</Text>
+    </Button>
+  );
+
   render() {
     const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
 
@@ -211,7 +232,7 @@ class ManutencaoItem extends Component<Props> {
 
     return (
       <Container padder>
-        <HeaderNav title={'Manutenção'} />
+        <HeaderNav title={'Manutenção'} rightContent={this.botaoTodosMateriais}/>
         <Content padder>
           <KeyboardAvoidingView
             behavior="height">

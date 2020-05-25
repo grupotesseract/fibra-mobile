@@ -69,7 +69,7 @@ class SelecionaPlanta extends Component<Props, State> {
     if (!proximaProgramacao) {
       Toast.show({
         text: 'Sem programação armazenada para esta planta!',
-        position: 'top',
+        position: 'bottom',
       });
     } else {
       await setPlantaAtiva(plantaSelecionada);
