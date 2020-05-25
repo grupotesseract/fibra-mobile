@@ -14,4 +14,15 @@ export const armazenaFotos = (idProgramacao: number, idItem: number, fotos) => a
 export const addProgramacao = (programacaoRealizada: ProgramacaoRealizada) => action(ProgramacoesTypes.ADD, { programacaoRealizada })
 export const liberarDocumentoPlanta = (idProgramacao: number, now: string, usuarios: number[]) => action(ProgramacoesTypes.LIBERAR_DOCUMENTO, { idProgramacao, now, usuarios })
 export const confirmaPeriodoProgramacao = (idProgramacao: number, dataInicioReal: string) => action(ProgramacoesTypes.CONFIRMA_PERIODO, { idProgramacao, dataInicioReal })
-export const deleteProgramacoes = () => action(ProgramacoesTypes.DELETE_ALL)
+export const deleteProgramacoes = () => action(ProgramacoesTypes.DELETE_ALL);
+
+export const setItemAlterado = ({
+  idProgramacao,
+  idItem,
+  materiaisAlterados
+}) =>
+  action(ProgramacoesTypes.SET_ITEM_ALTERADO, {
+    idProgramacao,
+    idItem,
+    materiaisAlterados
+  });
