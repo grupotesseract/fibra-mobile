@@ -19,6 +19,7 @@ import { Programacao } from "../programacao/types";
     CONCLUI_MANUTENCAO = '@programacoes/CONCLUI_MANUTENCAO',
     UPDATE_PROGRAMACAO_REALIZADA = '@programacoes/UPDATE_PROGRAMACAO_REALIZADA',
     DELETE_ALL = '@programacoes/DELETE_ALL',
+    SET_ITEM_ALTERADO = '@programacoes/SET_ITEM_ALTERADO',
  }
 
 /**
@@ -71,6 +72,15 @@ export interface DataManutencao {
   data_fim?: string
 }
 
+export interface MaterialAlterado {
+ material_id: number
+ quantidade_instalada: number
+}
+export interface ItemAlterado {
+  item_id: number
+  materiais?: MaterialAlterado[]
+}
+
 export interface ProgramacaoRealizada {
     programacao?: Programacao
     liberacoesDocumentos?: LiberacaoDocumento[]
@@ -85,6 +95,7 @@ export interface ProgramacaoRealizada {
     errorSync?: boolean
     estoqueConcluido?: boolean
     entradaConcluida?: boolean
+    itensAlterados?: ItemAlterado[]
 }
 
 /**
