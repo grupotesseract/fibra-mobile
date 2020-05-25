@@ -44,13 +44,19 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial }) => {
             >
               {estoque.map(material => {
                 const label =
-                  (material.tipoMaterialTipo || material.id) +
+                  (material.tipoMaterialTipo || "") +
                   " " +
                   (material.tipoMaterial || "") +
                   " " +
                   (material.base || "") +
                   " " +
                   (material.reator || "") +
+                  " " +
+                  (material.nome || "") +
+                  " " +
+                  (material.potencia || "") +
+                  " " +
+                  (material.tensao || "") +
                   " ";
                 return <Picker.Item label={label} value={material.id} />;
               })}

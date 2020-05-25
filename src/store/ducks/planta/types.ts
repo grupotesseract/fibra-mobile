@@ -41,6 +41,11 @@ export interface Item {
     concluido?: boolean
 }
 
+export interface AtividadePendente {
+    id: number
+    texto?: string    
+}
+
 export interface Planta {
     id: number
     nome?: string
@@ -48,6 +53,7 @@ export interface Planta {
     itens?: Item[]
     estoque?: Material[]
     entrada?: Material[]
+    atividadesPendentes?: AtividadePendente
 }
 
 /**

@@ -34,6 +34,7 @@ import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCli
 import ManutencaoClienteComentarios from "./screens/Cliente/Comentarios/Comentarios";
 import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesRealizadas";
 import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
+import AtividadesPendentes from "./screens/RDO/AtividadesPendentes/AtividadesPendentes";
 import TodosMateriaisItem from "./screens/ManutencaoIluminacao/TodosMateriaisItem";
 
 const AuthStack = createStackNavigator(
@@ -66,6 +67,7 @@ const AuthStack = createStackNavigator(
     EditaAtividade: { screen: EditaAtividade },
     MenuPrincipalRDO: { screen: MenuPrincipalRDO },
     SincronizacaoRDO: { screen: SincronizacaoRDO },
+    AtividadesPendentes: { screen: AtividadesPendentes },
     TodosMateriaisItem: { screen: TodosMateriaisItem },
   },
   {

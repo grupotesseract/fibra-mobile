@@ -182,7 +182,7 @@ class TodosMateriaisItem extends Component<Props> {
                     </CardItem>
                     <CardItem footer bordered style={{ flexDirection: 'column' }}>
                       <Text style={{ marginVertical: 3 }}>Trocas</Text>
-                      {material.quantidadeInstalada &&
+                      
                         <Item style={style.itemSubstituicao}>
                           <Left>
                             <Label>Qtd. Instalada:</Label>
@@ -197,7 +197,7 @@ class TodosMateriaisItem extends Component<Props> {
                               onChange={quantidade => this.onChangeQuantidadeInstalada(material.id, quantidade)} />
                           </Right>
                         </Item>
-                      }
+                      
                       <Item style={style.itemSubstituicao}>
                         <Button
                           small
