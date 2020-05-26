@@ -106,8 +106,31 @@ class TodosMateriaisItem extends Component<Props> {
     this.setState({permiteAlteracao : true});
     if (item) {
       const { todosMateriais, circuito, qrcode, nome, id } = item;
+      const { programacoesRealizadas } = this.props;
+      const idProgramacao = plantaAtiva.proximaProgramacao.id;
+      const programacao = programacoesRealizadas?.find(pr => pr.programacao.id === idProgramacao)
+      const { itensAlterados } = programacao;
+      const itemAlterado = itensAlterados?.find(item => item.item_id === id);
+
+      const materiais = todosMateriais.map(material => {
+        let { quantidadeInstalada } = material;
+        let quantidadeConfirmada = false;
+        //Busca se material já foi alterado para esta programacao
+        const materialAlterado = itemAlterado?.materiais?.find(materialAlterado => materialAlterado.id === material.id)
+        if(materialAlterado) {
+          quantidadeInstalada = materialAlterado.quantidadeInstalada;
+          quantidadeConfirmada = true;
+        }
+        return {
+          ...material,
+          quantidadeInstalada,
+          quantidadeConfirmada,
+        }
+      });
+
+
       this.setState({
-        materiais: todosMateriais.map(m => ({ ...m, quantidadeConfirmada: false})),
+        materiais,
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
@@ -127,11 +150,9 @@ class TodosMateriaisItem extends Component<Props> {
       qrcode,
       emergencia,
       nome,
-      idItem,
       permiteAlteracao,
       incluindoMaterial,
     } = this.state;
-
     if (error) {
       return <Container>
         <HeaderNav title={nome + ' - Materiais'} />
@@ -182,7 +203,7 @@ class TodosMateriaisItem extends Component<Props> {
                     </CardItem>
                     <CardItem footer bordered style={{ flexDirection: 'column' }}>
                       <Text style={{ marginVertical: 3 }}>Trocas</Text>
-                      
+
                         <Item style={style.itemSubstituicao}>
                           <Left>
                             <Label>Qtd. Instalada:</Label>
@@ -197,7 +218,7 @@ class TodosMateriaisItem extends Component<Props> {
                               onChange={quantidade => this.onChangeQuantidadeInstalada(material.id, quantidade)} />
                           </Right>
                         </Item>
-                      
+
                       <Item style={style.itemSubstituicao}>
                         <Button
                           small
