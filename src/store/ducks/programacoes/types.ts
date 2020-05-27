@@ -1,4 +1,5 @@
 import { Programacao } from "../programacao/types";
+import { Material } from "../planta/types";
 
 /**
  * Action types
@@ -72,13 +73,9 @@ export interface DataManutencao {
   data_fim?: string
 }
 
-export interface MaterialAlterado {
- material_id: number
- quantidade_instalada: number
-}
 export interface ItemAlterado {
   item_id: number
-  materiais?: MaterialAlterado[]
+  materiais?: Material[]
 }
 
 export interface ProgramacaoRealizada {

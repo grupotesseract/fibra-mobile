@@ -380,7 +380,6 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                         materiais: materiaisAlterados,
                       })
                     }
-                    console.log('itensAlterados no redux:', itensAlterados);
 
                     return {
                       ...programacaoRealizada,

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
-import { Usuario } from '../../../store/ducks/usuarios/types'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
 
@@ -22,7 +21,7 @@ class AtividadesPendentes extends Component<Props> {
     const plantaSelecionaId = rdoAtual.plantaSelecionadaId;
 
     let planta;
-    const empresa = empresas.listaEmpresas.find(empresa => {
+    empresas.listaEmpresas.find(empresa => {
       planta = empresa.plantas.find(planta => {
         return planta.id === plantaSelecionaId
       })
