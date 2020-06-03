@@ -45,12 +45,12 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
     <CardItem>
       <Left>
         <Body>
-          <Text>Entrada:</Text>
+          {/* <Text>Entrada:</Text>
           <Text note>{iso2ddmmaaaa(dataHoraEntrada)}</Text>
           <Text>Saída:</Text>
-          <Text note>{iso2ddmmaaaa(dataHoraSaida)}</Text>
+          <Text note>{iso2ddmmaaaa(dataHoraSaida)}</Text> */}
 
-          <Text style={{ marginVertical: 7, fontWeight: 'bold' }}> 
+          <Text style={{ marginVertical: 7, fontWeight: 'bold' }}>
             Sincronização
           </Text>
 
@@ -62,7 +62,7 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
             style={{ marginTop: 12 }}
             onPress={() => sincronizarRDO(rdo)}
           >
-            { loading ? 
+            { loading ?
               <ActivityIndicator /> :
               <Text>Sincronizar</Text>
             }
@@ -101,13 +101,13 @@ class SincronizacaoRDO extends Component<Props, State> {
     const { updateRDO } = this.props;
     let idRDOServer: number;
 
-    updateRDO({ 
+    updateRDO({
       rdo: {
         ...rdo,
         loading: true,
       }
     });
-    
+
     const res = await uploadInfosRDO(rdo);
     if (res.error) {
       rdo.errorSync = true;
