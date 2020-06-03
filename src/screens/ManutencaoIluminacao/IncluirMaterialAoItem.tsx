@@ -35,7 +35,7 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial }) => {
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
-              style={{ width: undefined }}
+              style={{ width: '100%' }}
               placeholder="Escolha um material"
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
@@ -44,20 +44,20 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial }) => {
             >
               {estoque.map(material => {
                 const label =
-                  (material.tipoMaterialTipo || "") +
+                  (material.tipoMaterialTipo ? material.tipoMaterialTipo.substring(0,3) : "") +
                   " " +
-                  (material.tipoMaterial || "") +
+                  (material.tipoMaterialAbreviacao || "") +
+                  " " +
+                  (material.potencia ? material.potencia + "W" : "") +
+                  " " +
+                  (material.tensao ? material.tensao + 'V' : "") +
                   " " +
                   (material.base || "") +
                   " " +
                   (material.reator || "") +
                   " " +
                   (material.nome || "") +
-                  " " +
-                  (material.potencia || "") +
-                  " " +
-                  (material.tensao || "") +
-                  " ";
+                  " " ;
                 return <Picker.Item label={label} value={material.id} />;
               })}
             </Picker>

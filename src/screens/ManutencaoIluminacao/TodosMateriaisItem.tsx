@@ -189,7 +189,7 @@ class TodosMateriaisItem extends Component<Props> {
                 materiais?.map((material: Material) => {
                   return <Card key={material.id}>
                     <CardItem header bordered>
-                      <Text>{material.nome ? material.nome : material.tipoMaterial.toUpperCase()}</Text>
+                      <Text>{material.nome ? material.nome : material.tipoMaterialTipo.toUpperCase()}</Text>
                     </CardItem>
                     <CardItem>
                       <Body>

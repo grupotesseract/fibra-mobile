@@ -29,17 +29,14 @@ export function* loadEmpresas() {
     try {
         let token = yield select(getToken);
         yield call(setToken, token);
-        let role = yield select(getRole);
+
         let empresas: Empresa[] = [];
         let usuarios: Usuario[] = [];
-        if (role === 'admin') {
-          const response = yield call(api.get, '/sync');
-          empresas = response.data.data.empresas;
-          usuarios = response.data.data.usuarios;
-        } else {
-          empresas = yield select(getEmpresas);
-          usuarios = yield select(getUsuarios);
-        }
+
+        const response = yield call(api.get, '/sync');
+        empresas = response.data.data.empresas;
+        usuarios = response.data.data.usuarios;
+
         yield put({ type: UsuariosTypes.LOADED, data: [ ...usuarios ]});
         yield put({ type: EmpresasTypes.LOADED, data: [ ...empresas ]});
     } catch (err) {

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ManutencaoRDO } from '../store/ducks/rdo/types';
 
 const api = axios.create({
-    baseURL: 'https://fibra.grupotesseract.com.br/api'
+    baseURL: 'https://stage.fibra.grupotesseract.com.br/api'
 })
 
 export const setToken = (token: string) => {
