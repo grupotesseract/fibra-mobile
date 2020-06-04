@@ -23,6 +23,7 @@ export interface Material {
     reator?: string,
     tipoMaterial?: string,
     tipoMaterialTipo?: string,
+    tipoMaterialAbreviacao?: string,
     quantidadeInstalada?: number,
     quantidade?: number,
     quantidadeBase?: number,
@@ -43,7 +44,7 @@ export interface Item {
 
 export interface AtividadePendente {
     id: number
-    texto?: string    
+    texto?: string
 }
 
 export interface Planta {
