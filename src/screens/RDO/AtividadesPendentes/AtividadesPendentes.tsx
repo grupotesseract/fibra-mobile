@@ -1,4 +1,4 @@
-import { Container, Content, List, ListItem, Text } from 'native-base'
+import { Container, Content, List, ListItem, Text, Icon } from 'native-base'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -6,6 +6,7 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
+import { Clipboard } from 'react-native';
 
 interface StateProps {
   empresas: EmpresasState,
@@ -15,6 +16,12 @@ interface StateProps {
 type Props = StateProps
 
 class AtividadesPendentes extends Component<Props> {
+
+  writeToClipboard = async (texto) => {
+    await Clipboard.setString(texto);
+    alert('Copiado para a área de transferência!');
+  };
+
 
   render() {
     const { rdoAtual, empresas } = this.props
@@ -34,12 +41,18 @@ class AtividadesPendentes extends Component<Props> {
       <Container>
         <HeaderNav title="Atividades Pendentes"/>
 
-        <Content padder>
+        <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
           <List>
             {atividadesPendentes.map(atividadePendente => {
               return (
-                <ListItem key={atividadePendente.id}>
-                  <Text>{atividadePendente.texto}</Text>
+                <ListItem key={atividadePendente.id} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                  <Text style={{ flex: 1 }}>{atividadePendente.texto}</Text>
+                  <Icon
+                    type="AntDesign"
+                    name="checkcircle"
+                    style={{color: 'grey', padding: 5}}
+                    onPress={() => this.writeToClipboard(atividadePendente.texto)}
+                  />
                 </ListItem>
               )
             })}

@@ -194,6 +194,7 @@ class TodosMateriaisItem extends Component<Props> {
                     <CardItem>
                       <Body>
                         <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
+                        <Text>Tipo: {material.tipoMaterial}</Text>
                           {material.base && <Text>Base: {material.base}</Text>}
                           {material.reator && <Text>Reator : {material.reator}</Text>}
                         </View>
