@@ -140,8 +140,6 @@ class Programacoes extends Component<Props> {
                 <CardItem>
                   <Left>
                     <Body>
-                      <Text>Manutenção prevista para</Text>
-                      <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
 
                       <Text style={{marginVertical: 5, fontWeight: 'bold'}}> Sincronização </Text>
 
