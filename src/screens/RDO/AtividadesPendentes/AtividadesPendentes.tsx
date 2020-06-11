@@ -1,4 +1,4 @@
-import { Container, Content, List, ListItem, Text, Icon } from 'native-base'
+import { Container, Content, List, ListItem, Text, Icon, Button } from 'native-base'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -6,7 +6,7 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
-import { Clipboard } from 'react-native';
+import { Clipboard, Alert } from 'react-native';
 
 interface StateProps {
   empresas: EmpresasState,
@@ -19,7 +19,7 @@ class AtividadesPendentes extends Component<Props> {
 
   writeToClipboard = async (texto) => {
     await Clipboard.setString(texto);
-    alert('Copiado para a área de transferência!');
+    Alert.alert('Texto copiado','Copiado para a área de transferência!');
   };
 
 
