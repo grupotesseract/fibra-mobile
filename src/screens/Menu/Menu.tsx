@@ -8,6 +8,7 @@ import HeaderLogo from '../../components/HeaderLogo'
 import * as AuthActions from '../../store/ducks/auth/actions'
 import { AuthState } from '../../store/ducks/auth/types'
 import { checkAuth } from '../../utils/authNavigation'
+import { AntDesign } from '@expo/vector-icons';
 
 interface Props {
   auth: AuthState,
@@ -42,30 +43,44 @@ class Menu extends Component<Props> {
 
           <Button
             block
+            onPress={() => navigate('MenuPrincipalRDO')}
+            style={style.btnStyle}>
+            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
+            <Text>RDO</Text>
+          </Button>
+
+          {/* <Button
+            block
+            onPress={() => navigate('ManutencaoCliente')}
+            style={style.btnStyle}>
+            <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
+            <Text>Manutenção Cliente</Text>
+          </Button> */}
+
+          <Button
+            block
             onPress={() => navigate('Colaboradores')}
             style={style.btnStyle}>
             <Icon name="person"/>
             <Text>Colaboradores</Text>
           </Button>
 
-          {role === 'admin' &&
-            <>
-              <Button
-                block
-                onPress={() => navigate('SyncEmpresas')}
-                style={style.btnStyle}>
-                <Icon name="cloud-download"/>
-                <Text>Sincronização</Text>
-              </Button>
+          <Button
+            block
+            onPress={() => navigate('SyncEmpresas')}
+            style={style.btnStyle}>
+            <Icon name="cloud-download"/>
+            <Text>Atualizar Empresas</Text>
+          </Button>
 
-              <Button
-                block
-                onPress={() => navigate('Programacoes')}
-                style={style.btnStyle}>
-                <Icon name="cube"/>
-                <Text>Programações</Text>
-              </Button>
-            </>
+          {role === 'admin' &&
+            <Button
+              block
+              onPress={() => navigate('Programacoes')}
+              style={style.btnStyle}>
+              <Icon name="cube"/>
+              <Text>Programações</Text>
+            </Button>
           }
 
           <Button

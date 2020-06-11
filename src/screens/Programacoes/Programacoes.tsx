@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  Badge,
   Body,
   Button,
   Card,
@@ -9,7 +8,6 @@ import {
   Content,
   Left,
   Text,
-  View,
   Toast,
 } from 'native-base'
 import { connect } from 'react-redux'
@@ -39,11 +37,6 @@ class Programacoes extends Component<Props> {
 
   state = {
     isSyncing: false
-  } 
-  
-  
-  componentDidMount() {
-    const { programacoesRealizadas } = this.props;
   }
 
   syncProgramacao = async (idProgramacao: number) => {
@@ -129,9 +122,9 @@ class Programacoes extends Component<Props> {
       <Container>
         <HeaderNav title="Programações" />
         {
-          isSyncing ? <ActivityIndicator size='large' /> : null          
+          isSyncing ? <ActivityIndicator size='large' /> : null
         }
-        
+
         <Content padder>
           {
             programacoesRealizadas?.map((programacaoRealizada: ProgramacaoRealizada) => {
@@ -147,8 +140,6 @@ class Programacoes extends Component<Props> {
                 <CardItem>
                   <Left>
                     <Body>
-                      <Text>Manutenção prevista para</Text>
-                      <Text note>{iso2ddmmaaaa(inicio)} - {iso2ddmmaaaa(fim)}</Text>
 
                       <Text style={{marginVertical: 5, fontWeight: 'bold'}}> Sincronização </Text>
 

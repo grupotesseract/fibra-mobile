@@ -8,6 +8,9 @@ import { Provider } from "react-redux";
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
 import SelecionaPlanta from './screens/SelecionaPlanta/SelecionarPlanta';
+import SelecionaPlantaRDO from './screens/RDO/SelecionaPlanta/SelecionarPlanta';
+import RDOLiberarDocumentoEquipe from './screens/RDO/LiberarDocumento/EquipeLiberacao';
+import RDOLiberarDocumentoRegistro from './screens/RDO/LiberarDocumento/RegistroLiberacao';
 import ConfirmarPeriodoManutencao from './screens/ConfirmarPeriodoManutencao';
 import LiberarDocumento from './screens/LiberarDocumento';
 import MenuVistoria from "./screens/MenuVistoria/MenuVistoria";
@@ -22,6 +25,17 @@ import { store, persistor } from "./store";
 import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
 import FotosItemScreen from "./screens/FotosItem/FotosItem";
+import MenuRDO from "./screens/RDO/MenuRDO/MenuRDO";
+import MenuPrincipalRDO from "./screens/RDO/MenuRDO/MenuPrincipalRDO";
+import SincronizacaoRDO from "./screens/RDO/Sincronizacao/Sincronizacao";
+import ComentariosRDO from "./screens/RDO/Comentarios/Comentarios";
+import FotosRDO from "./screens/RDO/FotosRDO/FotosRDO";
+import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCliente";
+import ManutencaoClienteComentarios from "./screens/Cliente/Comentarios/Comentarios";
+import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesRealizadas";
+import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
+import AtividadesPendentes from "./screens/RDO/AtividadesPendentes/AtividadesPendentes";
+import TodosMateriaisItem from "./screens/ManutencaoIluminacao/TodosMateriaisItem";
 
 const AuthStack = createStackNavigator(
   {
@@ -41,6 +55,20 @@ const AuthStack = createStackNavigator(
     Colaboradores: { screen: Colaboradores },
     SyncEmpresas: { screen: SyncEmpresas },
     Programacoes: { screen: Programacoes },
+    SelecionaPlantaRDO: { screen: SelecionaPlantaRDO },
+    RDOLiberarDocumentoEquipe: { screen: RDOLiberarDocumentoEquipe },
+    RDOLiberarDocumentoRegistro: { screen: RDOLiberarDocumentoRegistro },
+    MenuRDO: { screen: MenuRDO },
+    ComentariosRDO: { screen: ComentariosRDO },
+    FotosRDO: { screen: FotosRDO },
+    ManutencaoCliente: { screen: ManutencaoCliente },
+    ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios },
+    AtividadesRealizadas: { screen: AtividadesRealizadas },
+    EditaAtividade: { screen: EditaAtividade },
+    MenuPrincipalRDO: { screen: MenuPrincipalRDO },
+    SincronizacaoRDO: { screen: SincronizacaoRDO },
+    AtividadesPendentes: { screen: AtividadesPendentes },
+    TodosMateriaisItem: { screen: TodosMateriaisItem },
   },
   {
     headerMode: 'none',

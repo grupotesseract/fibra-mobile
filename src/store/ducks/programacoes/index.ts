@@ -354,6 +354,39 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
                 ...state,
                 programacoesRealizadas: [],
             }
+        case ProgramacoesTypes.SET_ITEM_ALTERADO:
+        {
+            const { idProgramacao, idItem, materiaisAlterados } = action.payload;
+            const { programacoesRealizadas } = state;
+
+            return {
+                ...state,
+                programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
+                    if (programacaoRealizada?.programacao?.id !== idProgramacao) {
+                        return programacaoRealizada;
+                    }
+                    let { itensAlterados } = programacaoRealizada;
+                    if(!itensAlterados) {
+                      itensAlterados = [];
+                    }
+                    const itemAlteradoIndex = itensAlterados.findIndex(item => item.item_id === idItem)
+                    if(itemAlteradoIndex >= 0) {
+                      itensAlterados[itemAlteradoIndex].materiais = materiaisAlterados;
+                    }
+
+                    if(itemAlteradoIndex === -1) {
+                      itensAlterados.push({
+                        item_id: idItem,
+                        materiais: materiaisAlterados,
+                      })
+                    }
+
+                    return {
+                      ...programacaoRealizada,
+                      itensAlterados,                   };
+                })
+            }
+        }
         default:
             return state;
     }

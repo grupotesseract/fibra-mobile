@@ -9,9 +9,7 @@ export const getUsuarios = (state) => {
 }
 
 function loginOffline({ usuarios, email, password }) {
-    console.log("Usuarios carregados para login offline: ", usuarios);
     const usuario = usuarios.find(u => u.login === email);
-    console.log("Usuario logado", usuario);
     return usuario;
 }
 

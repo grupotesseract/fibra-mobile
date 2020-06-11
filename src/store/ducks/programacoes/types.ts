@@ -1,4 +1,5 @@
 import { Programacao } from "../programacao/types";
+import { Material } from "../planta/types";
 
 /**
  * Action types
@@ -19,6 +20,7 @@ import { Programacao } from "../programacao/types";
     CONCLUI_MANUTENCAO = '@programacoes/CONCLUI_MANUTENCAO',
     UPDATE_PROGRAMACAO_REALIZADA = '@programacoes/UPDATE_PROGRAMACAO_REALIZADA',
     DELETE_ALL = '@programacoes/DELETE_ALL',
+    SET_ITEM_ALTERADO = '@programacoes/SET_ITEM_ALTERADO',
  }
 
 /**
@@ -71,6 +73,11 @@ export interface DataManutencao {
   data_fim?: string
 }
 
+export interface ItemAlterado {
+  item_id: number
+  materiais?: Material[]
+}
+
 export interface ProgramacaoRealizada {
     programacao?: Programacao
     liberacoesDocumentos?: LiberacaoDocumento[]
@@ -85,6 +92,7 @@ export interface ProgramacaoRealizada {
     errorSync?: boolean
     estoqueConcluido?: boolean
     entradaConcluida?: boolean
+    itensAlterados?: ItemAlterado[]
 }
 
 /**

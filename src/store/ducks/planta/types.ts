@@ -6,6 +6,7 @@ import { Programacao } from "../programacao/types";
 
  export enum PlantaTypes {
     SET = '@planta/SET',
+    SET_TODOS_MATERIAIS_ITEM = '@planta/SET_TODOS_MATERIAIS_ITEM',
  }
 
  /**
@@ -22,6 +23,7 @@ export interface Material {
     reator?: string,
     tipoMaterial?: string,
     tipoMaterialTipo?: string,
+    tipoMaterialAbreviacao?: string,
     quantidadeInstalada?: number,
     quantidade?: number,
     quantidadeBase?: number,
@@ -36,7 +38,13 @@ export interface Item {
     qrcode?: string
     circuito?: string
     materiais?: Material[],
+    todosMateriais?: Material[],
     concluido?: boolean
+}
+
+export interface AtividadePendente {
+    id: number
+    texto?: string
 }
 
 export interface Planta {
@@ -46,6 +54,7 @@ export interface Planta {
     itens?: Item[]
     estoque?: Material[]
     entrada?: Material[]
+    atividadesPendentes?: AtividadePendente
 }
 
 /**

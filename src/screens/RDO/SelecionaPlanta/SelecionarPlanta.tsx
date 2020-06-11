@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
+import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast, Input } from 'native-base';
+import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as PlantaActions from '../../store/ducks/planta/actions'
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
-import { EmpresasState } from '../../store/ducks/empresas/types';
-import { ApplicationState } from '../../store'
-import { Planta } from '../../store/ducks/planta/types';
-import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { EmpresasState } from '../../../store/ducks/empresas/types';
+import { ApplicationState } from '../../../store'
+import { Planta } from '../../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
@@ -17,22 +15,26 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  setPlantaAtiva(planta: Planta): void,
-  addProgramacao(programacao: ProgramacaoRealizada): void,
+  selecionarPlanta({
+    plantaSelecionadaId: number,
+    obraAtividade: string
+  }): void,
 }
 
 type Props = StateProps & DispatchProps
 
 interface State {
-  empresaSelecionada: number
-  plantaSelecionada: Planta
+  empresaSelecionada: number;
+  plantaSelecionada: Planta;
+  obraAtividade: string;
 }
 
-class SelecionaPlanta extends Component<Props, State> {
+class SelecionaPlantaRDO extends Component<Props, State> {
   state = {
     empresaSelecionada: 0,
     plantaSelecionada: null,
-    empresas: []
+    empresas: [],
+    obraAtividade: '',
   }
 
   selectEmpresa = (empresaSelecionada: number) => {
@@ -62,47 +64,22 @@ class SelecionaPlanta extends Component<Props, State> {
     return empresa.plantas;
   }
 
-  iniciaManutencao = async () => {
-    const { navigation, setPlantaAtiva, addProgramacao } = this.props;
-    const { plantaSelecionada } = this.state;
-    const { proximaProgramacao } = plantaSelecionada;
-    if (!proximaProgramacao) {
-      Toast.show({
-        text: 'Sem programação armazenada para esta planta!',
-        position: 'bottom',
-      });
-    } else {
-      await setPlantaAtiva(plantaSelecionada);
-      await addProgramacao({
-        programacao: plantaSelecionada.proximaProgramacao,
-        liberacoesDocumentos: [],
-        entradas: [],
-        quantidadesSubstituidas: [],
-        itensVistoriados: [],
-        estoques: [],
-        comentarios: [],
-        fotosItens: [],
-      });
+  iniciaRDO = async () => {
+    const { navigation, selecionarPlanta } = this.props;
+    const { plantaSelecionada: { id }, obraAtividade } = this.state;
 
-      navigation.navigate('ConfirmarPeriodoManutencao');
-    }
+    await selecionarPlanta({
+      plantaSelecionadaId: id,
+      obraAtividade,
+    });
+
+    navigation.navigate('RDOLiberarDocumentoEquipe');
   }
 
   render() {
-    const { empresaSelecionada, plantaSelecionada } = this.state;
+    const { empresaSelecionada, plantaSelecionada, obraAtividade } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
-
-    if((listaEmpresas || []).length === 0) {
-      return (
-        <Container>
-          <HeaderNav title="Selecionar Planta"/>
-          <Content padder >
-            <Text> Nenhuma planta disponível para seleção </Text>
-          </Content>
-        </Container>
-      );
-    }
 
     return (
       <Container>
@@ -166,12 +143,18 @@ class SelecionaPlanta extends Component<Props, State> {
                 )}
               </Picker>
             </Item>
+            <Item>
+              <Label>Obra/Atividade</Label>
+              <Input
+                value={obraAtividade}
+                onChangeText={obraAtividade => this.setState({ obraAtividade })} />
+            </Item>
           </Form>
           <Button
             block
             disabled={(empresaSelecionada === null)}
-            onPress={() => this.iniciaManutencao()}>
-            <Text>Iniciar manutenção</Text>
+            onPress={() => this.iniciaRDO()}>
+            <Text>Iniciar RDO</Text>
           </Button>
         </Content>
       </Container>
@@ -184,6 +167,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(Object.assign({}, PlantaActions, ProgramacoesActions), dispatch);
+  bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)
+export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlantaRDO)

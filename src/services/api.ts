@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ManutencaoRDO } from '../store/ducks/rdo/types';
 
 const api = axios.create({
     baseURL: 'https://fibra.grupotesseract.com.br/api'
@@ -47,13 +48,29 @@ export const loginOffline = ({ email, password }) =>
     })
     .catch(error => ({ error }));
 
-export const uploadProgramacao = ({ idProgramacao, programacao }) =>
-    api.post('sync/programacoes/'+idProgramacao, programacao)
+export const uploadProgramacao = ({ idProgramacao, programacao }) => {
+
+  const { itensAlterados } = programacao;
+  if(itensAlterados) {
+    let itensArrayUnico = [];
+    itensAlterados.forEach(item => {
+      const materiais = item.materiais || [];
+      const materiaisArray = materiais.map(material => ({
+        material_id: material.id,
+        item_id: item.item_id,
+        quantidade_instalada: material.quantidadeInstalada,
+      }))
+      itensArrayUnico.push(...materiaisArray);
+    });
+    programacao.itensAlterados = itensArrayUnico;
+  }
+  return api.post('sync/programacoes/'+idProgramacao, programacao)
     .then(response => {
         const data = response.data.data;
         return data;
     })
     .catch(error => ({ error }));
+  }
 
 export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
   const url = 'sync/programacoes/'+idProgramacao+'/item/'+idItem+'/fotos';
@@ -65,12 +82,13 @@ export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
 
     let uriParts = uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
-    let filePathAndName = uriParts[uriParts.length - 2].split('/');
-    let fileName = filePathAndName[filePathAndName.length - 1];
+    const firstPart = uriParts[uriParts.lenght - 2]
+    // let filePathAndName = uriParts[uriParts.length - 2].split('/');
+    // let fileName = filePathAndName[filePathAndName.length - 1];
 
     formData.append('fotos[]', {
       uri,
-      name: `${fileName}.${fileType}`,
+      name: `${firstPart}.${fileType}`,
       type: `image/${fileType}`,
     });
   })
@@ -85,5 +103,99 @@ export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
     return ({ error });
   }
 }
+
+
+export const uploadInfosRDO = async (rdo: ManutencaoRDO) => {
+  try {
+    const {
+      plantaSelecionadaId,
+      problemasEncontrados,
+      infosAdicionais,
+      observacoes,
+      obraAtividade,
+      equipeFiscalizacao,
+      colaboradores,
+      dataHoraEntrada,
+      dataHoraSaida,
+      dataHoraFinalLEM,
+      dataHoraFinalLET,
+      dataHoraInicioLEM,
+      dataHoraInicioLET,
+      dataHoraInicioAtividades,
+      liberacaoIT,
+      liberacaoLEM,
+      liberacaoLET,
+      liberacaoOS,
+      atividadesRealizadas,
+    } = rdo;
+
+    const objetoManutencao = {
+      manutencao_civil_eletrica: {
+        problemas_encontrados: problemasEncontrados,
+        informacoes_adicionais: infosAdicionais,
+        observacoes: observacoes,
+        obra_atividade: obraAtividade,
+        equipe_cliente: equipeFiscalizacao,
+        data_hora_entrada: dataHoraEntrada,
+        data_hora_saida: dataHoraSaida,
+        data_hora_inicio_lem: dataHoraInicioLEM,
+        data_hora_inicio_let: dataHoraInicioLET,
+        data_hora_final_lem: dataHoraFinalLEM,
+        data_hora_final_let: dataHoraFinalLET,
+        data_hora_inicio_atividades: dataHoraInicioAtividades,
+        it: liberacaoIT,
+        lem: liberacaoLEM,
+        let: liberacaoLET,
+        os: liberacaoOS,
+      },
+      atividades_realizadas: atividadesRealizadas.map(atividade =>
+        ({
+          texto: atividade.descricao,
+          status: atividade.concluido,
+        })
+      ),
+      usuarios_manutencao: colaboradores.map(colaboradorId => ({
+        usuario_id: colaboradorId
+      })),
+    };
+    const res = await api.post('sync/plantas/rdo/'+plantaSelecionadaId, objetoManutencao)
+
+    return res.data.data;
+  } catch(error) {
+    console.log("error", error);
+    return { error };
+  }
+}
+
+export const uploadFotosRDO = async ({ idRDO, fotos }) => {
+  const url = 'sync/plantas/rdo/'+idRDO+'/fotos';
+
+  let formData = new FormData();
+
+  fotos.forEach(foto => {
+    const { uri } = foto;
+
+    let uriParts = uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+    const firstPart = uriParts[uriParts.lenght - 2]
+
+    formData.append('fotos[]', {
+      uri,
+      name: `${firstPart}.${fileType}`,
+      type: `image/${fileType}`,
+    });
+  })
+
+  try {
+    const response = await api.post(url, formData);
+    const data = response.data.data;
+    return data
+  }
+  catch (error) {
+    return ({ error });
+  }
+}
+
+
 
 export default api;

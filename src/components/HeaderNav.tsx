@@ -1,32 +1,38 @@
-import { Body, Button, Header, Icon, Left, Title, View } from 'native-base'
+import { Body, Button, Header, Icon, Left, Title, View, Right } from 'native-base'
 import React from 'react'
 import { Platform, StatusBar } from 'react-native'
 import { withNavigation } from 'react-navigation'
 
 interface Props {
   navigation: any,
-  title: string
+  title: string,
+  rightContent?: any,
 }
 
 class HeaderNav extends React.Component<Props> {
   render() {
+    const { navigation, rightContent, title } = this.props;
     return (
       <View style={styles.view}>
         <Header>
           <Left>
             <Button
               hasText
-              onPress={() => {this.props.navigation.goBack()}}>
-              <Icon name="arrow-back"/>
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Icon name="arrow-back" />
             </Button>
           </Left>
 
           <Body>
-            <Title>{this.props.title}</Title>
+            <Title>{title}</Title>
           </Body>
+          {rightContent && <Right>{rightContent}</Right>}
         </Header>
       </View>
-    )
+    );
   }
 }
 
