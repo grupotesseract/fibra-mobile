@@ -236,13 +236,14 @@ const manutencaoRDOReducer: Reducer<RDOState> = (state = INITIAL_STATE, action) 
           maxId = rdo.id;
         }
       })
+      maxId++;
       return {
         ...state,
         rdos: [
           ...rdos,
           {
             ...rdoAtual,
-            id: maxId++,
+            id: maxId,
           },
         ],
         rdoAtual: INITIAL_RDO,
