@@ -68,7 +68,7 @@ class Login extends Component<Props, State> {
         <View padder>
           <Logo center size="md" />
 
-          <Text style={style.text}>1.0.0</Text>
+          <Text style={style.text}>1.1.0</Text>
 
           <Form style={style.form}>
             <Item stackedLabel>
@@ -76,7 +76,7 @@ class Login extends Component<Props, State> {
               <Input
                 value={user}
                 autoCapitalize='none'
-                onChangeText={user => this.setState({ user })} />
+                onChangeText={user => this.setState({ user: user.toLowerCase() })} />
             </Item>
 
             <Item stackedLabel>

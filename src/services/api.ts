@@ -13,23 +13,27 @@ export const clearToken = () => {
     api.defaults.headers.common['Authorization'] = "";
 }
 
-export const login = ({ email, password }) =>
-    api.post('login', {
-        email,
-        password
-    })
-    .then(response => {
-        const data = response.data.data;
-        const { id, nome, role } = data.usuario;
-        const { token } = data.token;
-        return {
-            id,
-            nome,
-            role,
-            token
-        }
-    })
-    .catch(error => ({ error }));
+export const login = async ({ email, password }) => {
+  try {
+    const res = await api.post("login", {
+      email,
+      password
+    });
+    const data = res.data.data;
+    console.log("data no login", data);
+    const { id, nome, role } = data.usuario;
+    const { token } = data.token;
+    return {
+      id,
+      nome,
+      role,
+      token
+    };
+  } catch (error) {
+    console.log("erro no login", error);
+    return { error };
+  }
+};
 
 export const loginOffline = ({ email, password }) =>
     api.post('login', {
