@@ -76,7 +76,7 @@ class Login extends Component<Props, State> {
               <Input
                 value={user}
                 autoCapitalize='none'
-                onChangeText={user => this.setState({ user })} />
+                onChangeText={user => this.setState({ user: user.toLowerCase() })} />
             </Item>
 
             <Item stackedLabel>
