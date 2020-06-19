@@ -111,6 +111,8 @@ class SincronizacaoRDO extends Component<Props, State> {
     const res = await uploadInfosRDO(rdo);
     if (res.error) {
       rdo.errorSync = true;
+      rdo.loading = false;
+      await updateRDO({ rdo });
 
       Toast.show({
         text: String(res.error),
