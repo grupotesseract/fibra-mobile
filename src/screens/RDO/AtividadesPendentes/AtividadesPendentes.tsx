@@ -41,11 +41,11 @@ class AtividadesPendentes extends Component<Props> {
       <Container>
         <HeaderNav title="Atividades Pendentes"/>
 
-        <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+        <Content padder>
           <List>
             {atividadesPendentes.map(atividadePendente => {
               return (
-                <ListItem key={atividadePendente.id} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                <ListItem key={atividadePendente.id}>
                   <Text style={{ flex: 1 }}>{atividadePendente.texto}</Text>
                   <Icon
                     type="AntDesign"
