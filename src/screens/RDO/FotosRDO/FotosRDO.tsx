@@ -36,10 +36,12 @@ class FotosRDO extends Component<Props> {
         const { photos } = this.state;
         ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
-            this.setPhotos([
-                ...photos,
-                img
-            ])
+            if (!img.cancelled) {
+              this.setPhotos([
+                  ...photos,
+                  img
+              ])
+            }
         })
         .catch(err => {
             console.log("ERRO NA IMG", err)
