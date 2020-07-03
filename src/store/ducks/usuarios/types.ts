@@ -17,6 +17,7 @@ export interface Usuario {
     login: string
     role: string
     password: string
+    passwordsha256: string
     nome?: string
 }
 

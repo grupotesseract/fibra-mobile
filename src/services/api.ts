@@ -14,6 +14,7 @@ export const clearToken = () => {
 }
 
 export const login = async ({ email, password }) => {
+
   try {
     const res = await api.post("login", {
       email,
