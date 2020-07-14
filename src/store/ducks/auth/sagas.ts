@@ -3,18 +3,30 @@ import { setToken, clearToken, login } from '../../../services/api'
 import { authFailure } from './actions';
 import { AuthTypes } from './types';
 import NetInfo from '@react-native-community/netinfo';
+import * as Crypto from 'expo-crypto';
 
 export const getUsuarios = (state) => {
     const { listaUsuarios } = state.usuariosReducer;
     return listaUsuarios;
 }
 
-function loginOffline({ usuarios, email, password }) {
-    const usuario = usuarios.find(u => u.login === email);
-    return usuario;
+export const loginOffline = async ({ usuarios, email, password }) => {
+
+  const digest = await Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    password
+  );
+
+  const usuario = usuarios.find(u => u.login === email && u.passwordsha256 === digest);
+
+  return usuario;
+
 }
 
 function* authorize(user, password) {
+
+  const usuarios = yield select(getUsuarios);
+
   try {
     const { type, isConnected } = yield call(NetInfo.fetch);
 
@@ -35,11 +47,13 @@ function* authorize(user, password) {
     }
     if (!isConnected) {
       const usuarios = yield select(getUsuarios);
+
       const { id, nome, role } = yield call(loginOffline, {
         email: user,
         password,
         usuarios
       });
+
       const token = "tokenoffline";
       if (role === "admin") {
         yield call(clearToken);
