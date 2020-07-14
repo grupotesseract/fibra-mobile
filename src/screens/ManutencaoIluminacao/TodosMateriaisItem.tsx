@@ -164,81 +164,117 @@ class TodosMateriaisItem extends Component<Props> {
 
     return (
       <Container padder>
-        <HeaderNav title={nome + ' - Materiais'}/>
+        <HeaderNav title={nome + " - Materiais"} />
         <Content padder>
-          <KeyboardAvoidingView
-            behavior="height">
+          <KeyboardAvoidingView behavior="height">
             <Card>
               <CardItem>
                 <Left>
-                  <Thumbnail source={require('../../../assets/qrcode.png')} />
+                  <Thumbnail source={require("../../../assets/qrcode.png")} />
                   <Body>
                     <Text note>{qrcode}</Text>
                     <Text note>{nome}</Text>
-                    <Badge
-                      warning={emergencia}
-                      primary={!emergencia}>
-                      <Text>{emergencia ? 'E' : 'N'}</Text>
+                    <Badge warning={emergencia} primary={!emergencia}>
+                      <Text>{emergencia ? "E" : "N"}</Text>
                     </Badge>
                   </Body>
                 </Left>
               </CardItem>
             </Card>
             <ScrollView>
-              {
-                materiais?.map((material: Material) => {
-                  return <Card key={material.id}>
+              {materiais?.map((material: Material) => {
+                return (
+                  <Card key={material.id}>
                     <CardItem header bordered>
-                      <Text>{material.nome ? material.nome : material.tipoMaterialTipo.toUpperCase()}</Text>
+                      <Text>
+                        {material.nome
+                          ? material.nome
+                          : material.tipoMaterialTipo?.toUpperCase()}
+                      </Text>
                     </CardItem>
                     <CardItem>
                       <Body>
-                        <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
-                        <Text>Tipo: {material.tipoMaterial}</Text>
+                        <View
+                          style={{
+                            marginBottom: 5,
+                            borderBottomWidth: 0,
+                            paddingBottom: 5
+                          }}
+                        >
+                          <Text>Tipo: {material.tipoMaterial}</Text>
                           {material.base && <Text>Base: {material.base}</Text>}
-                          {material.reator && <Text>Reator : {material.reator}</Text>}
+                          {material.reator && (
+                            <Text>Reator : {material.reator}</Text>
+                          )}
                         </View>
-                        {material.potencia && <Text>Potência: {material.potencia}</Text>}
-                        {material.tensao && <Text>Tensão: {material.tensao}</Text>}
+                        {material.potencia && (
+                          <Text>Potência: {material.potencia}</Text>
+                        )}
+                        {material.tensao && (
+                          <Text>Tensão: {material.tensao}</Text>
+                        )}
                       </Body>
                     </CardItem>
-                    <CardItem footer bordered style={{ flexDirection: 'column' }}>
+                    <CardItem
+                      footer
+                      bordered
+                      style={{ flexDirection: "column" }}
+                    >
                       <Text style={{ marginVertical: 3 }}>Trocas</Text>
 
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Qtd. Instalada:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={Number(!material.quantidadeConfirmada)}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeInstalada}
-                              onChange={quantidade => this.onChangeQuantidadeInstalada(material.id, quantidade)} />
-                          </Right>
-                        </Item>
+                      <Item style={style.itemSubstituicao}>
+                        <Left>
+                          <Label>Qtd. Instalada:</Label>
+                        </Left>
+                        <Right>
+                          <NumericInput
+                            minValue={0}
+                            step={Number(!material.quantidadeConfirmada)}
+                            editable={false}
+                            rounded={true}
+                            value={material.quantidadeInstalada}
+                            onChange={quantidade =>
+                              this.onChangeQuantidadeInstalada(
+                                material.id,
+                                quantidade
+                              )
+                            }
+                          />
+                        </Right>
+                      </Item>
 
                       <Item style={style.itemSubstituicao}>
                         <Button
                           small
                           disabled={!permiteAlteracao}
                           rounded={true}
-                          warning={!material.quantidadeConfirmada && permiteAlteracao}
-                          success={material.quantidadeConfirmada && permiteAlteracao}
-                          onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+                          warning={
+                            !material.quantidadeConfirmada && permiteAlteracao
+                          }
+                          success={
+                            material.quantidadeConfirmada && permiteAlteracao
+                          }
+                          onPress={() =>
+                            this.onPressBotaoOK(
+                              material.id,
+                              material.quantidadeConfirmada
+                            )
+                          }
+                        >
                           <Text>Confirmar</Text>
                         </Button>
                       </Item>
                     </CardItem>
                   </Card>
-                })
-            }
+                );
+              })}
             </ScrollView>
-            {incluindoMaterial ?
-              <IncluirMaterialAoItem incluirMaterial={this.handleIncluirMaterial}/>
-              :
+            {incluindoMaterial ? (
+              <IncluirMaterialAoItem
+                incluirMaterial={this.handleIncluirMaterial}
+                cancelarInclusao={() => this.setState({ incluindoMaterial: false })}
+              />
+            ) : (
               <Button
                 block
                 light
@@ -247,15 +283,16 @@ class TodosMateriaisItem extends Component<Props> {
               >
                 <Text>Incluir Material</Text>
               </Button>
-            }
+            )}
             <Button
               block
               onPress={() => this.salvaQuantidades()}
               style={style.btnStyle}
-              disabled={!materiais.reduce((tudoConfirmado, material) => {
-                return tudoConfirmado
-                  && material.quantidadeConfirmada
-              }, true) || incluindoMaterial}
+              disabled={
+                !materiais.reduce((tudoConfirmado, material) => {
+                  return tudoConfirmado && material.quantidadeConfirmada;
+                }, true) || incluindoMaterial
+              }
             >
               <Text>Concluído</Text>
             </Button>
