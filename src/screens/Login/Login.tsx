@@ -43,12 +43,9 @@ class Login extends Component<Props, State> {
     const { authRequest } = this.props
     const { user, password } = this.state
 
+    this.setState({ password: '' });
     authRequest({ user, password })
-  }
 
-  componentDidMount() {
-    const { auth, navigation } = this.props
-    checkAuth({ auth, navigation })
   }
 
   componentDidUpdate() {
