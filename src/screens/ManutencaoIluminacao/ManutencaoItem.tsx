@@ -192,13 +192,13 @@ class ManutencaoItem extends Component<Props> {
   verTodosMateriais = () => {
     const { navigation } = this.props;
     const { idItem, permiteAlteracao } = this.state;
-    
+
     permiteAlteracao && navigation.navigate('TodosMateriaisItem', { idItem });
   }
 
-  botaoTodosMateriais = (    
+  botaoTodosMateriais = (
     <Button
-      transparent      
+      transparent
       style={{
         paddingRight:0,
         flexDirection: 'column',
