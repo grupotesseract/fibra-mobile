@@ -53,6 +53,20 @@ class TodosMateriaisItem extends Component<Props> {
     this.setState({ materiais: novosMateriais })
   }
 
+  onChangeQuantidadeBase = (idMaterial: number, quantidadeBase: number) => {
+    const { materiais } = this.state;
+    const novosMateriais = materiais.map((material: Material) => {
+      if (material.id !== idMaterial) {
+        return material;
+      }
+      return {
+        ...material,
+        quantidadeBase
+      }
+    })
+    this.setState({ materiais: novosMateriais })
+  }
+
   onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
     const { materiais } = this.state;
     const novosMateriais = materiais.map(material => {
@@ -71,7 +85,6 @@ class TodosMateriaisItem extends Component<Props> {
     const { setItemAlterado, plantaAtiva, navigation } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const { materiais, idItem } = this.state;
-
     await setItemAlterado({
       idProgramacao,
       idItem,
@@ -242,6 +255,29 @@ class TodosMateriaisItem extends Component<Props> {
                           />
                         </Right>
                       </Item>
+
+                      {material.base &&
+                        <Item style={style.itemSubstituicao}>
+                          <Left>
+                            <Label>Qtd. Base:</Label>
+                          </Left>
+                          <Right>
+                            <NumericInput
+                              minValue={0}
+                              step={Number(!material.quantidadeConfirmada)}
+                              editable={false}
+                              rounded={true}
+                              value={material.quantidadeBase}
+                              onChange={quantidadeBase =>
+                                this.onChangeQuantidadeBase(
+                                  material.id,
+                                  quantidadeBase
+                                )
+                              }
+                            />
+                          </Right>
+                        </Item>
+                      }
 
                       <Item style={style.itemSubstituicao}>
                         <Button

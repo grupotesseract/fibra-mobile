@@ -64,6 +64,7 @@ export const uploadProgramacao = ({ idProgramacao, programacao }) => {
         material_id: material.id,
         item_id: item.item_id,
         quantidade_instalada: material.quantidadeInstalada,
+        quantidade_base: material.quantidadeBase,
       }))
       itensArrayUnico.push(...materiaisArray);
     });
