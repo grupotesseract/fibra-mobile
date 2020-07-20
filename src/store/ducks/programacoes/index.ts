@@ -358,7 +358,6 @@ const programacoesReducer: Reducer<ProgramacoesState> = (state = INITIAL_STATE,a
         {
             const { idProgramacao, idItem, materiaisAlterados } = action.payload;
             const { programacoesRealizadas } = state;
-            console.log(action.payload);
             return {
                 ...state,
                 programacoesRealizadas: programacoesRealizadas.map(programacaoRealizada => {
