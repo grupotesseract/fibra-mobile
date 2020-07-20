@@ -12,6 +12,7 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
   const [materialSelecionado, setMaterialSelecionado] = useState(null);
   const [quantidade, setQuantidade] = useState(0);
   const [quantidadeBase, setQuantidadeBase] = useState(0);
+  const [quantidadeReator, setQuantidadeReator] = useState(0);
 
   useEffect(() => {
     const selecionado = estoque.find( materialEstoque => materialEstoque.id === materialId)
@@ -22,7 +23,8 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
     incluirMaterial({
       ...materialSelecionado,
       quantidadeInstalada: quantidade,
-      quantidadeBase: quantidadeBase
+      quantidadeBase: quantidadeBase,
+      quantidadeReator: quantidadeReator
     })
   }
 
@@ -129,6 +131,23 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
                   rounded={true}
                   value={quantidadeBase}
                   onChange={setQuantidadeBase}
+                />
+              </Right>
+            </Item>
+          }
+          {materialSelecionado && materialSelecionado.reator &&
+            <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+              <Left>
+                <Label>Qtd. Reator:</Label>
+              </Left>
+              <Right>
+                <NumericInput
+                  minValue={0}
+                  step={1}
+                  editable={false}
+                  rounded={true}
+                  value={quantidadeReator}
+                  onChange={setQuantidadeReator}
                 />
               </Right>
             </Item>

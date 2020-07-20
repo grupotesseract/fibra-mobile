@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ManutencaoRDO } from '../store/ducks/rdo/types';
 
 const api = axios.create({
-    baseURL: 'https://fibra.grupotesseract.com.br/api'
+    baseURL: 'https://stage.fibra.grupotesseract.com.br/api'
 })
 
 export const setToken = (token: string) => {
@@ -65,6 +65,7 @@ export const uploadProgramacao = ({ idProgramacao, programacao }) => {
         item_id: item.item_id,
         quantidade_instalada: material.quantidadeInstalada,
         quantidade_base: material.quantidadeBase,
+        quantidade_reator: material.quantidadeReator,
       }))
       itensArrayUnico.push(...materiaisArray);
     });

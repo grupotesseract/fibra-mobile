@@ -67,6 +67,20 @@ class TodosMateriaisItem extends Component<Props> {
     this.setState({ materiais: novosMateriais })
   }
 
+  onChangeQuantidadeReator = (idMaterial: number, quantidadeReator: number) => {
+    const { materiais } = this.state;
+    const novosMateriais = materiais.map((material: Material) => {
+      if (material.id !== idMaterial) {
+        return material;
+      }
+      return {
+        ...material,
+        quantidadeReator
+      }
+    })
+    this.setState({ materiais: novosMateriais })
+  }
+
   onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
     const { materiais } = this.state;
     const novosMateriais = materiais.map(material => {
@@ -272,6 +286,29 @@ class TodosMateriaisItem extends Component<Props> {
                                 this.onChangeQuantidadeBase(
                                   material.id,
                                   quantidadeBase
+                                )
+                              }
+                            />
+                          </Right>
+                        </Item>
+                      }
+
+                      {material.reator &&
+                        <Item style={style.itemSubstituicao}>
+                          <Left>
+                            <Label>Qtd. Base:</Label>
+                          </Left>
+                          <Right>
+                            <NumericInput
+                              minValue={0}
+                              step={Number(!material.quantidadeConfirmada)}
+                              editable={false}
+                              rounded={true}
+                              value={material.quantidadeReator}
+                              onChange={quantidadeReator =>
+                                this.onChangeQuantidadeReator(
+                                  material.id,
+                                  quantidadeReator
                                 )
                               }
                             />
