@@ -24,7 +24,8 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
       ...materialSelecionado,
       quantidadeInstalada: quantidade,
       quantidadeBase: quantidadeBase,
-      quantidadeReator: quantidadeReator
+      quantidadeReator: quantidadeReator,
+      novoMaterial: true
     })
   }
 

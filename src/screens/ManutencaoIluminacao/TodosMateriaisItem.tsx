@@ -270,7 +270,7 @@ class TodosMateriaisItem extends Component<Props> {
                         </Right>
                       </Item>
 
-                      {material.base &&
+                      {material.base && material.novoMaterial &&
                         <Item style={style.itemSubstituicao}>
                           <Left>
                             <Label>Qtd. Base:</Label>
@@ -293,7 +293,7 @@ class TodosMateriaisItem extends Component<Props> {
                         </Item>
                       }
 
-                      {material.reator &&
+                      {material.reator && material.novoMaterial &&
                         <Item style={style.itemSubstituicao}>
                           <Left>
                             <Label>Qtd. Base:</Label>
