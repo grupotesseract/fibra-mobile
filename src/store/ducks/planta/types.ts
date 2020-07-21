@@ -29,6 +29,7 @@ export interface Material {
     quantidadeBase?: number,
     quantidadeReator?: number,
     quantidadeConfirmada?: boolean,
+    novoMaterial?: boolean
 }
 
 // Item é uma sala dentro de uma planta

@@ -11,6 +11,8 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
   const [materialId, setMaterialId] = useState(null);
   const [materialSelecionado, setMaterialSelecionado] = useState(null);
   const [quantidade, setQuantidade] = useState(0);
+  const [quantidadeBase, setQuantidadeBase] = useState(0);
+  const [quantidadeReator, setQuantidadeReator] = useState(0);
 
   useEffect(() => {
     const selecionado = estoque.find( materialEstoque => materialEstoque.id === materialId)
@@ -20,7 +22,10 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
   const handleIncluir = () => {
     incluirMaterial({
       ...materialSelecionado,
-      quantidadeInstalada: quantidade
+      quantidadeInstalada: quantidade,
+      quantidadeBase: quantidadeBase,
+      quantidadeReator: quantidadeReator,
+      novoMaterial: true
     })
   }
 
@@ -113,6 +118,41 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
               />
             </Right>
           </Item>
+
+          {materialSelecionado && materialSelecionado.base &&
+            <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+              <Left>
+                <Label>Qtd. Base:</Label>
+              </Left>
+              <Right>
+                <NumericInput
+                  minValue={0}
+                  step={1}
+                  editable={false}
+                  rounded={true}
+                  value={quantidadeBase}
+                  onChange={setQuantidadeBase}
+                />
+              </Right>
+            </Item>
+          }
+          {materialSelecionado && materialSelecionado.reator &&
+            <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+              <Left>
+                <Label>Qtd. Reator:</Label>
+              </Left>
+              <Right>
+                <NumericInput
+                  minValue={0}
+                  step={1}
+                  editable={false}
+                  rounded={true}
+                  value={quantidadeReator}
+                  onChange={setQuantidadeReator}
+                />
+              </Right>
+            </Item>
+          }
         </Body>
       </CardItem>
       <CardItem footer bordered style={{ flexDirection: "column" }}>

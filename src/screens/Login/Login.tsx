@@ -48,6 +48,11 @@ class Login extends Component<Props, State> {
 
   }
 
+  componentDidMount() {
+    const { auth, navigation } = this.props
+    checkAuth({ auth, navigation })
+  }
+
   componentDidUpdate() {
     const { auth, navigation } = this.props
     checkAuth({ auth, navigation })
