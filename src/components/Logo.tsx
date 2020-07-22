@@ -1,29 +1,39 @@
-import React from 'react'
-import { Image, StyleSheet } from 'react-native'
-import { View } from 'native-base'
+import React from 'react';
+import { Image, ImageStyle, StyleSheet, View, ViewStyle } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 
-const Logo = (props) => {
-  let size = logoSize[props.size]
-  let style = props.center ? {
-    alignSelf: 'center', ...size
-  } : size
-
-  return (
-    <View>
-      <Image
-        style={style}
-        resizeMode='center'
-        source={require('../../assets/fibra-logo.png')}
-      />
-    </View>
-  )
+interface Style {
+  image: ImageStyle;
+  container: ViewStyle;
 }
 
-export default Logo
+const Logo = (props) => {
+  const dimensions = StyleSheet.create({
+    xlg: { width: moderateScale(280), height: moderateScale(59) },
+    lg: { width: moderateScale(224), height: moderateScale(48) },
+    md: { width: moderateScale(146), height: moderateScale(31) },
+    sm: { width: moderateScale(104), height: moderateScale(22) },
+    xs: { width: moderateScale(90), height: moderateScale(19) },
+  });
 
-const logoSize = StyleSheet.create({
-  lg: { width: 224, height: 120 },
-  md: { width: 146, height: 78 },
-  sm: { width: 104, height: 56 },
-  xs: { width: 90, height: 48 }
-})
+  const styles = StyleSheet.create<Style>({
+    image: {
+      ...dimensions[props.size],
+    },
+    container: {
+      alignSelf: props.center ? 'center' : undefined,
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      <Image
+        style={styles.image}
+        resizeMode='center'
+        source={require('../../assets/fibraheader.png')}
+      />
+    </View>
+  );
+};
+
+export default Logo;
