@@ -43,13 +43,9 @@ class Login extends Component<Props, State> {
     const { authRequest } = this.props;
     const { user, password } = this.state;
 
-<<<<<<< HEAD
     this.setState({ password: '' });
     authRequest({ user, password })
 
-=======
-    authRequest({ user, password });
->>>>>>> feat: Adaptações em alguns componentes
   }
 
   componentDidMount() {
