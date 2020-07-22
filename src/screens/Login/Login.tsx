@@ -1,74 +1,75 @@
-import { Form, Input, Item, Label, Text, View } from 'native-base'
-import React, { Component } from 'react'
-import { KeyboardAvoidingView, StyleSheet } from 'react-native'
-import { NavigationAction } from 'react-navigation'
-import { connect } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import React, { Component } from 'react';
+import { Form, Input, Item, Label, Text, View } from 'native-base';
+import { KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { NavigationAction } from 'react-navigation';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
-import ActionButton from '../../components/ActionButton'
-import Logo from '../../components/Logo'
-import { ApplicationState } from '../../store'
-import * as AuthActions from '../../store/ducks/auth/actions'
-import { AuthState, LoginData } from '../../store/ducks/auth/types'
-import { checkAuth } from '../../utils/authNavigation'
+import ActionButton from '../../components/ActionButton';
+import Logo from '../../components/Logo';
+import { ApplicationState } from '../../store';
+import * as AuthActions from '../../store/ducks/auth/actions';
+import { AuthState, LoginData } from '../../store/ducks/auth/types';
+import { checkAuth } from '../../utils/authNavigation';
 
 interface StateProps {
-  auth: AuthState,
-  navigation: NavigationAction
+  auth: AuthState;
+  navigation: NavigationAction;
 }
 
 interface DispatchProps {
-  authRequest(data: LoginData): void
+  authRequest(data: LoginData): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 interface State {
-  user: string
-  password: string
-  auth: AuthState
+  user: string;
+  password: string;
+  auth: AuthState;
 }
-class Login extends Component<Props, State> {
 
+class Login extends Component<Props, State> {
   state = {
-    user: '',
-    password: '',
+    user: 'admin.tesseract',
+    password: '12344321',
     auth: {
       loading: false,
       error: false,
-    }
-  }
+    },
+  };
 
   authLogin() {
-    const { authRequest } = this.props
-    const { user, password } = this.state
+    const { authRequest } = this.props;
+    const { user, password } = this.state;
 
+<<<<<<< HEAD
     this.setState({ password: '' });
     authRequest({ user, password })
 
+=======
+    authRequest({ user, password });
+>>>>>>> feat: Adaptações em alguns componentes
   }
 
   componentDidMount() {
-    const { auth, navigation } = this.props
-    checkAuth({ auth, navigation })
+    const { auth, navigation } = this.props;
+    checkAuth({ auth, navigation });
   }
 
   componentDidUpdate() {
-    const { auth, navigation } = this.props
-    checkAuth({ auth, navigation })
+    const { auth, navigation } = this.props;
+    checkAuth({ auth, navigation });
   }
 
   render() {
-    const { user, password } = this.state
-    const { auth } = this.props
+    const { user, password } = this.state;
+    const { auth } = this.props;
 
     return (
-      <KeyboardAvoidingView
-        behavior="padding"
-        style={style.container}>
-
+      <KeyboardAvoidingView behavior='padding' style={style.container}>
         <View padder>
-          <Logo center size="md" />
+          <Logo center size='xlg' />
 
           <Text style={style.text}>1.5.0</Text>
 
@@ -78,7 +79,8 @@ class Login extends Component<Props, State> {
               <Input
                 value={user}
                 autoCapitalize='none'
-                onChangeText={user => this.setState({ user })} />
+                onChangeText={(user) => this.setState({ user })}
+              />
             </Item>
 
             <Item stackedLabel>
@@ -86,7 +88,8 @@ class Login extends Component<Props, State> {
               <Input
                 value={password}
                 secureTextEntry={true}
-                onChangeText={password => this.setState({ password })} />
+                onChangeText={(password) => this.setState({ password })}
+              />
             </Item>
           </Form>
 
@@ -96,24 +99,24 @@ class Login extends Component<Props, State> {
             block
             onPress={() => this.authLogin()}
             style={style.buttonLogin}
-            loading={auth.loading}>
+            loading={auth.loading}
+          >
             <Text>Login</Text>
           </ActionButton>
-
         </View>
       </KeyboardAvoidingView>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.auth
-})
+  auth: state.auth,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(AuthActions, dispatch)
+  bindActionCreators(AuthActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const style = StyleSheet.create({
   container: {
@@ -137,8 +140,6 @@ const style = StyleSheet.create({
     textAlign: 'center',
   },
   logo: {
-    width: 'auto',
-    height: 70,
-    resizeMode: 'contain'
-  }
-})
+    resizeMode: 'contain',
+  },
+});

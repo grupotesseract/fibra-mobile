@@ -1,33 +1,28 @@
-import { Header, Left, Right, Text, View } from 'native-base'
-import React from 'react'
-import { Platform, StatusBar } from 'react-native'
+import React from 'react';
+import { Header, Body, View, Left, Text, Right } from 'native-base';
+import { Platform, StatusBar, StyleSheet } from 'react-native';
 
-import Logo from './Logo'
+import Logo from './Logo';
 
 const HeaderLogo = () => {
   return (
-    <View style={style.view}>
-      <Header transparent>
-        <Left>
-          <Logo size="xs" />
-        </Left>
+    <Header transparent style={styles.header}>
+      <Left>
+        <Logo size='xlg' />
+      </Left>
+    </Header>
+  );
+};
 
-        <Right>
-          <Text style={style.text}>Serviços Especializados de Engenharia</Text>
-        </Right>
-      </Header>
-    </View>
-  )
-}
-
-const style = {
-  view: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+const styles = StyleSheet.create({
+  header: {
+    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    justifyContent: 'space-between',
   },
   text: {
     fontFamily: 'OpenSans_Light',
     fontSize: 13,
-  }
-}
+  },
+});
 
-export default HeaderLogo
+export default HeaderLogo;
