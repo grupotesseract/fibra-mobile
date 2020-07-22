@@ -29,6 +29,7 @@
     "react-native-numeric-input": "^1.8.3",
     "react-native-reanimated": "~1.4.0",
     "react-native-screens": "2.0.0-alpha.12",
+    "react-native-size-matters": "0.3.0",
     "react-native-web": "^0.11.7",
     "react-navigation": "^4.0.0",
     "react-navigation-stack": "^1.8.1",
@@ -55,5 +56,9 @@
     "prettier": "^1.18.2",
     "react-native-dropdown": "0.0.6",
     "typescript": "^3.7.2"
+  },
+  "resolutions": {
+    "**/**/mem": ">=4.0.0",
+    "**/**/yargs-parser": ">=13.1.2 <14.0.0 || >=15.0.1 <16.0.0 || >=18.1.2"
   }
 }
