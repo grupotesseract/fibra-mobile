@@ -11,6 +11,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import * as MediaLibrary from 'expo-media-library';
 
 interface StateProps {
   plantaAtiva: Planta,
@@ -38,6 +39,9 @@ class FotosItemScreen extends Component<Props> {
 
     pickImage = async () => {
         const { photos } = this.state;
+        const { navigation } = this.props;
+        const { idItem } = navigation.state.params;
+
         ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
             if (!img.cancelled) {
@@ -45,6 +49,18 @@ class FotosItemScreen extends Component<Props> {
                   ...photos,
                   img
               ])
+
+              MediaLibrary.createAssetAsync(img.uri)
+              .then(asset => {
+
+                MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset)
+                  .then(() => {
+                    console.log('Album created!');
+                  })
+                  .catch(error => {
+                    console.log('err', error);
+                  });
+              })
             }
         })
         .catch(err => {
@@ -54,6 +70,7 @@ class FotosItemScreen extends Component<Props> {
 
     componentDidMount() {
         this.getPermissionAsync();
+        this.getPermissionCameraRollAsync();
         const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
         const { idItem } = navigation.state.params;
         const idProgramacao = plantaAtiva.proximaProgramacao.id;
@@ -72,9 +89,16 @@ class FotosItemScreen extends Component<Props> {
         if (platform === 'ios') {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+                alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
             }
         }
+    }
+
+    getPermissionCameraRollAsync = async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+      }
     }
 
     storePhotos = async () => {
