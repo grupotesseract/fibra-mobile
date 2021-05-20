@@ -38,6 +38,7 @@ class EstoqueScreen extends Component<Props> {
       let pageTo = pageFrom + 3;
 
       const estoqueAux = materiais.concat(estoque.slice(pageFrom, pageTo));
+      console.log(estoqueAux);
       this.setState({ materiais: estoqueAux, page: pageTo + 1 })
     }
 
@@ -46,7 +47,7 @@ class EstoqueScreen extends Component<Props> {
       const { page } = this.state;
       const { estoque } = plantaAtiva;
       const estoqueAux = estoque.slice(0, page + 3);
-      this.setState({ materiais: estoqueAux})
+      this.setState({ materiais: estoqueAux, page: page + 3})
     }
 
     onChangeQuantidade = (idMaterial, quantidade) => {
@@ -90,7 +91,47 @@ class EstoqueScreen extends Component<Props> {
       navigation.navigate('MenuVistoria');
     }
 
+    renderItem = ({ item }) => (
+      <Item>
+        <Card>
+          <CardItem header bordered>
+              <Text>{item.nome ? item.nome : item.tipoMaterialTipo.toUpperCase()}</Text>
+          </CardItem>
+          <CardItem>
+              <Body>
+                  { item.tipoMaterial && <Text>Tipo: {item.tipoMaterial}</Text> }
+                  { item.potencia && <Text>Potência: {item.potencia}</Text> }
+                  { item.tensao && <Text>Tensão: {item.tensao}</Text> }
+                  { item.base && <Text>Base: {item.base}</Text> }
+              </Body>
+          </CardItem>
 
+          <CardItem footer bordered>
+              <Item style={{borderBottomColor: 'transparent'}}>
+
+              <Label>Qtde. Estoque:</Label>
+              <NumericInput
+                  minValue={0}
+                  step={+!item.quantidadeConfirmada}
+                  editable={false}
+                  rounded={true}
+                  value={item.quantidade}
+                  onChange={quantidade => this.onChangeQuantidade(item.id, quantidade)} />
+
+              <Button
+                  style={{marginLeft: 10}}
+                  rounded={true}
+                  warning={!item.quantidadeConfirmada}
+                  success={item.quantidadeConfirmada}
+                  onPress={() => this.onPressBotaoOK(item.id, item.quantidadeConfirmada)} >
+                  <Text>OK</Text>
+              </Button>
+
+              </Item>
+          </CardItem>
+        </Card>
+      </Item>
+    )
 
     render() {
         const { materiais } = this.state;
@@ -109,47 +150,7 @@ class EstoqueScreen extends Component<Props> {
                           maxToRenderPerBatch={3}
                           onEndReachedThreshold={0.1}
                           onEndReached={this.loadRepositories}
-                          renderItem={({ item }) => (
-                            <Item>
-                              <Card>
-                                <CardItem header bordered>
-                                    <Text>{item.nome ? item.nome : item.tipoMaterialTipo.toUpperCase()}</Text>
-                                </CardItem>
-                                <CardItem>
-                                    <Body>
-                                        { item.tipoMaterial && <Text>Tipo: {item.tipoMaterial}</Text> }
-                                        { item.potencia && <Text>Potência: {item.potencia}</Text> }
-                                        { item.tensao && <Text>Tensão: {item.tensao}</Text> }
-                                        { item.base && <Text>Base: {item.base}</Text> }
-                                    </Body>
-                                </CardItem>
-
-                                <CardItem footer bordered>
-                                    <Item style={{borderBottomColor: 'transparent'}}>
-
-                                    <Label>Qtde. Estoque:</Label>
-                                    <NumericInput
-                                        minValue={0}
-                                        step={+!item.quantidadeConfirmada}
-                                        editable={false}
-                                        rounded={true}
-                                        value={item.quantidade}
-                                        onChange={quantidade => this.onChangeQuantidade(item.id, quantidade)} />
-
-                                    <Button
-                                        style={{marginLeft: 10}}
-                                        rounded={true}
-                                        warning={!item.quantidadeConfirmada}
-                                        success={item.quantidadeConfirmada}
-                                        onPress={() => this.onPressBotaoOK(item.id, item.quantidadeConfirmada)} >
-                                        <Text>OK</Text>
-                                    </Button>
-
-                                    </Item>
-                                </CardItem>
-                              </Card>
-                            </Item>
-                          )}
+                          renderItem={this.renderItem}
                           keyExtractor={item => item.id}>
                         </FlatList>
                         <Button
