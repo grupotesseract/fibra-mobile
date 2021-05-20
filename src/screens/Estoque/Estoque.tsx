@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Card, CardItem, Body, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, FlatList } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -24,14 +24,29 @@ type Props = StateProps & DispatchProps
 
 class EstoqueScreen extends Component<Props> {
     state = {
-        materiais: []
+        materiais: [],
+        page: 0
+    }
+
+    loadRepositories = async () => {
+      const { plantaAtiva } = this.props;
+      const { page } = this.state;
+      const { materiais } = this.state;
+      const { estoque } = plantaAtiva;
+
+      let pageFrom = page + 1;
+      let pageTo = pageFrom + 3;
+
+      const estoqueAux = materiais.concat(estoque.slice(pageFrom, pageTo));
+      this.setState({ materiais: estoqueAux, page: pageTo + 1 })
     }
 
     componentDidMount() {
-        const { plantaAtiva } = this.props;
-
-        const { estoque } = plantaAtiva;
-        this.setState({ materiais: estoque })
+      const { plantaAtiva } = this.props;
+      const { page } = this.state;
+      const { estoque } = plantaAtiva;
+      const estoqueAux = estoque.slice(0, page + 3);
+      this.setState({ materiais: estoqueAux})
     }
 
     onChangeQuantidade = (idMaterial, quantidade) => {
@@ -75,8 +90,11 @@ class EstoqueScreen extends Component<Props> {
       navigation.navigate('MenuVistoria');
     }
 
+
+
     render() {
         const { materiais } = this.state;
+
         return (
             <Container>
                 <HeaderNav title="Estoque Materiais" />
@@ -84,47 +102,56 @@ class EstoqueScreen extends Component<Props> {
                     <KeyboardAvoidingView
                         behavior="height"
                     >
-                        <ScrollView>
-                            {
-                                materiais.map(material => {
-                                    return <Card key={material.id}>
-                                        <CardItem header bordered>
-                                            <Text>{material.nome ? material.nome : material.tipoMaterialTipo.toUpperCase()}</Text>
-                                        </CardItem>
-                                        <CardItem>
-                                            <Body>
-                                                { material.tipoMaterial && <Text>Tipo: {material.tipoMaterial}</Text> }
-                                                { material.potencia && <Text>Potência: {material.potencia}</Text> }
-                                                { material.tensao && <Text>Tensão: {material.tensao}</Text> }
-                                                { material.base && <Text>Base: {material.base}</Text> }
-                                            </Body>
-                                        </CardItem>
-                                        <CardItem footer bordered>
-                                            <Item style={{borderBottomColor: 'transparent'}}>
+                        <FlatList
+                          data = {materiais}
+                          removeClippedSubviews={true}
+                          initialNumToRender={3}
+                          maxToRenderPerBatch={3}
+                          onEndReachedThreshold={0.1}
+                          onEndReached={this.loadRepositories}
+                          renderItem={({ item }) => (
+                            <Item>
+                              <Card>
+                                <CardItem header bordered>
+                                    <Text>{item.nome ? item.nome : item.tipoMaterialTipo.toUpperCase()}</Text>
+                                </CardItem>
+                                <CardItem>
+                                    <Body>
+                                        { item.tipoMaterial && <Text>Tipo: {item.tipoMaterial}</Text> }
+                                        { item.potencia && <Text>Potência: {item.potencia}</Text> }
+                                        { item.tensao && <Text>Tensão: {item.tensao}</Text> }
+                                        { item.base && <Text>Base: {item.base}</Text> }
+                                    </Body>
+                                </CardItem>
 
-                                            <Label>Qtde. Estoque:</Label>
-                                            <NumericInput
-                                                minValue={0}
-                                                step={+!material.quantidadeConfirmada}
-                                                editable={false}
-                                                rounded={true}
-                                                value={material.quantidade}
-                                                onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                                <CardItem footer bordered>
+                                    <Item style={{borderBottomColor: 'transparent'}}>
 
-                                            <Button
-                                                style={{marginLeft: 10}}
-                                                rounded={true}
-                                                warning={!material.quantidadeConfirmada}
-                                                success={material.quantidadeConfirmada}
-                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
-                                                <Text>OK</Text>
-                                            </Button>
+                                    <Label>Qtde. Estoque:</Label>
+                                    <NumericInput
+                                        minValue={0}
+                                        step={+!item.quantidadeConfirmada}
+                                        editable={false}
+                                        rounded={true}
+                                        value={item.quantidade}
+                                        onChange={quantidade => this.onChangeQuantidade(item.id, quantidade)} />
 
-                                            </Item>
-                                        </CardItem>
-                                    </Card>
-                                })
-                            }
+                                    <Button
+                                        style={{marginLeft: 10}}
+                                        rounded={true}
+                                        warning={!item.quantidadeConfirmada}
+                                        success={item.quantidadeConfirmada}
+                                        onPress={() => this.onPressBotaoOK(item.id, item.quantidadeConfirmada)} >
+                                        <Text>OK</Text>
+                                    </Button>
+
+                                    </Item>
+                                </CardItem>
+                              </Card>
+                            </Item>
+                          )}
+                          keyExtractor={item => item.id}>
+                        </FlatList>
                         <Button
                             block
                             onPress={() => this.concluiEstoque()}
@@ -136,7 +163,7 @@ class EstoqueScreen extends Component<Props> {
                         >
                             <Text>Concluído</Text>
                         </Button>
-                        </ScrollView>
+
                     </KeyboardAvoidingView>
                 </Content>
             </Container>
