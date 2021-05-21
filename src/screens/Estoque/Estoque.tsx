@@ -46,37 +46,36 @@ class EstoqueScreen extends Component<Props> {
       const { plantaAtiva } = this.props;
       const { page } = this.state;
       const { estoque } = plantaAtiva;
-      const estoqueAux = estoque.slice(0, page + 3);
-      this.setState({ materiais: estoqueAux, page: page + 3})
+      const estoqueAux = estoque.slice(0, page + 6);
+      this.setState({ materiais: estoqueAux, page: page + 6})
     }
 
     onChangeQuantidade = (idMaterial, quantidade) => {
-
-        const { materiais } = this.state;
-        const novosMateriais = materiais.map( material => {
-            if(material.id !== idMaterial) {
-                return material;
-            }
-            return {
-                ...material,
-                quantidade: quantidade
-            }
-        })
-        this.setState({materiais: novosMateriais})
+      const { materiais } = this.state;
+      const novosMateriais = materiais.map( material => {
+          if(material.id !== idMaterial) {
+              return material;
+          }
+          return {
+              ...material,
+              quantidade: quantidade
+          }
+      })
+      this.setState({materiais: novosMateriais})
     }
 
     onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
-        const { materiais } = this.state;
-        const novosMateriais = materiais.map( material => {
-            if(material.id !== idMaterial) {
-                return material;
-            }
-            return {
-                ...material,
-                quantidadeConfirmada: !quantidadeConfirmada
-            }
-        })
-        this.setState({materiais: novosMateriais})
+      const { materiais } = this.state;
+      const novosMateriais = materiais.map( material => {
+          if(material.id !== idMaterial) {
+              return material;
+          }
+          return {
+              ...material,
+              quantidadeConfirmada: !quantidadeConfirmada
+          }
+      })
+      this.setState({materiais: novosMateriais})
     }
 
     concluiEstoque = async () => {
@@ -91,47 +90,16 @@ class EstoqueScreen extends Component<Props> {
       navigation.navigate('MenuVistoria');
     }
 
-    renderItem = ({ item }) => (
-      <Item>
-        <Card>
-          <CardItem header bordered>
-              <Text>{item.nome ? item.nome : item.tipoMaterialTipo.toUpperCase()}</Text>
-          </CardItem>
-          <CardItem>
-              <Body>
-                  { item.tipoMaterial && <Text>Tipo: {item.tipoMaterial}</Text> }
-                  { item.potencia && <Text>Potência: {item.potencia}</Text> }
-                  { item.tensao && <Text>Tensão: {item.tensao}</Text> }
-                  { item.base && <Text>Base: {item.base}</Text> }
-              </Body>
-          </CardItem>
+    renderItem = ({ item }) => {
+      return (
 
-          <CardItem footer bordered>
-              <Item style={{borderBottomColor: 'transparent'}}>
-
-              <Label>Qtde. Estoque:</Label>
-              <NumericInput
-                  minValue={0}
-                  step={+!item.quantidadeConfirmada}
-                  editable={false}
-                  rounded={true}
-                  value={item.quantidade}
-                  onChange={quantidade => this.onChangeQuantidade(item.id, quantidade)} />
-
-              <Button
-                  style={{marginLeft: 10}}
-                  rounded={true}
-                  warning={!item.quantidadeConfirmada}
-                  success={item.quantidadeConfirmada}
-                  onPress={() => this.onPressBotaoOK(item.id, item.quantidadeConfirmada)} >
-                  <Text>OK</Text>
-              </Button>
-
-              </Item>
-          </CardItem>
-        </Card>
-      </Item>
-    )
+        <OptionItem
+          itemMaterial = {item}
+          onChangeQuantidade = {this.onChangeQuantidade }
+          onPressBotaoOK = {this.onPressBotaoOK }
+        />
+      );
+    }
 
     render() {
         const { materiais } = this.state;
@@ -170,6 +138,65 @@ class EstoqueScreen extends Component<Props> {
             </Container>
         );
     }
+}
+
+class OptionItem extends Component {
+
+  shouldComponentUpdate(nextProps, nextState){
+    const quantidade  = nextProps.itemMaterial.quantidade;
+    const prevQuantidade = this.props.itemMaterial.quantidade;
+
+    const quantidadeConfirmada = nextProps.itemMaterial.quantidadeConfirmada;
+    const prevQuantidadeConfirmada = this.props.itemMaterial.quantidadeConfirmada;
+
+    return (quantidade !== prevQuantidade || quantidadeConfirmada !== prevQuantidadeConfirmada);
+  }
+
+  render () {
+    const { itemMaterial, onChangeQuantidade, onPressBotaoOK } = this.props;
+
+    return (
+      <Item>
+        <Card>
+          <CardItem header bordered>
+              <Text>{itemMaterial.nome ? itemMaterial.nome : itemMaterial.tipoMaterialTipo.toUpperCase()}</Text>
+          </CardItem>
+          <CardItem>
+              <Body>
+                  { itemMaterial.tipoMaterial && <Text>Tipo: {itemMaterial.tipoMaterial}</Text> }
+                  { itemMaterial.potencia && <Text>Potência: {itemMaterial.potencia}</Text> }
+                  { itemMaterial.tensao && <Text>Tensão: {itemMaterial.tensao}</Text> }
+                  { itemMaterial.base && <Text>Base: {itemMaterial.base}</Text> }
+              </Body>
+          </CardItem>
+
+          <CardItem footer bordered>
+              <Item style={{borderBottomColor: 'transparent'}}>
+
+              <Label>Qtde. Estoque:</Label>
+              <NumericInput
+                  minValue={0}
+                  step={+!itemMaterial.quantidadeConfirmada}
+                  editable={false}
+                  rounded={true}
+                  value={itemMaterial.quantidade}
+                  onChange={quantidade => onChangeQuantidade(itemMaterial.id, quantidade)} />
+
+              <Button
+                  style={{marginLeft: 10}}
+                  rounded={true}
+                  warning={!itemMaterial.quantidadeConfirmada}
+                  success={itemMaterial.quantidadeConfirmada}
+                  onPress={() => onPressBotaoOK(itemMaterial.id, itemMaterial.quantidadeConfirmada)} >
+                  <Text>OK</Text>
+              </Button>
+
+              </Item>
+          </CardItem>
+        </Card>
+      </Item>
+    );
+  }
 }
 
 const style = {
