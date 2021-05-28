@@ -23,121 +23,119 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps
 
 class EstoqueScreen extends Component<Props> {
-    state = {
-        materiais: [],
-        page: 0
-    }
+  state = {
+      materiais: [],
+      page: 0
+  }
 
-    loadRepositories = async () => {
-      const { plantaAtiva } = this.props;
-      const { page } = this.state;
+  loadRepositories = async () => {
+    const { plantaAtiva } = this.props;
+    const { page } = this.state;
+    const { materiais } = this.state;
+    const { estoque } = plantaAtiva;
+
+    let pageFrom = page + 1;
+    let pageTo = pageFrom + 3;
+
+    const estoqueAux = materiais.concat(estoque.slice(pageFrom, pageTo));
+    this.setState({ materiais: estoqueAux, page: pageTo + 1 })
+  }
+
+  componentDidMount() {
+    const { plantaAtiva } = this.props;
+    const { page } = this.state;
+    const { estoque } = plantaAtiva;
+    const estoqueAux = estoque.slice(0, page + 6);
+    this.setState({ materiais: estoqueAux, page: page + 6})
+  }
+
+  onChangeQuantidade = (idMaterial, quantidade) => {
+    const { materiais } = this.state;
+    const novosMateriais = materiais.map( material => {
+        if(material.id !== idMaterial) {
+            return material;
+        }
+        return {
+            ...material,
+            quantidade: quantidade
+        }
+    })
+    this.setState({materiais: novosMateriais})
+  }
+
+  onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
+    const { materiais } = this.state;
+    const novosMateriais = materiais.map( material => {
+        if(material.id !== idMaterial) {
+            return material;
+        }
+        return {
+            ...material,
+            quantidadeConfirmada: !quantidadeConfirmada
+        }
+    })
+    this.setState({materiais: novosMateriais})
+  }
+
+  concluiEstoque = async () => {
+    const { materiais } = this.state;
+    const { navigation, armazenaEstoque, plantaAtiva } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const estoques = materiais.map( material => ({
+      material_id: material.id,
+      quantidade_inicial: material.quantidade
+    }));
+    await armazenaEstoque(idProgramacao, estoques);
+    navigation.navigate('MenuVistoria');
+  }
+
+  renderItem = ({ item }) => {
+    return (
+      <OptionItem
+        itemMaterial = {item}
+        onChangeQuantidade = {this.onChangeQuantidade }
+        onPressBotaoOK = {this.onPressBotaoOK }
+      />
+    );
+  }
+
+  render() {
       const { materiais } = this.state;
-      const { estoque } = plantaAtiva;
 
-      let pageFrom = page + 1;
-      let pageTo = pageFrom + 3;
-
-      const estoqueAux = materiais.concat(estoque.slice(pageFrom, pageTo));
-      console.log(estoqueAux);
-      this.setState({ materiais: estoqueAux, page: pageTo + 1 })
-    }
-
-    componentDidMount() {
-      const { plantaAtiva } = this.props;
-      const { page } = this.state;
-      const { estoque } = plantaAtiva;
-      const estoqueAux = estoque.slice(0, page + 6);
-      this.setState({ materiais: estoqueAux, page: page + 6})
-    }
-
-    onChangeQuantidade = (idMaterial, quantidade) => {
-      const { materiais } = this.state;
-      const novosMateriais = materiais.map( material => {
-          if(material.id !== idMaterial) {
-              return material;
-          }
-          return {
-              ...material,
-              quantidade: quantidade
-          }
-      })
-      this.setState({materiais: novosMateriais})
-    }
-
-    onPressBotaoOK = (idMaterial, quantidadeConfirmada) => {
-      const { materiais } = this.state;
-      const novosMateriais = materiais.map( material => {
-          if(material.id !== idMaterial) {
-              return material;
-          }
-          return {
-              ...material,
-              quantidadeConfirmada: !quantidadeConfirmada
-          }
-      })
-      this.setState({materiais: novosMateriais})
-    }
-
-    concluiEstoque = async () => {
-      const { materiais } = this.state;
-      const { navigation, armazenaEstoque, plantaAtiva } = this.props;
-      const idProgramacao = plantaAtiva.proximaProgramacao.id;
-      const estoques = materiais.map( material => ({
-        material_id: material.id,
-        quantidade_inicial: material.quantidade
-      }));
-      await armazenaEstoque(idProgramacao, estoques);
-      navigation.navigate('MenuVistoria');
-    }
-
-    renderItem = ({ item }) => {
       return (
-
-        <OptionItem
-          itemMaterial = {item}
-          onChangeQuantidade = {this.onChangeQuantidade }
-          onPressBotaoOK = {this.onPressBotaoOK }
-        />
-      );
-    }
-
-    render() {
-        const { materiais } = this.state;
-
-        return (
-            <Container>
-                <HeaderNav title="Estoque Materiais" />
-                <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-                    <KeyboardAvoidingView
-                        behavior="height"
+          <Container>
+              <HeaderNav title="Estoque Materiais" />
+              <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+                <KeyboardAvoidingView
+                    behavior="height"
+                >
+                    <FlatList
+                      data = {materiais}
+                      removeClippedSubviews={true}
+                      initialNumToRender={3}
+                      maxToRenderPerBatch={3}
+                      onEndReachedThreshold={0.1}
+                      onEndReached={this.loadRepositories}
+                      renderItem={this.renderItem}
+                      keyExtractor={item => item.id}>
+                    </FlatList>
+                    <Button
+                        block
+                        onPress={() => this.concluiEstoque()}
+                        style={style.btnStyle}
+                        disabled={!materiais.reduce( (tudoConfirmado, material) => {
+                            return tudoConfirmado
+                                    && material.quantidadeConfirmada
+                        }, true)}
                     >
-                        <FlatList
-                          data = {materiais}
-                          removeClippedSubviews={true}
-                          initialNumToRender={3}
-                          maxToRenderPerBatch={3}
-                          onEndReachedThreshold={0.1}
-                          onEndReached={this.loadRepositories}
-                          renderItem={this.renderItem}
-                          keyExtractor={item => item.id}>
-                        </FlatList>
-                        <Button
-                            block
-                            onPress={() => this.concluiEstoque()}
-                            style={style.btnStyle}
-                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
-                                return tudoConfirmado
-                                        && material.quantidadeConfirmada
-                            }, true)}
-                        >
-                            <Text>Concluído</Text>
-                        </Button>
+                        <Text>Concluído</Text>
+                    </Button>
 
-                    </KeyboardAvoidingView>
-                </Content>
-            </Container>
-        );
-    }
+                </KeyboardAvoidingView>
+              </Content>
+          </Container>
+      );
+  }
 }
 
 class OptionItem extends Component {

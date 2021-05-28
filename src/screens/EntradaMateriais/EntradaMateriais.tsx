@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Icon, Content, Button, Text, Fab, Card, CardItem, Body, Item, Label } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, FlatList, View } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
@@ -24,129 +24,188 @@ type Props = StateProps & DispatchProps
 
 class EntradaMateriais extends Component<Props> {
 
-    state = {
-        materiais: []
-    }
+  state = {
+      materiais: [],
+      page: 0
+  }
 
-    componentDidMount() {
-        const { plantaAtiva } = this.props;
-        const entrada = plantaAtiva?.entrada || [];
-        this.setState({ materiais: entrada })
-    }
+  loadRepositories = async () => {
+    const { plantaAtiva } = this.props;
+    const { page } = this.state;
+    const { materiais } = this.state;
+    const entrada = plantaAtiva?.entrada || [];
 
-    concluiEntrada = async () => {
+    let pageFrom = page + 1;
+    let pageTo = pageFrom + 3;
+
+    const entradaAux = materiais.concat(entrada.slice(pageFrom, pageTo));
+    this.setState({ materiais: entradaAux, page: pageTo + 1 })
+  }
+
+  componentDidMount() {
+      const { plantaAtiva } = this.props;
+      const { page } = this.state;
+      const entrada = plantaAtiva?.entrada || [];
+      const entradaAux = entrada.slice(0, page + 6);
+      this.setState({ materiais: entradaAux, page: page + 6 })
+  }
+
+  concluiEntrada = async () => {
+    const { materiais } = this.state;
+    const { navigation, armazenaEntrada, plantaAtiva } = this.props;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    const entradas = materiais.map( material => ({
+      material_id: material.id,
+      quantidade: material.quantidade
+    }));
+    await armazenaEntrada(idProgramacao, entradas);
+    navigation.navigate('MenuVistoria');
+  }
+
+  onChangeQuantidade = (idMaterial: number, quantidade: number) => {
+
       const { materiais } = this.state;
-      const { navigation, armazenaEntrada, plantaAtiva } = this.props;
-      const idProgramacao = plantaAtiva.proximaProgramacao.id;
-      const entradas = materiais.map( material => ({
-        material_id: material.id,
-        quantidade: material.quantidade
-      }));
-      await armazenaEntrada(idProgramacao, entradas);
-      navigation.navigate('MenuVistoria');
-    }
+      const novosMateriais = materiais.map( material => {
+          if(material.id !== idMaterial) {
+              return material;
+          }
+          return {
+              ...material,
+              quantidade: quantidade
+          }
+      })
+      this.setState({materiais: novosMateriais})
+  }
 
-    onChangeQuantidade = (idMaterial: number, quantidade: number) => {
+  onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
+      const { materiais } = this.state;
+      const novosMateriais = materiais.map( material => {
+          if(material.id !== idMaterial) {
+              return material;
+          }
+          return {
+              ...material,
+              quantidadeConfirmada: !quantidadeConfirmada,
+              quantidade: material.quantidade ? material.quantidade : 0
+          }
+      })
+      this.setState({materiais: novosMateriais})
+  }
 
-        const { materiais } = this.state;
-        const novosMateriais = materiais.map( material => {
-            if(material.id !== idMaterial) {
-                return material;
-            }
-            return {
-                ...material,
-                quantidade: quantidade
-            }
-        })
-        this.setState({materiais: novosMateriais})
-    }
+  renderItem = ({ item }) => {
+    return (
 
-    onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
-        const { materiais } = this.state;
-        const novosMateriais = materiais.map( material => {
-            if(material.id !== idMaterial) {
-                return material;
-            }
-            return {
-                ...material,
-                quantidadeConfirmada: !quantidadeConfirmada,
-                quantidade: material.quantidade ? material.quantidade : 0
-            }
-        })
-        this.setState({materiais: novosMateriais})
-    }
+      <OptionItem
+        itemMaterial = {item}
+        onChangeQuantidade = {this.onChangeQuantidade }
+        onPressBotaoOK = {this.onPressBotaoOK }
+      />
+    );
+  }
 
-    render() {
-        const { materiais } = this.state;
-        return (
-            <Container>
-                <HeaderNav title="Entrada de Materiais" />
-                <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
-                    <KeyboardAvoidingView
-                        behavior="height"
-                    >
-                        <ScrollView>
-                            {
-                                materiais.map(material => {
-                                    return <Card key={material.id}>
-                                        <CardItem header bordered>
-                                            <Text>{material.nome ? material.nome : material.tipoMaterialTipo.toUpperCase()}</Text>
-                                        </CardItem>
-                                        <CardItem>
-                                            <Body>
-                                                { material.tipoMaterial && <Text>Tipo: {material.tipoMaterial}</Text> }
-                                                { material.potencia && <Text>Potência: {material.potencia}</Text> }
-                                                { material.tensao && <Text>Tensão: {material.tensao}</Text> }
-                                                { material.base && <Text>Base: {material.base}</Text> }
-                                            </Body>
-                                        </CardItem>
-                                        <CardItem footer bordered>
-                                            <Item style={{borderBottomColor: 'transparent'}}>
+  render() {
+    const { materiais } = this.state;
+    return (
+        <Container>
+            <HeaderNav title="Entrada de Materiais" />
+            <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+                <KeyboardAvoidingView
+                    behavior="height"
+                >
 
-                                            <Label>Quantidade</Label>
-                                            <NumericInput
-                                                minValue={0}
-                                                step={+!material.quantidadeConfirmada}
-                                                editable={false}
-                                                rounded={true}
-                                                value={material.quantidade}
-                                                onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
+                  <FlatList
+                    data = {materiais}
+                    removeClippedSubviews={true}
+                    initialNumToRender={3}
+                    maxToRenderPerBatch={3}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={this.loadRepositories}
+                    renderItem={this.renderItem}
+                    keyExtractor={item => item.id}>
+                  </FlatList>
 
-                                            <Button
-                                                style={{marginLeft: 10}}
-                                                rounded={true}
-                                                warning={!material.quantidadeConfirmada}
-                                                success={material.quantidadeConfirmada}
-                                                onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
-                                                <Text>OK</Text>
-                                            </Button>
-                                            </Item>
-                                        </CardItem>
-                                    </Card>
-                                })
-                            }
-                        <Button
-                            block
-                            onPress={() => this.concluiEntrada()}
-                            style={style.btnStyle}
-                            disabled={!materiais.reduce( (tudoConfirmado, material) => {
-                                return tudoConfirmado
-                                        && material.quantidadeConfirmada
-                            }, true)}
-                        >
-                            <Text>Concluído</Text>
-                        </Button>
-                        </ScrollView>
-                    </KeyboardAvoidingView>
-                </Content>
-            </Container>
-        );
-    }
+                  <Button
+                    block
+                    onPress={() => this.concluiEntrada()}
+                    style={style.btnStyle}
+                    disabled={!materiais.reduce( (tudoConfirmado, material) => {
+                        return tudoConfirmado
+                                && material.quantidadeConfirmada
+                    }, true)}
+                  >
+                    <Text>Concluído</Text>
+                  </Button>
+
+                </KeyboardAvoidingView>
+
+            </Content>
+        </Container>
+    );
+  }
+}
+
+class OptionItem extends Component {
+
+  shouldComponentUpdate(nextProps, nextState){
+    const quantidade  = nextProps.itemMaterial.quantidade;
+    const prevQuantidade = this.props.itemMaterial.quantidade;
+
+    const quantidadeConfirmada = nextProps.itemMaterial.quantidadeConfirmada;
+    const prevQuantidadeConfirmada = this.props.itemMaterial.quantidadeConfirmada;
+
+    return (quantidade !== prevQuantidade || quantidadeConfirmada !== prevQuantidadeConfirmada);
+  }
+
+  render () {
+    const { itemMaterial, onChangeQuantidade, onPressBotaoOK } = this.props;
+
+    return (
+      <Item>
+        <Card>
+          <CardItem header bordered>
+              <Text>{itemMaterial.nome ? itemMaterial.nome : itemMaterial.tipoMaterialTipo.toUpperCase()}</Text>
+          </CardItem>
+          <CardItem>
+              <Body>
+                  { itemMaterial.tipoMaterial && <Text>Tipo: {itemMaterial.tipoMaterial}</Text> }
+                  { itemMaterial.potencia && <Text>Potência: {itemMaterial.potencia}</Text> }
+                  { itemMaterial.tensao && <Text>Tensão: {itemMaterial.tensao}</Text> }
+                  { itemMaterial.base && <Text>Base: {itemMaterial.base}</Text> }
+              </Body>
+          </CardItem>
+
+          <CardItem footer bordered>
+              <Item style={{borderBottomColor: 'transparent'}}>
+
+              <Label>Qtde. Estoque:</Label>
+              <NumericInput
+                  minValue={0}
+                  step={+!itemMaterial.quantidadeConfirmada}
+                  editable={false}
+                  rounded={true}
+                  value={itemMaterial.quantidade}
+                  onChange={quantidade => onChangeQuantidade(itemMaterial.id, quantidade)} />
+
+              <Button
+                  style={{marginLeft: 10}}
+                  rounded={true}
+                  warning={!itemMaterial.quantidadeConfirmada}
+                  success={itemMaterial.quantidadeConfirmada}
+                  onPress={() => onPressBotaoOK(itemMaterial.id, itemMaterial.quantidadeConfirmada)} >
+                  <Text>OK</Text>
+              </Button>
+
+              </Item>
+          </CardItem>
+        </Card>
+      </Item>
+    );
+  }
 }
 
 const style = {
     btnStyle: {
-        marginVertical: 5,
+        marginVertical: 10,
     }
 }
 
