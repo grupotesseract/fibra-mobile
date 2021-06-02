@@ -257,85 +257,16 @@ class ManutencaoItem extends Component<Props> {
             <ScrollView>
               {
                 materiais?.map((material: Material) => {
-                  return <Card key={material.id}>
-                    <CardItem header bordered>
-                      <Text>LÂMPADA</Text>
-                    </CardItem>
-                    <CardItem>
-                      <Body>
-                        <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
-                          <Text>Tipo: {material.tipoMaterial}</Text>
-                          {material.base && <Text>Base: {material.base}</Text>}
-                          {material.reator && <Text>Reator : {material.reator}</Text>}
-                        </View>
-
-                        {material.potencia && <Text>Potência: {material.potencia}</Text>}
-                        {material.tensao && <Text>Tensão: {material.tensao}</Text>}
-                        <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
-                      </Body>
-                    </CardItem>
-                    <CardItem footer bordered style={{ flexDirection: 'column' }}>
-                      <Text style={{ marginVertical: 3 }}>Trocas</Text>
-                      {material.base &&
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Bases:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={+!material.quantidadeConfirmada}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeBase}
-                              onChange={quantidade => this.onChangeQuantidadeBase(material.id, quantidade)} />
-                          </Right>
-                        </Item>
-                      }
-                      {material.reator &&
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Reatores:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={+!material.quantidadeConfirmada}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeReator}
-                              onChange={quantidade => this.onChangeQuantidadeReator(material.id, quantidade)} />
-                          </Right>
-                        </Item>
-                      }
-                      <Item style={style.itemSubstituicao}>
-                        <Left>
-                          <Label>Lâmpadas:</Label>
-                        </Left>
-                        <Right>
-                          <NumericInput
-                            minValue={0}
-                            step={+!material.quantidadeConfirmada}
-                            editable={false}
-                            rounded={true}
-                            value={material.quantidade}
-                            onChange={quantidade => this.onChangeQuantidade(material.id, quantidade)} />
-                        </Right>
-
-                      </Item>
-                      <Item style={style.itemSubstituicao}>
-                        <Button
-                          small
-                          disabled={!permiteAlteracao}
-                          rounded={true}
-                          warning={!material.quantidadeConfirmada && permiteAlteracao}
-                          success={material.quantidadeConfirmada && permiteAlteracao}
-                          onPress={() => this.onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
-                          <Text>Confirmar</Text>
-                        </Button>
-                      </Item>
-                    </CardItem>
-                  </Card>
+                  return (
+                    <OptionItem
+                      material = {material}
+                      onChangeQuantidade = {this.onChangeQuantidade}
+                      onChangeQuantidadeBase = {this.onChangeQuantidadeBase}
+                      onChangeQuantidadeReator = {this.onChangeQuantidadeReator}
+                      permiteAlteracao = {permiteAlteracao}
+                      onPressBotaoOK = {this.onPressBotaoOK }
+                    />
+                  )
                 })
             }
             </ScrollView>
@@ -381,6 +312,112 @@ class ManutencaoItem extends Component<Props> {
           </KeyboardAvoidingView>
         </Content>
       </Container>
+    );
+  }
+}
+
+class OptionItem extends Component {
+
+  shouldComponentUpdate(nextProps, nextState){
+    const quantidade  = nextProps.material.quantidade;
+    const prevQuantidade = this.props.material.quantidade;
+
+    const quantidadeBase  = nextProps.material.quantidadeBase;
+    const prevQuantidadeBase = this.props.material.quantidadeBase;
+
+    const quantidadeReator  = nextProps.material.quantidadeReator;
+    const prevQuantidadeReator = this.props.material.quantidadeReator;
+
+    const quantidadeConfirmada = nextProps.material.quantidadeConfirmada;
+    const prevQuantidadeConfirmada = this.props.material.quantidadeConfirmada;
+
+    return (quantidade !== prevQuantidade || quantidadeConfirmada !== prevQuantidadeConfirmada
+        || quantidadeBase !== prevQuantidadeBase || quantidadeReator !== prevQuantidadeReator);
+  }
+
+  render () {
+    const { material, onChangeQuantidadeBase, onChangeQuantidadeReator, onChangeQuantidade, onPressBotaoOK, permiteAlteracao } = this.props;
+
+    return (
+      <Card key={material.id}>
+        <CardItem header bordered>
+          <Text>LÂMPADA</Text>
+        </CardItem>
+        <CardItem>
+          <Body>
+            <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
+              <Text>Tipo: {material.tipoMaterial}</Text>
+              {material.base && <Text>Base: {material.base}</Text>}
+              {material.reator && <Text>Reator : {material.reator}</Text>}
+            </View>
+
+            {material.potencia && <Text>Potência: {material.potencia}</Text>}
+            {material.tensao && <Text>Tensão: {material.tensao}</Text>}
+            <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
+          </Body>
+        </CardItem>
+        <CardItem footer bordered style={{ flexDirection: 'column' }}>
+          <Text style={{ marginVertical: 3 }}>Trocas</Text>
+          {material.base &&
+            <Item style={style.itemSubstituicao}>
+              <Left>
+                <Label>Bases:</Label>
+              </Left>
+              <Right>
+                <NumericInput
+                  minValue={0}
+                  step={+!material.quantidadeConfirmada}
+                  editable={false}
+                  rounded={true}
+                  value={material.quantidadeBase}
+                  onChange={quantidade => onChangeQuantidadeBase(material.id, quantidade)} />
+              </Right>
+            </Item>
+          }
+          {material.reator &&
+            <Item style={style.itemSubstituicao}>
+              <Left>
+                <Label>Reatores:</Label>
+              </Left>
+              <Right>
+                <NumericInput
+                  minValue={0}
+                  step={+!material.quantidadeConfirmada}
+                  editable={false}
+                  rounded={true}
+                  value={material.quantidadeReator}
+                  onChange={quantidade => onChangeQuantidadeReator(material.id, quantidade)} />
+              </Right>
+            </Item>
+          }
+          <Item style={style.itemSubstituicao}>
+            <Left>
+              <Label>Lâmpadas:</Label>
+            </Left>
+            <Right>
+              <NumericInput
+                minValue={0}
+                step={+!material.quantidadeConfirmada}
+                editable={false}
+                rounded={true}
+                value={material.quantidade}
+                onChange={quantidade => onChangeQuantidade(material.id, quantidade)} />
+            </Right>
+
+          </Item>
+          <Item style={style.itemSubstituicao}>
+            <Button
+              small
+              disabled={!permiteAlteracao}
+              rounded={true}
+              warning={!material.quantidadeConfirmada && permiteAlteracao}
+              success={material.quantidadeConfirmada && permiteAlteracao}
+              onPress={() => onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+              <Text>Confirmar</Text>
+            </Button>
+          </Item>
+        </CardItem>
+      </Card>
     );
   }
 }
