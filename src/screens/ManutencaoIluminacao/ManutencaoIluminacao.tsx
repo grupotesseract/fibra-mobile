@@ -130,24 +130,11 @@ class ManutencaoIluminacao extends Component<Props> {
                   <ActivityIndicator /> :
                   itens.map((item: Item) => {
                     const isEmergencia = item.circuito === 'Emergência'
-                    return <ListItem key={item.id} onPress={() => this.openItem(item)} >
-                      <Left>
-                        <Badge
-                          warning={isEmergencia}
-                          primary={!isEmergencia}
-                          style={{ marginRight: 10 }}>
-                          <Text>{isEmergencia ? 'E' : 'N'}</Text>
-                        </Badge>
-                        <Text>{item.nome}</Text>
-                      </Left>
-                      <Right>
-                        <Badge
-                          danger={!item.concluido}
-                          success={item.concluido}
-                          style={{ marginLeft: 10, width: 26 }}>
-                        </Badge>
-                      </Right>
-                    </ListItem>
+                    return <OptionItem
+                      item = {item}
+                      openItem = {this.openItem}
+                      isEmergencia = {isEmergencia}
+                    />
                   })
               }
             </List>
@@ -174,6 +161,41 @@ class ManutencaoIluminacao extends Component<Props> {
         </Content>
       </Container>
     )
+  }
+}
+
+class OptionItem extends Component {
+
+  shouldComponentUpdate(nextProps, nextState){
+    const concluido  = nextProps.item.concluido;
+    const prevConcluido = this.props.item.concluido;
+
+    return (concluido !== prevConcluido);
+  }
+
+  render () {
+    const { item, openItem, isEmergencia } = this.props;
+
+    return (
+      <ListItem key={item.id} onPress={() => openItem(item)} >
+        <Left>
+          <Badge
+            warning={isEmergencia}
+            primary={!isEmergencia}
+            style={{ marginRight: 10 }}>
+            <Text>{isEmergencia ? 'E' : 'N'}</Text>
+          </Badge>
+          <Text>{item.nome}</Text>
+        </Left>
+        <Right>
+          <Badge
+            danger={!item.concluido}
+            success={item.concluido}
+            style={{ marginLeft: 10, width: 26 }}>
+          </Badge>
+        </Right>
+      </ListItem>
+    );
   }
 }
 
