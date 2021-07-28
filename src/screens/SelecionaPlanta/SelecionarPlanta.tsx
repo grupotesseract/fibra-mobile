@@ -109,15 +109,15 @@ class SelecionaPlanta extends Component<Props, State> {
 
         <HeaderNav title="Selecionar Planta"/>
         <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
-          <Form>
-            <Item>
+          {/* <Form>
+            <Item> */}
               <Label>Empresa</Label>
               <Picker
                 mode="dropdown"
                 placeholder="Selecione uma empresa"
                 iosHeader="Selecione uma empresa"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
+                style={{ marginTop: 100 }}
                 selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
@@ -145,8 +145,8 @@ class SelecionaPlanta extends Component<Props, State> {
                   </>)
                 }
               </Picker>
-            </Item>
-            <Item>
+            {/* </Item> */}
+            {/* <Item> */}
               <Label>Planta</Label>
               <Picker
                 mode="dropdown"
@@ -165,8 +165,8 @@ class SelecionaPlanta extends Component<Props, State> {
                   />
                 )}
               </Picker>
-            </Item>
-          </Form>
+            {/* </Item>
+          </Form> */}
           <Button
             block
             disabled={(empresaSelecionada === null)}
