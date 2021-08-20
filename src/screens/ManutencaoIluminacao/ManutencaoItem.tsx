@@ -1,32 +1,57 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Label, Item, Button, View, Icon, Left, Thumbnail, Badge, Right } from 'native-base';
+import {
+  Container,
+  Content,
+  Card,
+  CardItem,
+  Body,
+  Text,
+  Label,
+  Item,
+  Button,
+  View,
+  Icon,
+  Left,
+  Thumbnail,
+  Badge,
+  Right,
+} from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Planta, Item as ItemPlanta, Material } from '../../store/ducks/planta/types';
+import {
+  Planta,
+  Item as ItemPlanta,
+  Material,
+} from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
-import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import {
+  QuantidadeSubstituida,
+  ProgramacaoRealizada,
+} from '../../store/ducks/programacoes/types';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  programacoesRealizadas: ProgramacaoRealizada[],
-  navigation: NavigationScreenProp<any, any>,
+  plantaAtiva: Planta;
+  programacoesRealizadas: ProgramacaoRealizada[];
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  armazenaQuantidades(idProgramacao: number, quantidadesSubstituidas: QuantidadeSubstituida[]): void
-  concluiItem({ idItem, idProgramacao, data }): void
-  iniciaItem({ idItem, idProgramacao, data }): void
+  armazenaQuantidades(
+    idProgramacao: number,
+    quantidadesSubstituidas: QuantidadeSubstituida[]
+  ): void;
+  concluiItem({ idItem, idProgramacao, data }): void;
+  iniciaItem({ idItem, idProgramacao, data }): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 class ManutencaoItem extends Component<Props> {
-
   state = {
     materiais: [],
     nome: 'Item',
@@ -35,7 +60,7 @@ class ManutencaoItem extends Component<Props> {
     error: false,
     idItem: null,
     permiteAlteracao: false,
-  }
+  };
 
   onChangeQuantidade = (idMaterial: number, quantidade: number) => {
     const { materiais } = this.state;
@@ -45,11 +70,11 @@ class ManutencaoItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidade
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidade,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onChangeQuantidadeBase = (idMaterial: number, quantidadeBase: number) => {
     const { materiais } = this.state;
@@ -59,11 +84,11 @@ class ManutencaoItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidadeBase
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeBase,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onChangeQuantidadeReator = (idMaterial: number, quantidadeReator: number) => {
     const { materiais } = this.state;
@@ -73,25 +98,25 @@ class ManutencaoItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidadeReator
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeReator,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
     const { materiais } = this.state;
-    const novosMateriais = materiais.map(material => {
+    const novosMateriais = materiais.map((material) => {
       if (material.id !== idMaterial) {
         return material;
       }
       return {
         ...material,
-        quantidadeConfirmada: !quantidadeConfirmada
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeConfirmada: !quantidadeConfirmada,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   salvaQuantidades = async (idItem: number) => {
     const { armazenaQuantidades, plantaAtiva } = this.props;
@@ -99,7 +124,7 @@ class ManutencaoItem extends Component<Props> {
     const { materiais } = this.state;
 
     let quantidadesSubstituidas: QuantidadeSubstituida[];
-    quantidadesSubstituidas = materiais.map( material => {
+    quantidadesSubstituidas = materiais.map((material) => {
       return {
         material_id: material.id,
         item_id: idItem,
@@ -108,23 +133,26 @@ class ManutencaoItem extends Component<Props> {
         quantidade_substituida: material.quantidade || 0,
         quantidade_substituida_base: material.quantidadeBase || 0,
         quantidade_substituida_reator: material.quantidadeReator || 0,
-      }
-    })
+      };
+    });
 
     await armazenaQuantidades(idProgramacao, quantidadesSubstituidas);
-  }
+  };
 
   verFotosItem = async (idItem: number) => {
     const { navigation } = this.props;
     await this.salvaQuantidades(idItem);
-    navigation.navigate({ routeName: 'FotosItem', params: { idItem: idItem } })
-  }
+    navigation.navigate({ routeName: 'FotosItem', params: { idItem: idItem } });
+  };
 
   editarComentarioItem = async (idItem: number) => {
     const { navigation } = this.props;
     await this.salvaQuantidades(idItem);
-    navigation.navigate({ routeName: 'ComentariosGerais', params: { idItem: idItem } })
-  }
+    navigation.navigate({
+      routeName: 'ComentariosGerais',
+      params: { idItem: idItem },
+    });
+  };
 
   concluirItem = async (idItem: number) => {
     const { navigation, concluiItem, plantaAtiva } = this.props;
@@ -132,36 +160,39 @@ class ManutencaoItem extends Component<Props> {
     await this.salvaQuantidades(idItem);
     const data = new Date().toISOString();
     await concluiItem({ idItem, idProgramacao, data });
-    navigation.navigate({ routeName: 'ManutencaoIluminacao' })
-  }
+    navigation.navigate({ routeName: 'ManutencaoIluminacao' });
+  };
 
   iniciarItem = async (idItem: number) => {
     const { iniciaItem, plantaAtiva } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const data = new Date().toISOString();
     await iniciaItem({ idItem, idProgramacao, data });
-  }
+  };
 
   componentDidMount() {
     const { plantaAtiva, programacoesRealizadas, navigation } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+    const programacao = programacoesRealizadas.find(
+      (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao
+    );
     const { idItem, qrcode } = navigation.state.params;
     const { itens } = plantaAtiva;
     let item: ItemPlanta;
     if (idItem) {
-      item = itens.find(item => item.id === idItem);
+      item = itens.find((item) => item.id === idItem);
     } else if (qrcode) {
-      item = itens.find(item => item.qrcode === qrcode);
-      this.setState({permiteAlteracao : true});
+      item = itens.find((item) => item.qrcode === qrcode);
+      this.setState({ permiteAlteracao: true });
     }
     if (item) {
       const { materiais, circuito, qrcode, nome, id } = item;
       let materiaisComQuantidade = materiais;
       if (programacao) {
-        materiaisComQuantidade = materiais.map( (m: Material) => {
-          const materialPreenchido = programacao.quantidadesSubstituidas
-            .find( q => q.material_id === m.id && q.item_id === id);
+        materiaisComQuantidade = materiais.map((m: Material) => {
+          const materialPreenchido = programacao.quantidadesSubstituidas.find(
+            (q) => q.material_id === m.id && q.item_id === id
+          );
           if (!materialPreenchido) {
             return m;
           }
@@ -171,21 +202,22 @@ class ManutencaoItem extends Component<Props> {
             quantidadeConfirmada: true,
             quantidadeBase: materialPreenchido.quantidade_substituida_base,
             quantidadeReator: materialPreenchido.quantidade_substituida_reator,
-          }
-        })
+          };
+        });
       }
       this.setState({
         materiais: materiaisComQuantidade,
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
-        idItem: item.id
+        idItem: item.id,
       });
       this.iniciarItem(id);
     } else {
       this.setState({
-        error: 'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.'
-      })
+        error:
+          'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.',
+      });
     }
   }
 
@@ -194,50 +226,65 @@ class ManutencaoItem extends Component<Props> {
     const { idItem, permiteAlteracao } = this.state;
 
     permiteAlteracao && navigation.navigate('TodosMateriaisItem', { idItem });
-  }
+  };
 
   botaoTodosMateriais = (
     <Button
       transparent
       style={{
-        paddingRight:0,
+        paddingRight: 0,
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
       onPress={this.verTodosMateriais}
-      >
-      <Icon name="md-git-compare" style={{color: 'white'}}/>
-      <Text style={{fontSize: 10, marginLeft: -12 }}>Editar</Text>
+    >
+      <Icon name='md-git-compare' style={{ color: 'white' }} />
+      <Text style={{ fontSize: 10, marginLeft: -12 }}>Editar</Text>
     </Button>
   );
 
   render() {
-    const { error, materiais, qrcode, emergencia, nome, idItem, permiteAlteracao } = this.state;
+    const {
+      error,
+      materiais,
+      qrcode,
+      emergencia,
+      nome,
+      idItem,
+      permiteAlteracao,
+    } = this.state;
 
     const { plantaAtiva, programacoesRealizadas } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+    const programacao = programacoesRealizadas.find(
+      (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao
+    );
 
     const { fotosItens } = programacao;
-    const fotosItem = fotosItens ?.find(fotoItem => fotoItem.id_item === idItem);
-    const qtdFotos = fotosItem ?.fotos ?.length || 0;
+    const fotosItem = fotosItens?.find(
+      (fotoItem) => fotoItem.id_item === idItem
+    );
+    const qtdFotos = fotosItem?.fotos?.length || 0;
 
     if (error) {
-      return <Container>
-        <HeaderNav title={'Manutenção'} />
-        <Content padder>
-          <Text>{error}</Text>
-        </Content>
-      </Container>
+      return (
+        <Container>
+          <HeaderNav title={'Manutenção'} />
+          <Content padder>
+            <Text>{error}</Text>
+          </Content>
+        </Container>
+      );
     }
 
     return (
-      <Container padder>
-        <HeaderNav title={'Manutenção'} rightContent={this.botaoTodosMateriais}/>
+      <Container>
+        <HeaderNav
+          title={'Manutenção'}
+          rightContent={this.botaoTodosMateriais}
+        />
         <Content padder>
-          <KeyboardAvoidingView
-            behavior="height">
-
+          <KeyboardAvoidingView behavior='height'>
             <Card>
               <CardItem>
                 <Left>
@@ -245,9 +292,7 @@ class ManutencaoItem extends Component<Props> {
                   <Body>
                     <Text note>{qrcode}</Text>
                     <Text note>{nome}</Text>
-                    <Badge
-                      warning={emergencia}
-                      primary={!emergencia}>
+                    <Badge warning={emergencia} primary={!emergencia}>
                       <Text>{emergencia ? 'E' : 'N'}</Text>
                     </Badge>
                   </Body>
@@ -255,20 +300,19 @@ class ManutencaoItem extends Component<Props> {
               </CardItem>
             </Card>
             <ScrollView>
-              {
-                materiais?.map((material: Material) => {
-                  return (
-                    <OptionItem
-                      material = {material}
-                      onChangeQuantidade = {this.onChangeQuantidade}
-                      onChangeQuantidadeBase = {this.onChangeQuantidadeBase}
-                      onChangeQuantidadeReator = {this.onChangeQuantidadeReator}
-                      permiteAlteracao = {permiteAlteracao}
-                      onPressBotaoOK = {this.onPressBotaoOK }
-                    />
-                  )
-                })
-            }
+              {materiais?.map((material: Material) => {
+                return (
+                  <OptionItem
+                    key={material.id}
+                    material={material}
+                    onChangeQuantidade={this.onChangeQuantidade}
+                    onChangeQuantidadeBase={this.onChangeQuantidadeBase}
+                    onChangeQuantidadeReator={this.onChangeQuantidadeReator}
+                    permiteAlteracao={permiteAlteracao}
+                    onPressBotaoOK={this.onPressBotaoOK}
+                  />
+                );
+              })}
             </ScrollView>
             <View style={{ flexDirection: 'row', marginVertical: 5 }}>
               <Button
@@ -276,12 +320,13 @@ class ManutencaoItem extends Component<Props> {
                 style={{ flex: 1, marginRight: 3 }}
                 iconLeft
                 bordered
-                disabled={!materiais.reduce((tudoConfirmado, material) => {
-                  return tudoConfirmado
-                    && material.quantidadeConfirmada
-                }, true)}
+                disabled={
+                  !materiais.reduce((tudoConfirmado, material) => {
+                    return tudoConfirmado && material.quantidadeConfirmada;
+                  }, true)
+                }
               >
-                <Icon name="md-photos" />
+                <Icon name='images' />
                 <Text>Fotos</Text>
               </Button>
               <Button
@@ -289,12 +334,13 @@ class ManutencaoItem extends Component<Props> {
                 style={{ flex: 1, marginLeft: 3 }}
                 iconLeft
                 bordered
-                disabled={!materiais.reduce((tudoConfirmado, material) => {
-                  return tudoConfirmado
-                    && material.quantidadeConfirmada
-                }, true)}
+                disabled={
+                  !materiais.reduce((tudoConfirmado, material) => {
+                    return tudoConfirmado && material.quantidadeConfirmada;
+                  }, true)
+                }
               >
-                <Icon name="md-chatboxes" />
+                <Icon name='chatbox' />
                 <Text>Comentário</Text>
               </Button>
             </View>
@@ -302,10 +348,11 @@ class ManutencaoItem extends Component<Props> {
               block
               onPress={() => this.concluirItem(idItem)}
               style={style.btnStyle}
-              disabled={!materiais.reduce((tudoConfirmado, material) => {
-                return tudoConfirmado
-                  && material.quantidadeConfirmada
-              }, true) || qtdFotos === 0}
+              disabled={
+                !materiais.reduce((tudoConfirmado, material) => {
+                  return tudoConfirmado && material.quantidadeConfirmada;
+                }, true) || qtdFotos === 0
+              }
             >
               <Text>Concluído</Text>
             </Button>
@@ -317,26 +364,36 @@ class ManutencaoItem extends Component<Props> {
 }
 
 class OptionItem extends Component {
-
-  shouldComponentUpdate(nextProps, nextState){
-    const quantidade  = nextProps.material.quantidade;
+  shouldComponentUpdate(nextProps, nextState) {
+    const quantidade = nextProps.material.quantidade;
     const prevQuantidade = this.props.material.quantidade;
 
-    const quantidadeBase  = nextProps.material.quantidadeBase;
+    const quantidadeBase = nextProps.material.quantidadeBase;
     const prevQuantidadeBase = this.props.material.quantidadeBase;
 
-    const quantidadeReator  = nextProps.material.quantidadeReator;
+    const quantidadeReator = nextProps.material.quantidadeReator;
     const prevQuantidadeReator = this.props.material.quantidadeReator;
 
     const quantidadeConfirmada = nextProps.material.quantidadeConfirmada;
     const prevQuantidadeConfirmada = this.props.material.quantidadeConfirmada;
 
-    return (quantidade !== prevQuantidade || quantidadeConfirmada !== prevQuantidadeConfirmada
-        || quantidadeBase !== prevQuantidadeBase || quantidadeReator !== prevQuantidadeReator);
+    return (
+      quantidade !== prevQuantidade ||
+      quantidadeConfirmada !== prevQuantidadeConfirmada ||
+      quantidadeBase !== prevQuantidadeBase ||
+      quantidadeReator !== prevQuantidadeReator
+    );
   }
 
-  render () {
-    const { material, onChangeQuantidadeBase, onChangeQuantidadeReator, onChangeQuantidade, onPressBotaoOK, permiteAlteracao } = this.props;
+  render() {
+    const {
+      material,
+      onChangeQuantidadeBase,
+      onChangeQuantidadeReator,
+      onChangeQuantidade,
+      onPressBotaoOK,
+      permiteAlteracao,
+    } = this.props;
 
     return (
       <Card key={material.id}>
@@ -345,7 +402,13 @@ class OptionItem extends Component {
         </CardItem>
         <CardItem>
           <Body>
-            <View style={{ marginBottom: 5, borderBottomWidth: 0, paddingBottom: 5 }}>
+            <View
+              style={{
+                marginBottom: 5,
+                borderBottomWidth: 0,
+                paddingBottom: 5,
+              }}
+            >
               <Text>Tipo: {material.tipoMaterial}</Text>
               {material.base && <Text>Base: {material.base}</Text>}
               {material.reator && <Text>Reator : {material.reator}</Text>}
@@ -358,7 +421,7 @@ class OptionItem extends Component {
         </CardItem>
         <CardItem footer bordered style={{ flexDirection: 'column' }}>
           <Text style={{ marginVertical: 3 }}>Trocas</Text>
-          {material.base &&
+          {material.base && (
             <Item style={style.itemSubstituicao}>
               <Left>
                 <Label>Bases:</Label>
@@ -370,11 +433,14 @@ class OptionItem extends Component {
                   editable={false}
                   rounded={true}
                   value={material.quantidadeBase}
-                  onChange={quantidade => onChangeQuantidadeBase(material.id, quantidade)} />
+                  onChange={(quantidade) =>
+                    onChangeQuantidadeBase(material.id, quantidade)
+                  }
+                />
               </Right>
             </Item>
-          }
-          {material.reator &&
+          )}
+          {material.reator && (
             <Item style={style.itemSubstituicao}>
               <Left>
                 <Label>Reatores:</Label>
@@ -386,10 +452,13 @@ class OptionItem extends Component {
                   editable={false}
                   rounded={true}
                   value={material.quantidadeReator}
-                  onChange={quantidade => onChangeQuantidadeReator(material.id, quantidade)} />
+                  onChange={(quantidade) =>
+                    onChangeQuantidadeReator(material.id, quantidade)
+                  }
+                />
               </Right>
             </Item>
-          }
+          )}
           <Item style={style.itemSubstituicao}>
             <Left>
               <Label>Lâmpadas:</Label>
@@ -401,9 +470,11 @@ class OptionItem extends Component {
                 editable={false}
                 rounded={true}
                 value={material.quantidade}
-                onChange={quantidade => onChangeQuantidade(material.id, quantidade)} />
+                onChange={(quantidade) =>
+                  onChangeQuantidade(material.id, quantidade)
+                }
+              />
             </Right>
-
           </Item>
           <Item style={style.itemSubstituicao}>
             <Button
@@ -412,7 +483,10 @@ class OptionItem extends Component {
               rounded={true}
               warning={!material.quantidadeConfirmada && permiteAlteracao}
               success={material.quantidadeConfirmada && permiteAlteracao}
-              onPress={() => onPressBotaoOK(material.id, material.quantidadeConfirmada)} >
+              onPress={() =>
+                onPressBotaoOK(material.id, material.quantidadeConfirmada)
+              }
+            >
               <Text>Confirmar</Text>
             </Button>
           </Item>
@@ -430,14 +504,14 @@ const style = {
     marginVertical: 2,
     borderBottomColor: 'transparent',
   },
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
-  programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
-})
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoItem)
+export default connect(mapStateToProps, mapDispatchToProps)(ManutencaoItem);
