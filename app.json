@@ -3,11 +3,7 @@
     "name": "Fibra",
     "slug": "fibra-mobile",
     "privacy": "public",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "assets/*"
-    ],
+    "assetBundlePatterns": ["assets/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tesseract.fibramobile",
@@ -34,7 +28,6 @@
       "versionCode": 3,
       "package": "com.tesseract.fibramobile"
     },
-    "androidStatusBarColor": "#1d2781",
     "androidStatusBar": {
       "backgroundColor": "#1d2781",
       "barStyle": "light-content"
