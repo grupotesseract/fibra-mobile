@@ -45,12 +45,12 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
     const { plantaAtiva } = this.props;
 
     if (!plantaAtiva) {
-      return <ActivityIndicator />;
+      return <ActivityIndicator color='blue' />;
     }
 
     const { proximaProgramacao } = plantaAtiva;
     if (!proximaProgramacao) {
-      return <ActivityIndicator />;
+      return <ActivityIndicator color='blue' />;
     }
     const dataInicioPrevista = proximaProgramacao.data_inicio_prevista.split(
       'T'
@@ -59,7 +59,6 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
     return (
       <Container>
         <HeaderNav title='Período Manutenção' />
-
         <Content
           padder
           contentContainerStyle={{

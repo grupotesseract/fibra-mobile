@@ -133,7 +133,7 @@ class ManutencaoIluminacao extends Component<Props> {
           <ScrollView>
             <List>
               {!itens || itens.length === 0 ? (
-                <ActivityIndicator />
+                <ActivityIndicator color='blue' size='large' />
               ) : (
                 itens.map((item: Item) => {
                   const isEmergencia = item.circuito === 'Emergência';
@@ -171,7 +171,7 @@ class ManutencaoIluminacao extends Component<Props> {
               onPress={() => this.concluirManutencao()}
             >
               {loadingConcluir ? (
-                <ActivityIndicator />
+                <ActivityIndicator color='white' />
               ) : (
                 <>
                   <Icon name='md-checkmark' style={{ fontSize: 40 }} />
