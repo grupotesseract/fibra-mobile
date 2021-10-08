@@ -24,17 +24,17 @@ class ScanQRCodeReader extends Component<Props, ScanState> {
   }
 
   componentDidMount() {
-    this.focusListner = this.props.navigation.addListener('didFocus', () =>
+    this.focusListener = this.props.navigation.addListener('didFocus', () =>
       this.setState({ isFocused: true })
     );
-    this.blurListner = this.props.navigation.addListener('willBlur', () =>
+    this.blurListener = this.props.navigation.addListener('willBlur', () =>
       this.setState({ isFocused: false })
     );
   }
 
   componentWillUnmount() {
-    this.focusListner.remove();
-    this.blurListner.remove();
+    this.focusListener.remove();
+    this.blurListener.remove();
   }
 
   render() {

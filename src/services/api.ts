@@ -2,11 +2,11 @@ import axios from 'axios';
 import { ManutencaoRDO } from '../store/ducks/rdo/types';
 
 const api = axios.create({
-  baseURL: 'https://develop.fibra.grupotesseract.com.br/api',
+  baseURL: 'https://fibra.grupotesseract.com.br/api',
 });
 
 export const setToken = (token: string) => {
-  api.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
 export const clearToken = () => {
@@ -71,7 +71,7 @@ export const uploadProgramacao = ({ idProgramacao, programacao }) => {
     programacao.itensAlterados = itensArrayUnico;
   }
   return api
-    .post('sync/programacoes/' + idProgramacao, programacao)
+    .post(`sync/programacoes/${idProgramacao}`, programacao)
     .then((response) => {
       const data = response.data.data;
       return data;
@@ -80,8 +80,7 @@ export const uploadProgramacao = ({ idProgramacao, programacao }) => {
 };
 
 export const uploadFotos = async ({ idProgramacao, idItem, fotos }) => {
-  const url =
-    'sync/programacoes/' + idProgramacao + '/item/' + idItem + '/fotos';
+  const url = `sync/programacoes/${idProgramacao}/item/${idItem}/fotos`;
 
   let formData = new FormData();
 
@@ -164,7 +163,7 @@ export const uploadInfosRDO = async (rdo: ManutencaoRDO) => {
       })),
     };
     const res = await api.post(
-      'sync/plantas/rdo/' + plantaSelecionadaId,
+      `sync/plantas/rdo/${plantaSelecionadaId}`,
       objetoManutencao
     );
 
@@ -176,7 +175,7 @@ export const uploadInfosRDO = async (rdo: ManutencaoRDO) => {
 };
 
 export const uploadFotosRDO = async ({ idRDO, fotos }) => {
-  const url = 'sync/plantas/rdo/' + idRDO + '/fotos';
+  const url = `sync/plantas/rdo/${idRDO}/fotos`;
 
   let formData = new FormData();
 

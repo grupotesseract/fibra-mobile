@@ -149,23 +149,20 @@ class Programacoes extends Component<Props> {
                     <Left>
                       <Body>
                         <Text style={{ marginVertical: 5, fontWeight: 'bold' }}>
-                          {' '}
-                          Sincronização{' '}
+                          {`Sincronização `}
                         </Text>
 
                         <Text>
-                          {' '}
-                          Informações:{' '}
-                          {errorSync
-                            ? 'reenvio pendente'
-                            : dadosEnviados
-                            ? 'sincronizadas'
-                            : 'pendente'}{' '}
+                          {`Informações: ${
+                            errorSync
+                              ? 'reenvio pendente'
+                              : dadosEnviados
+                              ? 'sincronizadas'
+                              : 'pendente'
+                          }`}
                         </Text>
                         <Text>
-                          {' '}
-                          Fotos de itens: {fotosEnviadas} de {fotosItens.length}{' '}
-                          sincronizadas{' '}
+                          {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
                         </Text>
 
                         <Button
