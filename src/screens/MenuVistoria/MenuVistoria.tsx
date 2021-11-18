@@ -25,7 +25,7 @@ class MenuVistoria extends Component<Props> {
   render() {
     const { plantaAtiva, programacoesRealizadas } = this.props;
     if (!plantaAtiva) {
-      return <ActivityIndicator />;
+      return <ActivityIndicator color='blue' />;
     }
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
     const programacao = programacoesRealizadas.find(
