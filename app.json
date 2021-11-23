@@ -25,7 +25,7 @@
       }
     },
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "package": "com.tesseract.fibramobile42bauru"
     },
     "androidStatusBar": {
