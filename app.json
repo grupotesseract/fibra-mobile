@@ -15,7 +15,6 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["assets/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tesseract.fibramobile42bauru",
