@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
-import { Image, View, FlatList } from 'react-native';
+import { Image, View, FlatList, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NavigationScreenProp } from 'react-navigation';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
@@ -9,7 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
-import * as Permissions from 'expo-permissions';
+//import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 
 interface StateProps {
@@ -78,10 +78,17 @@ class FotosRDO extends Component<Props> {
 
   async componentDidMount() {
 
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
-    if (status !== 'granted') {
-      alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+    // if (status !== 'granted') {
+    //   alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+    // }
+
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+      }
     }
 
     const { rdoAtual } = this.props;

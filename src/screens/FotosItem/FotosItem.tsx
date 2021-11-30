@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { Image, View, FlatList } from 'react-native';
+import { Image, View, FlatList, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+//import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
@@ -70,7 +70,7 @@ class FotosItemScreen extends Component<Props> {
 
     componentDidMount() {
         this.getPermissionAsync();
-        this.getPermissionCameraRollAsync();
+        //this.getPermissionCameraRollAsync();
         const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
         const { idItem } = navigation.state.params;
         const idProgramacao = plantaAtiva.proximaProgramacao.id;
@@ -85,21 +85,28 @@ class FotosItemScreen extends Component<Props> {
     }
 
     getPermissionAsync = async () => {
-        const platform = '';
-        if (platform === 'ios') {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-            if (status !== 'granted') {
-                alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-            }
+        // const platform = '';
+        // if (platform === 'ios') {
+        //     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        //     if (status !== 'granted') {
+        //         alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+        //     }
+        // }
+
+        if (Platform.OS !== 'web') {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+          }
         }
     }
 
-    getPermissionCameraRollAsync = async () => {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-      }
-    }
+    // getPermissionCameraRollAsync = async () => {
+    //   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    //   if (status !== 'granted') {
+    //     alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+    //   }
+    // }
 
     storePhotos = async () => {
         const { navigation, plantaAtiva, armazenaFotos } = this.props;
