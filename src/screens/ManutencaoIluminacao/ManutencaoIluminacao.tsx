@@ -12,7 +12,7 @@ import {
   View,
   Content,
 } from 'native-base';
-import * as Permissions from 'expo-permissions';
+//import * as Permissions from 'expo-permissions';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -23,6 +23,7 @@ import { ApplicationState } from '../../store';
 import { Item, Planta } from '../../store/ducks/planta/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -47,8 +48,11 @@ class ManutencaoIluminacao extends Component<Props> {
   };
 
   async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
+
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
     this.setState({ hasCameraPermission: status === 'granted' });
+
     this.carregaItens();
   }
 
@@ -133,7 +137,7 @@ class ManutencaoIluminacao extends Component<Props> {
           <ScrollView>
             <List>
               {!itens || itens.length === 0 ? (
-                <ActivityIndicator />
+                <ActivityIndicator color='blue' size='large' />
               ) : (
                 itens.map((item: Item) => {
                   const isEmergencia = item.circuito === 'Emergência';
@@ -171,7 +175,7 @@ class ManutencaoIluminacao extends Component<Props> {
               onPress={() => this.concluirManutencao()}
             >
               {loadingConcluir ? (
-                <ActivityIndicator />
+                <ActivityIndicator color='white' />
               ) : (
                 <>
                   <Icon name='md-checkmark' style={{ fontSize: 40 }} />
