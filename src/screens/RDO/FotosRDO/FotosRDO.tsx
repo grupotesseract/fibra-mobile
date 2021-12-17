@@ -84,10 +84,24 @@ class FotosRDO extends Component<Props> {
     //   alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
     // }
 
+    // if (Platform.OS !== 'web') {
+    //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //   if (status !== 'granted') {
+    //     alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+    //   }
+    // }
+
     if (Platform.OS !== 'web') {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
-        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+        alert('Permissão não foi concedida! A câmera não funcionará!');
+      }
+    }
+
+    if (Platform.OS !== 'web') {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permissão não foi concedida! A câmera não funcionará!');
       }
     }
 
