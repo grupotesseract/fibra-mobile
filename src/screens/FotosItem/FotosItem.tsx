@@ -53,7 +53,7 @@ class FotosItemScreen extends Component<Props> {
               MediaLibrary.createAssetAsync(img.uri)
               .then(asset => {
 
-                MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset)
+                MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
                   .then(() => {
                     console.log('Album created!');
                   })
@@ -110,7 +110,7 @@ class FotosItemScreen extends Component<Props> {
         if (Platform.OS !== 'web') {
           const { status } = await MediaLibrary.requestPermissionsAsync();
           if (status !== 'granted') {
-            alert('Permissão não foi concedida! A câmera não funcionará!');
+            alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
           }
         }
     }
