@@ -51,7 +51,7 @@ class FotosRDO extends Component<Props> {
           MediaLibrary.createAssetAsync(img.uri)
           .then(asset => {
 
-            MediaLibrary.createAlbumAsync('RDO Planta '+rdoAtual.plantaSelecionadaId, asset)
+            MediaLibrary.createAlbumAsync('RDO Planta '+rdoAtual.plantaSelecionadaId, asset, false)
               .then(() => {
                 console.log('Album created!');
               })
