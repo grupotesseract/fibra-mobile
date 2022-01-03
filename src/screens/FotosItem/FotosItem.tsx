@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { Image, View, FlatList, Platform } from 'react-native';
+import { Image, View, FlatList, Platform, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 //import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
@@ -28,7 +28,8 @@ type Props = StateProps & DispatchProps
 
 class FotosItemScreen extends Component<Props> {
     state = {
-        photos: []
+        photos: [],
+        isLoading: false
     };
 
     setPhotos = (photos) => {
@@ -42,8 +43,11 @@ class FotosItemScreen extends Component<Props> {
         const { navigation } = this.props;
         const { idItem } = navigation.state.params;
 
+        this.setState({isLoading: true})
+
         ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
+
             if (!img.cancelled) {
               this.setPhotos([
                   ...photos,
@@ -62,6 +66,7 @@ class FotosItemScreen extends Component<Props> {
                   });
               })
             }
+            this.setState({isLoading: false})
         })
         .catch(err => {
             console.log("ERRO NA IMG", err)
@@ -69,19 +74,19 @@ class FotosItemScreen extends Component<Props> {
     };
 
     componentDidMount() {
-        this.getPermissionAsync();
-        //this.getPermissionCameraRollAsync();
-        const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
-        const { idItem } = navigation.state.params;
-        const idProgramacao = plantaAtiva.proximaProgramacao.id;
+      this.getPermissionAsync();
+      //this.getPermissionCameraRollAsync();
+      const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
+      const { idItem } = navigation.state.params;
+      const idProgramacao = plantaAtiva.proximaProgramacao.id;
 
-        const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
-        if (programacaoRealizada) {
-            const fotosItem = programacaoRealizada.fotosItens?.find(fotoItem => fotoItem.id_item === idItem);
-            if (fotosItem) {
-                this.setPhotos(fotosItem.fotos);
-            }
-        }
+      const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
+      if (programacaoRealizada) {
+          const fotosItem = programacaoRealizada.fotosItens?.find(fotoItem => fotoItem.id_item === idItem);
+          if (fotosItem) {
+              this.setPhotos(fotosItem.fotos);
+          }
+      }
     }
 
     getPermissionAsync = async () => {
@@ -102,6 +107,13 @@ class FotosItemScreen extends Component<Props> {
 
         if (Platform.OS !== 'web') {
           const { status } = await ImagePicker.requestCameraPermissionsAsync();
+          if (status !== 'granted') {
+            alert('Permissão não foi concedida! A câmera não funcionará!');
+          }
+        }
+
+        if (Platform.OS !== 'web') {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
           if (status !== 'granted') {
             alert('Permissão não foi concedida! A câmera não funcionará!');
           }
@@ -138,12 +150,16 @@ class FotosItemScreen extends Component<Props> {
     }
 
     render() {
-        const { photos } = this.state;
+        const { photos, isLoading } = this.state;
         const { idItem } = this.props.navigation.state.params;
+
         return <Container>
             <HeaderNav title={"Fotos Item #"+idItem} />
             <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
-                <FlatList
+                {isLoading ? (
+                    <ActivityIndicator color='blue' size='large' />
+                  ) : (
+                    <FlatList
                     data={photos}
                     renderItem={({ item }) => (
                         <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
@@ -158,6 +174,8 @@ class FotosItemScreen extends Component<Props> {
                     numColumns={3}
                     keyExtractor={(item, index) => String(index)}
                 />
+                  )}
+
                 <Fab
                     position="bottomRight"
                     style={{ backgroundColor: "#13328c" }}
