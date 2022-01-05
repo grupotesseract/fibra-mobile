@@ -169,7 +169,7 @@ class FotosItemScreen extends Component<Props> {
                   ) : (
                     <FlatList
                     data={photos}
-                    getItemLayout={(data, index) => (
+                    getItemLayout={(item, index) => (
                       {length: 130, offset: 130 * index, index}
                     )}
                     renderItem={this.renderItem}
