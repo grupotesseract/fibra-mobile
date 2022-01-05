@@ -35,28 +35,12 @@ type Props = StateProps & DispatchProps;
 class EstoqueScreen extends Component<Props> {
   state = {
     materiais: [],
-    page: 0,
-  };
-
-  loadRepositories = async () => {
-    const { plantaAtiva } = this.props;
-    const { page } = this.state;
-    const { materiais } = this.state;
-    const { estoque } = plantaAtiva;
-
-    let pageFrom = page + 1;
-    let pageTo = pageFrom + 3;
-
-    const estoqueAux = materiais.concat(estoque.slice(pageFrom, pageTo));
-    this.setState({ materiais: estoqueAux, page: pageTo + 1 });
   };
 
   componentDidMount() {
     const { plantaAtiva } = this.props;
-    const { page } = this.state;
     const { estoque } = plantaAtiva;
-    const estoqueAux = estoque.slice(0, page + 6);
-    this.setState({ materiais: estoqueAux, page: page + 6 });
+    this.setState({ materiais: estoque });
   }
 
   onChangeQuantidade = (idMaterial, quantidade) => {
@@ -122,10 +106,6 @@ class EstoqueScreen extends Component<Props> {
           <FlatList
             data={materiais}
             removeClippedSubviews={true}
-            initialNumToRender={3}
-            maxToRenderPerBatch={3}
-            onEndReachedThreshold={0.1}
-            onEndReached={this.loadRepositories}
             renderItem={this.renderItem}
             keyExtractor={(item) => item.id}
           ></FlatList>

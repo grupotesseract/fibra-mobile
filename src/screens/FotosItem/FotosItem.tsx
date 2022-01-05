@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { Image, View, FlatList, Platform, ActivityIndicator } from 'react-native';
+import { Image, View, FlatList, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 //import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
@@ -48,25 +48,25 @@ class FotosItemScreen extends Component<Props> {
         ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
 
-            if (!img.cancelled) {
-              this.setPhotos([
-                  ...photos,
-                  img
-              ])
+          if (!img.cancelled) {
+            this.setPhotos([
+                ...photos,
+                img
+            ])
 
-              MediaLibrary.createAssetAsync(img.uri)
-              .then(asset => {
+            MediaLibrary.createAssetAsync(img.uri)
+            .then(asset => {
+              MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
+                .then(() => {
+                  console.log('Album created!');
+                })
+                .catch(error => {
+                  console.log('err', error);
+                });
+            })
+          }
 
-                MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
-                  .then(() => {
-                    console.log('Album created!');
-                  })
-                  .catch(error => {
-                    console.log('err', error);
-                  });
-              })
-            }
-            this.setState({isLoading: false})
+          this.setState({isLoading: false})
         })
         .catch(err => {
             console.log("ERRO NA IMG", err)
@@ -149,18 +149,29 @@ class FotosItemScreen extends Component<Props> {
         })
     }
 
+    renderItem = ({ item }) => {
+      return (
+        <OptionItem
+          source={item.uri}
+        />
+      );
+    };
+
     render() {
         const { photos, isLoading } = this.state;
         const { idItem } = this.props.navigation.state.params;
 
         return <Container>
             <HeaderNav title={"Fotos Item #"+idItem} />
-            <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
+            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
                 {isLoading ? (
                     <ActivityIndicator color='blue' size='large' />
                   ) : (
                     <FlatList
                     data={photos}
+                    getItemLayout={(data, index) => (
+                      {length: 130, offset: 130 * index, index}
+                    )}
                     renderItem={({ item }) => (
                         <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
                             <Image style={{ justifyContent: 'center',
@@ -176,13 +187,18 @@ class FotosItemScreen extends Component<Props> {
                 />
                   )}
 
-                <Fab
+                {!isLoading ? (
+                  <Fab
                     position="bottomRight"
                     style={{ backgroundColor: "#13328c" }}
                     onPress={() => { this.pickImage() }}>
-                    <Icon name='md-camera'/>
-                </Fab>
-            </Content>
+                  <Icon name='md-camera'/>
+                  </Fab>
+                ) : (
+                  <View />
+                )}
+
+            </SafeAreaView>
             <Button
                 block
                 onPress={() => this.storePhotos()}
@@ -193,6 +209,26 @@ class FotosItemScreen extends Component<Props> {
             </Button>
         </Container>
     }
+}
+
+class OptionItem extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
+  render() {
+    const { source } = this.props;
+
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+          <Image style={{ justifyContent: 'center',
+              alignItems: 'center',
+              height: 130,
+              maxWidth:100
+          }} source={{ uri: source }} />
+      </View>
+    );
+  }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
