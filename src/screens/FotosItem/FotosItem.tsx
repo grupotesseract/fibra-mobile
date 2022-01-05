@@ -172,15 +172,7 @@ class FotosItemScreen extends Component<Props> {
                     getItemLayout={(data, index) => (
                       {length: 130, offset: 130 * index, index}
                     )}
-                    renderItem={({ item }) => (
-                        <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-                            <Image style={{ justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 130,
-                                maxWidth:100
-                            }} source={{ uri: item.uri }} />
-                        </View>
-                    )}
+                    renderItem={this.renderItem}
                     //Setting the number of column
                     numColumns={3}
                     keyExtractor={(item, index) => String(index)}
