@@ -67,7 +67,7 @@ class Login extends Component<Props, State> {
         <View padder>
           <Logo center size='xlg' />
 
-          <Text style={style.text}>42.6.0</Text>
+          <Text style={style.text}>42.6.0 - AMBIENTE DE TESTE!!</Text>
 
           <Form style={style.form}>
             <Item stackedLabel>
