@@ -24,6 +24,7 @@ import { Item, Planta } from '../../store/ducks/planta/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera } from 'expo-camera';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -50,7 +51,10 @@ class ManutencaoIluminacao extends Component<Props> {
   async componentDidMount() {
     // const { status } = await Permissions.askAsync(Permissions.CAMERA);
 
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    // const { status } = await BarCodeScanner.requestPermissionsAsync();
+    // this.setState({ hasCameraPermission: status === 'granted' });
+
+    const { status } = await Camera.requestCameraPermissionsAsync();
     this.setState({ hasCameraPermission: status === 'granted' });
 
     this.carregaItens();

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from "native-base";
-import { BarCodeScanner } from "expo-barcode-scanner";
+//import { BarCodeScanner } from "expo-barcode-scanner";
+import { Camera } from 'expo-camera';
 import { Dimensions } from "react-native";
 
 
@@ -24,7 +25,7 @@ export function QRCodeReader(props) {
     return (
 
         <View style={{zIndex:9, position: 'absolute', backgroundColor: 'black', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'flex-start', height: height}}>
-            <BarCodeScanner
+            <Camera
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
             style={StyleSheet.absoluteFillObject}
             />
