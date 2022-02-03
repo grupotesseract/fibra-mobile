@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
-import { Image, View, FlatList, Platform } from 'react-native';
+import { Image, View, FlatList, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 //import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
@@ -28,7 +28,8 @@ type Props = StateProps & DispatchProps
 
 class FotosItemScreen extends Component<Props> {
     state = {
-        photos: []
+        photos: [],
+        isLoading: false
     };
 
     setPhotos = (photos) => {
@@ -42,26 +43,45 @@ class FotosItemScreen extends Component<Props> {
         const { navigation } = this.props;
         const { idItem } = navigation.state.params;
 
+        this.setState({isLoading: true})
+
         ImagePicker.launchCameraAsync({quality: 0.2})
         .then(img => {
-            if (!img.cancelled) {
-              this.setPhotos([
-                  ...photos,
-                  img
-              ])
 
-              MediaLibrary.createAssetAsync(img.uri)
-              .then(asset => {
+          if (!img.cancelled) {
+            this.setPhotos([
+                ...photos,
+                img
+            ])
 
-                MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset)
-                  .then(() => {
-                    console.log('Album created!');
-                  })
-                  .catch(error => {
-                    console.log('err', error);
-                  });
+
+
+            MediaLibrary.createAssetAsync(img.uri)
+            .then(asset => {
+              MediaLibrary.getAlbumAsync('Iluminação Item '+idItem)
+              .then(album => {
+                if (!album) {
+                  MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
+                    .then(() => {
+                      console.log('Album created!');
+                    })
+                    .catch(error => {
+                      console.log('err', error);
+                    });
+                } else {
+                  MediaLibrary.addAssetsToAlbumAsync(asset, album, false)
+                    .then(() => {
+                      console.log('Asset inserted!');
+                    })
+                    .catch(error => {
+                      console.log('err', error);
+                    });
+                }
               })
-            }
+            })
+          }
+
+          this.setState({isLoading: false})
         })
         .catch(err => {
             console.log("ERRO NA IMG", err)
@@ -69,19 +89,19 @@ class FotosItemScreen extends Component<Props> {
     };
 
     componentDidMount() {
-        this.getPermissionAsync();
-        //this.getPermissionCameraRollAsync();
-        const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
-        const { idItem } = navigation.state.params;
-        const idProgramacao = plantaAtiva.proximaProgramacao.id;
+      this.getPermissionAsync();
+      //this.getPermissionCameraRollAsync();
+      const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
+      const { idItem } = navigation.state.params;
+      const idProgramacao = plantaAtiva.proximaProgramacao.id;
 
-        const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
-        if (programacaoRealizada) {
-            const fotosItem = programacaoRealizada.fotosItens?.find(fotoItem => fotoItem.id_item === idItem);
-            if (fotosItem) {
-                this.setPhotos(fotosItem.fotos);
-            }
-        }
+      const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
+      if (programacaoRealizada) {
+          const fotosItem = programacaoRealizada.fotosItens?.find(fotoItem => fotoItem.id_item === idItem);
+          if (fotosItem) {
+              this.setPhotos(fotosItem.fotos);
+          }
+      }
     }
 
     getPermissionAsync = async () => {
@@ -93,8 +113,29 @@ class FotosItemScreen extends Component<Props> {
         //     }
         // }
 
+        // if (Platform.OS !== 'web') {
+        //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        //   if (status !== 'granted') {
+        //     alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+        //   }
+        // }
+
         if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          const { status } = await ImagePicker.requestCameraPermissionsAsync();
+          if (status !== 'granted') {
+            alert('Permissão não foi concedida! A câmera não funcionará!');
+          }
+        }
+
+        // if (Platform.OS !== 'web') {
+        //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        //   if (status !== 'granted') {
+        //     alert('Permissão não foi concedida! A câmera não funcionará!');
+        //   }
+        // }
+
+        if (Platform.OS !== 'web') {
+          const { status } = await MediaLibrary.requestPermissionsAsync();
           if (status !== 'granted') {
             alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
           }
@@ -123,34 +164,48 @@ class FotosItemScreen extends Component<Props> {
         })
     }
 
+    renderItem = ({ item }) => {
+      return (
+        <OptionItem
+          source={item.uri}
+        />
+      );
+    };
+
     render() {
-        const { photos } = this.state;
+        const { photos, isLoading } = this.state;
         const { idItem } = this.props.navigation.state.params;
+
         return <Container>
             <HeaderNav title={"Fotos Item #"+idItem} />
-            <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
-                <FlatList
+            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
+                {isLoading ? (
+                    <ActivityIndicator color='blue' size='large' />
+                  ) : (
+                    <FlatList
                     data={photos}
-                    renderItem={({ item }) => (
-                        <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-                            <Image style={{ justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 130,
-                                maxWidth:100
-                            }} source={{ uri: item.uri }} />
-                        </View>
+                    getItemLayout={(item, index) => (
+                      {length: 130, offset: 130 * index, index}
                     )}
+                    renderItem={this.renderItem}
                     //Setting the number of column
                     numColumns={3}
                     keyExtractor={(item, index) => String(index)}
                 />
-                <Fab
+                  )}
+
+                {!isLoading ? (
+                  <Fab
                     position="bottomRight"
                     style={{ backgroundColor: "#13328c" }}
                     onPress={() => { this.pickImage() }}>
-                    <Icon name='md-camera'/>
-                </Fab>
-            </Content>
+                  <Icon name='md-camera'/>
+                  </Fab>
+                ) : (
+                  <View />
+                )}
+
+            </SafeAreaView>
             <Button
                 block
                 onPress={() => this.storePhotos()}
@@ -161,6 +216,26 @@ class FotosItemScreen extends Component<Props> {
             </Button>
         </Container>
     }
+}
+
+class OptionItem extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
+  render() {
+    const { source } = this.props;
+
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+          <Image style={{ justifyContent: 'center',
+              alignItems: 'center',
+              height: 130,
+              maxWidth:100
+          }} source={{ uri: source }} />
+      </View>
+    );
+  }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({

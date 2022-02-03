@@ -37,28 +37,12 @@ type Props = StateProps & DispatchProps;
 class EntradaMateriais extends Component<Props> {
   state = {
     materiais: [],
-    page: 0,
-  };
-
-  loadRepositories = async () => {
-    const { plantaAtiva } = this.props;
-    const { page } = this.state;
-    const { materiais } = this.state;
-    const entrada = plantaAtiva?.entrada || [];
-
-    let pageFrom = page + 1;
-    let pageTo = pageFrom + 3;
-
-    const entradaAux = materiais.concat(entrada.slice(pageFrom, pageTo));
-    this.setState({ materiais: entradaAux, page: pageTo + 1 });
   };
 
   componentDidMount() {
     const { plantaAtiva } = this.props;
-    const { page } = this.state;
     const entrada = plantaAtiva?.entrada || [];
-    const entradaAux = entrada.slice(0, page + 6);
-    this.setState({ materiais: entradaAux, page: page + 6 });
+    this.setState({ materiais: entrada });
   }
 
   concluiEntrada = async () => {
@@ -124,10 +108,6 @@ class EntradaMateriais extends Component<Props> {
           <FlatList
             data={materiais}
             removeClippedSubviews={true}
-            initialNumToRender={3}
-            maxToRenderPerBatch={3}
-            onEndReachedThreshold={0.1}
-            onEndReached={this.loadRepositories}
             renderItem={this.renderItem}
             keyExtractor={(item) => item.id}
           ></FlatList>
