@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text, Container, Button, Content, Icon, Fab } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
-import { Image, View, FlatList, Platform } from 'react-native';
+import { Image, View, FlatList, Platform, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NavigationScreenProp } from 'react-navigation';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
@@ -51,18 +51,34 @@ class FotosRDO extends Component<Props> {
           MediaLibrary.createAssetAsync(img.uri)
           .then(asset => {
 
-            MediaLibrary.createAlbumAsync('RDO Planta '+rdoAtual.plantaSelecionadaId, asset, false)
-              .then(() => {
-                console.log('Album created!');
+            MediaLibrary.getAlbumAsync('RDO Planta '+rdoAtual.plantaSelecionadaId)
+              .then(album => {
+                if (!album) {
+                  MediaLibrary.createAlbumAsync('RDO Planta '+rdoAtual.plantaSelecionadaId, asset, false)
+                    .then(() => {
+                      console.log('Album created!');
+                    })
+                    .catch(error => {
+                      alert('Erro ao criar novo album ' + error);
+                      console.log('err', error);
+                    });
+                } else {
+                  MediaLibrary.addAssetsToAlbumAsync(asset, album, false)
+                    .then(() => {
+                      console.log('Asset inserted!');
+                    })
+                    .catch(error => {
+                      alert('Erro ao adicionar foto no álbum ' + error);
+                      console.log('Erro ao adicionar foto no álbum', error);
+                    });
+                }
               })
-              .catch(error => {
-                console.log('err', error);
-              });
           })
         }
       })
       .catch(err => {
-          console.log("ERRO NA IMG", err)
+        alert('Erro ao tirar foto ' + err);
+        console.log("ERRO NA IMG", err)
       })
     };
 
@@ -91,26 +107,46 @@ class FotosRDO extends Component<Props> {
     //   }
     // }
 
-    if (Platform.OS !== 'web') {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! A câmera não funcionará!');
+    const imagePickerStatus  = await ImagePicker.getCameraPermissionsAsync();
+    console.log('imagePickerStatus', imagePickerStatus);
+    if (imagePickerStatus.status !== 'granted') {
+      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
+      if (Platform.OS !== 'web') {
+        const { status, expires } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão não foi concedida! A câmera não funcionará!');
+        }
+
+        if (expires !== 'never') {
+          alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+        }
       }
     }
 
-    if (Platform.OS !== 'web') {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! A câmera não funcionará!');
+
+    // if (Platform.OS !== 'web') {
+    //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //   if (status !== 'granted') {
+    //     alert('Permissão não foi concedida! A câmera não funcionará!');
+    //   }
+    // }
+
+    const mediaLibrarystatus  = await MediaLibrary.getPermissionsAsync();
+    console.log('mediaLibrarystatus', mediaLibrarystatus);
+    if (mediaLibrarystatus.status !== 'granted') {
+      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
+      if (Platform.OS !== 'web') {
+        const { status, expires } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+        }
+
+        if (expires !== 'never') {
+          alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+        }
       }
     }
 
-    if (Platform.OS !== 'web') {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-      }
-    }
 
     const { rdoAtual } = this.props;
     const photos = rdoAtual.fotos;
@@ -123,7 +159,7 @@ class FotosRDO extends Component<Props> {
         const { photos } = this.state;
         return <Container>
             <HeaderNav title={"Fotos RDO"} />
-            <Content padder contentContainerStyle={{ flex: 1, flexDirection: 'row' }}>
+            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
                 <FlatList
                     data={photos}
                     renderItem={({ item }) => (
@@ -145,7 +181,7 @@ class FotosRDO extends Component<Props> {
                     onPress={() => { this.pickImage() }}>
                     <Icon name='md-camera'/>
                 </Fab>
-            </Content>
+            </SafeAreaView>
             <Button
                 block
                 onPress={() => this.storePhotos()}

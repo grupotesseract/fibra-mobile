@@ -56,26 +56,42 @@ class FotosItemScreen extends Component<Props> {
 
             MediaLibrary.createAssetAsync(img.uri)
             .then(asset => {
-              MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
-                .then(() => {
-                  console.log('Album created!');
-                })
-                .catch(error => {
-                  console.log('err', error);
-                });
+
+              MediaLibrary.getAlbumAsync('Iluminação Item '+idItem)
+              .then(album => {
+                if (!album) {
+                  MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
+                    .then(() => {
+                      console.log('Album created!');
+                    })
+                    .catch(error => {
+                      alert('Erro ao criar novo album ' + error);
+                    });
+                } else {
+                  MediaLibrary.addAssetsToAlbumAsync(asset, album, false)
+                    .then(() => {
+                      console.log('Asset inserted!');
+                    })
+                    .catch(error => {
+                      alert('Erro ao adicionar foto no álbum ' + error);
+                      console.log('err', error);
+                    });
+                }
+              })
             })
           }
 
           this.setState({isLoading: false})
         })
         .catch(err => {
-            console.log("ERRO NA IMG", err)
+          alert('Erro ao tirar foto ' + err);
+          console.log("ERRO NA IMG", err);
+          this.setState({isLoading: false});
         })
     };
 
     componentDidMount() {
       this.getPermissionAsync();
-      //this.getPermissionCameraRollAsync();
       const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
       const { idItem } = navigation.state.params;
       const idProgramacao = plantaAtiva.proximaProgramacao.id;
@@ -90,49 +106,39 @@ class FotosItemScreen extends Component<Props> {
     }
 
     getPermissionAsync = async () => {
-        // const platform = '';
-        // if (platform === 'ios') {
-        //     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        //     if (status !== 'granted') {
-        //         alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-        //     }
-        // }
-
-        // if (Platform.OS !== 'web') {
-        //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        //   if (status !== 'granted') {
-        //     alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-        //   }
-        // }
-
+      const imagePickerStatus  = await ImagePicker.getCameraPermissionsAsync();
+      console.log('imagePickerStatus', imagePickerStatus);
+      if (imagePickerStatus.status !== 'granted') {
+        alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
         if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestCameraPermissionsAsync();
+          const { status, expires } = await ImagePicker.requestCameraPermissionsAsync();
           if (status !== 'granted') {
             alert('Permissão não foi concedida! A câmera não funcionará!');
           }
-        }
 
-        if (Platform.OS !== 'web') {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Permissão não foi concedida! A câmera não funcionará!');
+          if (expires !== 'never') {
+            alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
           }
         }
+      }
 
+
+      const mediaLibrarystatus  = await MediaLibrary.getPermissionsAsync();
+      console.log('mediaLibrarystatus', mediaLibrarystatus);
+      if (mediaLibrarystatus.status !== 'granted') {
+        alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
         if (Platform.OS !== 'web') {
-          const { status } = await MediaLibrary.requestPermissionsAsync();
+          const { status, expires } = await MediaLibrary.requestPermissionsAsync();
           if (status !== 'granted') {
             alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
           }
-        }
-    }
 
-    // getPermissionCameraRollAsync = async () => {
-    //   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    //   if (status !== 'granted') {
-    //     alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-    //   }
-    // }
+          if (expires !== 'never') {
+            alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+          }
+        }
+      }
+    }
 
     storePhotos = async () => {
         const { navigation, plantaAtiva, armazenaFotos } = this.props;
