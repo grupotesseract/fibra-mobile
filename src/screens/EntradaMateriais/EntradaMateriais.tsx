@@ -107,7 +107,6 @@ class EntradaMateriais extends Component<Props> {
         >
           <FlatList
             data={materiais}
-            removeClippedSubviews={true}
             renderItem={this.renderItem}
             keyExtractor={(item) => item.id}
           ></FlatList>
