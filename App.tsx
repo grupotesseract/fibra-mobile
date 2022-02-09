@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppLoading } from 'expo'
+import  AppLoading from 'expo-app-loading'
 import { Container, StyleProvider } from 'native-base'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
@@ -9,7 +9,7 @@ import material from './src/theme/variables/material'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './src/store'
-import { YellowBox } from 'react-native'
+import { LogBox } from 'react-native'
 
 export default class App extends React.Component {
 
@@ -31,7 +31,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    YellowBox.ignoreWarnings(['Remote debugger'])
+    LogBox.ignoreLogs(['Remote debugger'])
 
     if (!this.state.isReady) {
       return <AppLoading/>

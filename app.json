@@ -1,14 +1,10 @@
 {
   "expo": {
-    "name": "Fibra",
-    "slug": "fibra-mobile",
+    "name": "Fibra 42 Bauru",
+    "slug": "fibra-mobile-42-bauru",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "owner": "tesseract",
+    "platforms": ["ios", "android", "web"],
     "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,22 +16,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "assets/*"
-    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tesseract.fibramobile",
+      "bundleIdentifier": "com.tesseract.fibramobile42bauru",
       "buildNumber": "1.0",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to scan QRCodes to identify rooms (itens)."
       }
     },
     "android": {
-      "versionCode": 3,
-      "package": "com.tesseract.fibramobile"
+      "versionCode": 11,
+      "package": "com.tesseract.fibramobile42bauru"
     },
-    "androidStatusBarColor": "#1d2781",
     "androidStatusBar": {
       "backgroundColor": "#1d2781",
       "barStyle": "light-content"

@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardItem, Text, Body, Item, Left, Label, Right, Button, Picker, Icon, View } from 'native-base';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import {
+  Card,
+  CardItem,
+  Text,
+  Body,
+  Item,
+  Left,
+  Label,
+  Right,
+  Button,
+  Picker,
+  Icon,
+  View,
+} from 'native-base';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import NumericInput from 'react-native-numeric-input';
 import { ApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-
-const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) => {
+const IncluirMaterialAoItem = ({
+  estoque,
+  incluirMaterial,
+  cancelarInclusao,
+}) => {
   const [materialId, setMaterialId] = useState(null);
   const [materialSelecionado, setMaterialSelecionado] = useState(null);
   const [quantidade, setQuantidade] = useState(0);
@@ -15,7 +31,9 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
   const [quantidadeReator, setQuantidadeReator] = useState(0);
 
   useEffect(() => {
-    const selecionado = estoque.find( materialEstoque => materialEstoque.id === materialId)
+    const selecionado = estoque.find(
+      (materialEstoque) => materialEstoque.id === materialId
+    );
     setMaterialSelecionado(selecionado);
   }, [materialId]);
 
@@ -25,49 +43,48 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
       quantidadeInstalada: quantidade,
       quantidadeBase: quantidadeBase,
       quantidadeReator: quantidadeReator,
-      novoMaterial: true
-    })
-  }
+      novoMaterial: true,
+    });
+  };
 
   return (
-    <Card key={"novoitem-" + materialId}>
+    <Card key={'novoitem-' + materialId}>
       <CardItem header bordered style={{ justifyContent: 'space-between' }}>
         <Text>Incluir material</Text>
         <Button transparent onPress={cancelarInclusao}>
-          <Icon name="md-close" />
+          <Icon name='md-close' />
         </Button>
       </CardItem>
       <CardItem>
         <Body>
-          <Item picker>
+          <Item picker style={{ width: '100%', height: 50, marginBottom: 3 }}>
             <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ width: "100%" }}
-              placeholder="Escolha um material"
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
+              mode='dropdown'
+              iosIcon={<Icon name='arrow-down' />}
+              placeholder='Escolha um material'
+              placeholderStyle={{ color: '#bfc6ea' }}
+              placeholderIconColor='#007aff'
               selectedValue={materialId}
-              onValueChange={m => setMaterialId(m)}
+              onValueChange={(m) => setMaterialId(m)}
             >
-              {estoque.map(material => {
+              {estoque.map((material) => {
                 const label =
                   (material.tipoMaterialTipo
                     ? material.tipoMaterialTipo.substring(0, 3)
-                    : "") +
-                  " " +
-                  (material.tipoMaterialAbreviacao || "") +
-                  " " +
-                  (material.potencia ? material.potencia + "W" : "") +
-                  " " +
-                  (material.tensao ? material.tensao + "V" : "") +
-                  " " +
-                  (material.base || "") +
-                  " " +
-                  (material.reator || "") +
-                  " " +
-                  (material.nome || "") +
-                  " ";
+                    : '') +
+                  ' ' +
+                  (material.tipoMaterialAbreviacao || '') +
+                  ' ' +
+                  (material.potencia ? material.potencia + 'W' : '') +
+                  ' ' +
+                  (material.tensao ? material.tensao + 'V' : '') +
+                  ' ' +
+                  (material.base || '') +
+                  ' ' +
+                  (material.reator || '') +
+                  ' ' +
+                  (material.nome || '') +
+                  ' ';
                 return <Picker.Item label={label} value={material.id} />;
               })}
             </Picker>
@@ -79,7 +96,7 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
                   marginBottom: 5,
                   borderBottomWidth: 0,
                   paddingBottom: 5,
-                  paddingTop: 5
+                  paddingTop: 5,
                 }}
               >
                 {materialSelecionado.tipoMaterialTipo && (
@@ -103,7 +120,13 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
               </View>
             </Item>
           )}
-          <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+          <Item
+            style={{
+              borderBottomWidth: 0,
+              borderTopWidth: 0,
+              marginVertical: 3,
+            }}
+          >
             <Left>
               <Label>Qtd. Instalada:</Label>
             </Left>
@@ -119,8 +142,14 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
             </Right>
           </Item>
 
-          {materialSelecionado && materialSelecionado.base &&
-            <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+          {materialSelecionado && materialSelecionado.base && (
+            <Item
+              style={{
+                borderBottomWidth: 0,
+                borderTopWidth: 0,
+                marginVertical: 3,
+              }}
+            >
               <Left>
                 <Label>Qtd. Base:</Label>
               </Left>
@@ -135,8 +164,8 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
                 />
               </Right>
             </Item>
-          }
-          {materialSelecionado && materialSelecionado.reator &&
+          )}
+          {materialSelecionado && materialSelecionado.reator && (
             <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
               <Left>
                 <Label>Qtd. Reator:</Label>
@@ -152,10 +181,10 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
                 />
               </Right>
             </Item>
-          }
+          )}
         </Body>
       </CardItem>
-      <CardItem footer bordered style={{ flexDirection: "column" }}>
+      <CardItem footer bordered style={{ flexDirection: 'column' }}>
         <Item style={{ borderBottomWidth: 0 }}>
           <Button
             small
@@ -169,7 +198,7 @@ const IncluirMaterialAoItem = ({ estoque, incluirMaterial, cancelarInclusao }) =
       </CardItem>
     </Card>
   );
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => {
   const { plantaAtiva } = state.plantaReducer;
@@ -177,9 +206,12 @@ const mapStateToProps = (state: ApplicationState) => {
   return {
     estoque,
   };
-}
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(IncluirMaterialAoItem)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IncluirMaterialAoItem);

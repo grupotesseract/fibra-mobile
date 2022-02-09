@@ -1,66 +1,79 @@
 import React, { Component } from 'react';
-import { Container, Content, Button, Text,  Icon, Form, Picker, Item, Label, Toast } from 'native-base';
+import {
+  Container,
+  Content,
+  Button,
+  Text,
+  Icon,
+  Form,
+  Picker,
+  Item,
+  Label,
+  Toast,
+} from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as PlantaActions from '../../store/ducks/planta/actions'
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import * as PlantaActions from '../../store/ducks/planta/actions';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../store/ducks/empresas/types';
-import { ApplicationState } from '../../store'
+import { ApplicationState } from '../../store';
 import { Planta } from '../../store/ducks/planta/types';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
-  empresas: EmpresasState,
-  navigation: NavigationScreenProp<any, any>,
+  empresas: EmpresasState;
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  setPlantaAtiva(planta: Planta): void,
-  addProgramacao(programacao: ProgramacaoRealizada): void,
+  setPlantaAtiva(planta: Planta): void;
+  addProgramacao(programacao: ProgramacaoRealizada): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 interface State {
-  empresaSelecionada: number
-  plantaSelecionada: Planta
+  empresaSelecionada: number;
+  plantaSelecionada: Planta;
 }
 
 class SelecionaPlanta extends Component<Props, State> {
   state = {
     empresaSelecionada: 0,
     plantaSelecionada: null,
-    empresas: []
-  }
+    empresas: [],
+  };
 
   selectEmpresa = (empresaSelecionada: number) => {
     this.setState({
       empresaSelecionada,
-      plantaSelecionada: null
+      plantaSelecionada: null,
     });
-  }
+  };
 
   selectPlanta = (idPlantaSelecionada: number) => {
     const { empresaSelecionada } = this.state;
     const plantas = this.getPlantasFromEmpresa(empresaSelecionada);
-    const plantaSelecionada = plantas.find(planta => planta.id === idPlantaSelecionada)
+    const plantaSelecionada = plantas.find(
+      (planta) => planta.id === idPlantaSelecionada
+    );
     this.setState({ plantaSelecionada });
-  }
+  };
 
   getPlantasFromEmpresa = (idEmpresa: number) => {
-    const { empresas } = this.props
+    const { empresas } = this.props;
     const { listaEmpresas } = empresas;
-    if(!listaEmpresas || !Array.isArray(listaEmpresas)) {
+    if (!listaEmpresas || !Array.isArray(listaEmpresas)) {
       return [];
     }
-    const empresa = listaEmpresas.find(empresa => empresa.id === idEmpresa);
-    if(!empresa) {
+    const empresa = listaEmpresas.find((empresa) => empresa.id === idEmpresa);
+    if (!empresa) {
       return [];
     }
     return empresa.plantas;
-  }
+  };
 
   iniciaManutencao = async () => {
     const { navigation, setPlantaAtiva, addProgramacao } = this.props;
@@ -86,18 +99,18 @@ class SelecionaPlanta extends Component<Props, State> {
 
       navigation.navigate('ConfirmarPeriodoManutencao');
     }
-  }
+  };
 
   render() {
     const { empresaSelecionada, plantaSelecionada } = this.state;
     const { empresas } = this.props;
     const { listaEmpresas } = empresas;
 
-    if((listaEmpresas || []).length === 0) {
+    if ((listaEmpresas || []).length === 0) {
       return (
         <Container>
-          <HeaderNav title="Selecionar Planta"/>
-          <Content padder >
+          <HeaderNav title='Selecionar Planta' />
+          <Content padder>
             <Text> Nenhuma planta disponível para seleção </Text>
           </Content>
         </Container>
@@ -106,71 +119,89 @@ class SelecionaPlanta extends Component<Props, State> {
 
     return (
       <Container>
-
-        <HeaderNav title="Selecionar Planta"/>
-        <Content padder contentContainerStyle={{ flex:1, flexDirection:'column', justifyContent: 'space-between'}}>
+        <HeaderNav title='Selecionar Planta' />
+        <Content
+          padder
+          contentContainerStyle={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
           <Form>
-            <Item>
+            <Item style={{ height: 50 }}>
               <Label>Empresa</Label>
               <Picker
-                mode="dropdown"
-                placeholder="Selecione uma empresa"
-                iosHeader="Selecione uma empresa"
-                iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
+                mode='dropdown'
+                placeholder='Selecione uma empresa'
+                iosHeader='Selecione uma empresa'
+                iosIcon={<Icon name='arrow-down' />}
                 selectedValue={empresaSelecionada}
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
-                <Picker.Item
-                  label="Selecione uma empresa"
-                  value='0'
-                  key={0}
-                />
-                { Array.isArray(listaEmpresas) &&
-                  listaEmpresas.length > 0
-                  ?
-                  listaEmpresas.map(empresa => {
-                  return <Picker.Item
-                    label={empresa.nome}
-                    value={empresa.id}
-                    key={empresa.id}
-                  />
-                  }
-                  ):(<>
+                <Picker.Item label='Selecione uma empresa' value='0' key={0} />
+                <Picker.Item label='Selecione uma empresa' value='999' key={999} />
+                {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
+                  listaEmpresas.map((empresa) => {
+                    return (
+                      <Picker.Item
+                        label={empresa.nome}
+                        value={empresa.id}
+                        key={empresa.id}
+                      />
+                    );
+                  })
+                ) : (
+                  <>
                     <Picker.Item
-                      label="Nenhuma empresa carregada"
+                      label='Nenhuma empresa carregada'
                       value='0'
                       key={0}
                     />
-                  </>)
-                }
+                  </>
+                )}
               </Picker>
             </Item>
-            <Item>
+            <Item style={{ height: 50 }}>
               <Label>Planta</Label>
               <Picker
-                mode="dropdown"
-                placeholder="Selecione uma planta"
-                iosHeader="Selecione uma planta"
-                iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
+                mode='dropdown'
+                placeholder='Selecione uma planta'
+                iosHeader='Selecione uma planta'
+                iosIcon={<Icon name='arrow-down' />}
                 selectedValue={plantaSelecionada?.id}
                 onValueChange={(value) => this.selectPlanta(value)}
               >
-                { this.getPlantasFromEmpresa(empresaSelecionada).map(planta =>
-                  <Picker.Item
-                    label={planta.nome}
-                    value={planta.id}
-                    key={planta.id}
-                  />
+                <Picker.Item label='Selecione uma planta' value='0' key={0} />
+                <Picker.Item label='Selecione uma planta' value='999' key={999} />
+                {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
+                  this.getPlantasFromEmpresa(empresaSelecionada).map(
+                    (planta) => (
+                      <Picker.Item
+                        label={planta.nome}
+                        value={planta.id}
+                        key={planta.id}
+                      />
+                    )
+                  )
+                ) : (
+                  <>
+                    <Picker.Item
+                      label='Nenhuma empresa carregada'
+                      value='0'
+                      key={0}
+                    />
+                  </>
                 )}
+
               </Picker>
             </Item>
           </Form>
           <Button
             block
-            disabled={(empresaSelecionada === null)}
-            onPress={() => this.iniciaManutencao()}>
+            disabled={empresaSelecionada === null}
+            onPress={() => this.iniciaManutencao()}
+          >
             <Text>Iniciar manutenção</Text>
           </Button>
         </Content>
@@ -181,9 +212,12 @@ class SelecionaPlanta extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   empresas: state.empresasReducer,
-})
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(Object.assign({}, PlantaActions, ProgramacoesActions), dispatch);
+  bindActionCreators(
+    Object.assign({}, PlantaActions, ProgramacoesActions),
+    dispatch
+  );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta)
+export default connect(mapStateToProps, mapDispatchToProps)(SelecionaPlanta);
