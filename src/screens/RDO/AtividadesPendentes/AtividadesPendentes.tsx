@@ -6,7 +6,8 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
-import { Clipboard, Alert } from 'react-native';
+import { Alert } from 'react-native';
+import * as Clipboard from 'expo-clipboard'
 
 interface StateProps {
   empresas: EmpresasState,
@@ -19,7 +20,7 @@ class AtividadesPendentes extends Component<Props> {
 
   writeToClipboard = async (texto) => {
     await Clipboard.setString(texto);
-    Alert.alert('Texto copiado','Copiado para a área de transferência!');
+    Alert.alert('Texto copiado', 'Copiado para a área de transferência!');
   };
 
 
@@ -39,7 +40,7 @@ class AtividadesPendentes extends Component<Props> {
 
     return (
       <Container>
-        <HeaderNav title="Atividades Pendentes"/>
+        <HeaderNav title="Atividades Pendentes" />
 
         <Content padder>
           <List>
@@ -50,7 +51,7 @@ class AtividadesPendentes extends Component<Props> {
                   <Icon
                     type="AntDesign"
                     name="checkcircle"
-                    style={{color: 'grey', padding: 5}}
+                    style={{ color: 'grey', padding: 5 }}
                     onPress={() => this.writeToClipboard(atividadePendente.texto)}
                   />
                 </ListItem>
