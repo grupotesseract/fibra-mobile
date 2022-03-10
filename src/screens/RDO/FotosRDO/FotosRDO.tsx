@@ -59,6 +59,7 @@ class FotosRDO extends Component<Props> {
                       console.log('Album created!');
                     })
                     .catch(error => {
+                      alert('Erro ao criar novo album ' + error);
                       console.log('err', error);
                     });
                 } else {
@@ -67,7 +68,8 @@ class FotosRDO extends Component<Props> {
                       console.log('Asset inserted!');
                     })
                     .catch(error => {
-                      console.log('err', error);
+                      alert('Erro ao adicionar foto no álbum ' + error);
+                      console.log('Erro ao adicionar foto no álbum', error);
                     });
                 }
               })
@@ -75,7 +77,8 @@ class FotosRDO extends Component<Props> {
         }
       })
       .catch(err => {
-          console.log("ERRO NA IMG", err)
+        alert('Erro ao tirar foto ' + err);
+        console.log("ERRO NA IMG", err)
       })
     };
 
@@ -104,12 +107,22 @@ class FotosRDO extends Component<Props> {
     //   }
     // }
 
-    if (Platform.OS !== 'web') {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! A câmera não funcionará!');
+    const imagePickerStatus  = await ImagePicker.getCameraPermissionsAsync();
+    console.log('imagePickerStatus', imagePickerStatus);
+    if (imagePickerStatus.status !== 'granted') {
+      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
+      if (Platform.OS !== 'web') {
+        const { status, expires } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão não foi concedida! A câmera não funcionará!');
+        }
+
+        if (expires !== 'never') {
+          alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+        }
       }
     }
+
 
     // if (Platform.OS !== 'web') {
     //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -118,12 +131,22 @@ class FotosRDO extends Component<Props> {
     //   }
     // }
 
-    if (Platform.OS !== 'web') {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+    const mediaLibrarystatus  = await MediaLibrary.getPermissionsAsync();
+    console.log('mediaLibrarystatus', mediaLibrarystatus);
+    if (mediaLibrarystatus.status !== 'granted') {
+      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
+      if (Platform.OS !== 'web') {
+        const { status, expires } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
+        }
+
+        if (expires !== 'never') {
+          alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+        }
       }
     }
+
 
     const { rdoAtual } = this.props;
     const photos = rdoAtual.fotos;

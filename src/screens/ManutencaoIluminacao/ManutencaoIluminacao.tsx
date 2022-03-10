@@ -51,11 +51,19 @@ class ManutencaoIluminacao extends Component<Props> {
   async componentDidMount() {
     // const { status } = await Permissions.askAsync(Permissions.CAMERA);
 
-    // const { status } = await BarCodeScanner.requestPermissionsAsync();
-    // this.setState({ hasCameraPermission: status === 'granted' });
+    const imagePickerStatus  = await BarCodeScanner.getPermissionsAsync();
 
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    this.setState({ hasCameraPermission: status === 'granted' });
+    if (imagePickerStatus.status !== 'granted') {
+      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
+      const { status, expires } = await BarCodeScanner.requestPermissionsAsync();
+      this.setState({ hasCameraPermission: status === 'granted' });
+
+      if (expires !== 'never') {
+        alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+      }
+    }
+
+
 
     this.carregaItens();
   }
