@@ -122,7 +122,6 @@ class SelecionaPlantaRDO extends Component<Props, State> {
                 onValueChange={(value) => this.selectEmpresa(value)}
               >
                 <Picker.Item label='Selecione uma empresa' value='0' key={0} />
-                <Picker.Item label='Selecione uma empresa' value='999' key={999} />
                 {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
                   listaEmpresas.map((empresa) => {
                     return (
@@ -156,7 +155,6 @@ class SelecionaPlantaRDO extends Component<Props, State> {
                 onValueChange={(value) => this.selectPlanta(value)}
               >
                 <Picker.Item label='Selecione uma planta' value='0' key={0} />
-                <Picker.Item label='Selecione uma planta' value='999' key={999} />
                 {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
                   this.getPlantasFromEmpresa(empresaSelecionada).map(
                     (planta) => (

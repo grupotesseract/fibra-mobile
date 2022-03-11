@@ -23,7 +23,6 @@ class HeaderNav extends React.Component<Props> {
         <Header>
           <Left>
             <Button
-              hasText
               onPress={() => { navigation.goBack() }}
             >
               <Icon name='arrow-back' />
