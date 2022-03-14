@@ -9,11 +9,12 @@ const ActionButton = (props) => {
   } = props
 
   return (
-    <Button {...restProps}>
+    <Button size='lg' rounded={0} {...restProps}>
       {loading && <Spinner color='white' />}
       {children}
     </Button>
   )
 }
+
 
 export default ActionButton

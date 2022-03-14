@@ -1,5 +1,5 @@
 import React from "react";
-import { Root } from "native-base";
+import { Box, Button, Container, NativeBaseProvider, Text } from "native-base";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { PersistGate } from 'redux-persist/integration/react'
@@ -36,6 +36,7 @@ import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesR
 import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
 import AtividadesPendentes from "./screens/RDO/AtividadesPendentes/AtividadesPendentes";
 import TodosMateriaisItem from "./screens/ManutencaoIluminacao/TodosMateriaisItem";
+
 
 const AuthStack = createStackNavigator(
   {
@@ -78,11 +79,12 @@ const AuthStack = createStackNavigator(
 
 const AppContainer = createAppContainer(AuthStack);
 
-export default () =>
+export default () => {
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <Root>
-        <AppContainer />
-      </Root>
-    </PersistGate>
-  </Provider>;
+  return (
+    <Box flex={1}>
+      <AppContainer />
+    </Box>
+
+  )
+}

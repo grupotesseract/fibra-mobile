@@ -1,16 +1,15 @@
 import React from 'react';
-import { Header, Left } from 'native-base';
+import { Box } from 'native-base';
 import { Platform, StatusBar, StyleSheet } from 'react-native';
 
 import Logo from './Logo';
 
 const HeaderLogo = () => {
   return (
-    <Header transparent style={styles.header}>
-      <Left>
-        <Logo size='xlg' />
-      </Left>
-    </Header>
+    <Box>
+      <Box safeAreaTop bg="#6200ee" />
+      <Logo size='xlg' />
+    </Box>
   );
 };
 
