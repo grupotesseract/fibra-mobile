@@ -1,4 +1,4 @@
-import { Button, Spinner } from 'native-base'
+import { Button } from 'native-base'
 import React from 'react'
 
 const ActionButton = (props) => {
@@ -9,8 +9,15 @@ const ActionButton = (props) => {
   } = props
 
   return (
-    <Button size='lg' rounded={0} {...restProps}>
-      {loading && <Spinner color='white' />}
+    <Button _loading={{
+      bg: "primary",
+      opacity: '100',
+      _text: {
+        color: "white"
+      }
+    }} _spinner={{
+      color: "white"
+    }} size='lg' rounded={0} {...restProps}>
       {children}
     </Button>
   )

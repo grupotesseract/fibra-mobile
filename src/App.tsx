@@ -1,9 +1,7 @@
 import React from "react";
-import { Box, Button, Container, NativeBaseProvider, Text } from "native-base";
+import { Box } from "native-base";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import { PersistGate } from 'redux-persist/integration/react'
-import { Provider } from "react-redux";
 
 import Login from './screens/Login/Login';
 import Menu from './screens/Menu/Menu';
@@ -21,7 +19,6 @@ import ScanQRCodeReader from "./screens/ManutencaoIluminacao/ScanQRCodeReader";
 import ComentariosGerais from "./screens/ComentariosGerais/ComentariosGerais";
 import ManutencaoItem from "./screens/ManutencaoIluminacao/ManutencaoItem";
 import Colaboradores from "./screens/Colaboradores/Colaboradores";
-import { store, persistor } from "./store";
 import SyncEmpresas from "./screens/SyncEmpresas/SyncEmpresas";
 import Programacoes from "./screens/Programacoes/Programacoes";
 import FotosItemScreen from "./screens/FotosItem/FotosItem";
@@ -72,7 +69,7 @@ const AuthStack = createStackNavigator(
     TodosMateriaisItem: { screen: TodosMateriaisItem },
   },
   {
-    headerMode: 'none',
+    headerMode: "none",
     initialRouteName: "Login",
   }
 );
@@ -80,7 +77,6 @@ const AuthStack = createStackNavigator(
 const AppContainer = createAppContainer(AuthStack);
 
 export default () => {
-  <Provider store={store}>
   return (
     <Box flex={1}>
       <AppContainer />

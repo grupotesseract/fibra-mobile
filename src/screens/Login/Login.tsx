@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Form, Input, Item, Label, Text, View } from 'native-base';
-import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { NavigationAction } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import ActionButton from '../../components/ActionButton';
 import Logo from '../../components/Logo';
 import { ApplicationState } from '../../store';
 import * as AuthActions from '../../store/ducks/auth/actions';
 import { AuthState, LoginData } from '../../store/ducks/auth/types';
 import { checkAuth } from '../../utils/authNavigation';
+import { Center, FormControl, Input, Stack, Text } from 'native-base';
+import { KeyboardAvoidingView, StyleSheet } from 'react-native';
+import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
   auth: AuthState;
@@ -63,44 +62,47 @@ class Login extends Component<Props, State> {
     const { auth } = this.props;
 
     return (
-      <KeyboardAvoidingView behavior='padding' style={style.container}>
-        <View padder>
-          <Logo center size='xlg' />
 
-          <Text style={style.text}>44.0.0</Text>
+      <Center flex={1}>
+        <KeyboardAvoidingView behavior='padding'>
+          <Stack>
+            <Logo center size='xlg' />
 
-          <Form style={style.form}>
-            <Item stackedLabel>
-              <Label>Usuário</Label>
-              <Input
-                value={user}
-                autoCapitalize='none'
-                onChangeText={(user) => this.setState({ user })}
-              />
-            </Item>
+            <Text style={style.text}>44.0.0</Text>
 
-            <Item stackedLabel>
-              <Label>Senha</Label>
-              <Input
-                value={password}
-                secureTextEntry={true}
-                onChangeText={(password) => this.setState({ password })}
-              />
-            </Item>
-          </Form>
-
-          {auth.error && <Text>Usuário ou senha incorretos.</Text>}
-
-          <ActionButton
-            block
-            onPress={() => this.authLogin()}
-            style={style.buttonLogin}
-            loading={auth.loading}
-          >
-            <Text>Login</Text>
-          </ActionButton>
-        </View>
-      </KeyboardAvoidingView>
+            <FormControl mt={10}>
+              <Stack space={4}>
+                <Stack>
+                  <FormControl.Label>Usuário</FormControl.Label>
+                  <Input
+                    padding={0}
+                    value={user}
+                    autoCapitalize='none'
+                    onChangeText={(user) => this.setState({ user })}
+                  />
+                </Stack>
+                <Stack>
+                  <FormControl.Label>Senha</FormControl.Label>
+                  <Input
+                    padding={0}
+                    value={password}
+                    secureTextEntry={true}
+                    onChangeText={(password) => this.setState({ password })}
+                  />
+                </Stack>
+                {auth.error && <Text>Usuário ou senha incorretos.</Text>}
+              </Stack>
+            </FormControl>
+            <ActionButton
+              block
+              onPress={() => this.authLogin()}
+              mt={60}
+              isLoading={auth.loading}
+            > Login
+            </ActionButton>
+          </Stack>
+        </KeyboardAvoidingView>
+      </Center >
     );
   }
 }
@@ -115,27 +117,11 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
-    paddingTop: 0,
-  },
-  form: {
-    marginTop: 40,
-  },
-  buttonLogin: {
-    marginTop: 60,
-    justifyContent: 'center',
-  },
   text: {
     fontWeight: '300',
     fontSize: 16,
     marginTop: 10,
     marginBottom: 30,
     textAlign: 'center',
-  },
-  logo: {
-    resizeMode: 'contain',
   },
 });

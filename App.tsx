@@ -25,7 +25,6 @@ const App = () => {
         ...Ionicons.font,
       })
       setIsReady(true)
-      console.log('app carregado');
 
     }
     carregaFontes()
