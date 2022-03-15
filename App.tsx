@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import AppLoading from 'expo-app-loading'
-import { Button, NativeBaseProvider, Text, Box } from 'native-base'
+import { NativeBaseProvider } from 'native-base'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
 import AppRoutes from './src/App'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { store, persistor } from './src/store'
-import { LogBox } from 'react-native'
 import customTheme from './src/theme/customTheme'
 
 

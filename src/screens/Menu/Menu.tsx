@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Icon, Text, View } from 'native-base'
+import { Icon, Box, Stack } from 'native-base'
 import { NavigationScreenProp } from 'react-navigation'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
@@ -8,7 +8,9 @@ import HeaderLogo from '../../components/HeaderLogo'
 import * as AuthActions from '../../store/ducks/auth/actions'
 import { AuthState } from '../../store/ducks/auth/types'
 import { checkAuth } from '../../utils/authNavigation'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import MenuItem from '../../components/MenuItem'
+import brandColors from '../../theme/brandColors'
 
 interface Props {
   auth: AuthState,
@@ -29,70 +31,51 @@ class Menu extends Component<Props> {
     const { role } = auth.data
 
     return (
-      <View>
-        <HeaderLogo/>
+      <Box padding={7}>
+        <HeaderLogo />
 
-        <View padder>
-          <Button
-            block
+        <Stack space={2} mt={9}>
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={Ionicons} name="bulb" />}
             onPress={() => navigate('SelecionaPlanta')}
-            style={style.btnStyle}>
-            <Icon name="bulb"/>
-            <Text>Manutenção de Iluminação</Text>
-          </Button>
+            text='Manutenção de Iluminação'
+          />
 
-          <Button
-            block
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={AntDesign} name="profile" />}
+            text='RDO'
             onPress={() => navigate('MenuPrincipalRDO')}
-            style={style.btnStyle}>
-            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
-            <Text>RDO</Text>
-          </Button>
+          />
 
-          {/* <Button
-            block
-            onPress={() => navigate('ManutencaoCliente')}
-            style={style.btnStyle}>
-            <AntDesign name="tool" size={28} color="white" style={{marginLeft: 10}}/>
-            <Text>Manutenção Cliente</Text>
-          </Button> */}
-
-          <Button
-            block
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={Ionicons} name="person" />}
             onPress={() => navigate('Colaboradores')}
-            style={style.btnStyle}>
-            <Icon name="person"/>
-            <Text>Colaboradores</Text>
-          </Button>
+            text='Colaboradores'
+          />
 
-          <Button
-            block
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={Ionicons} name="cloud-download" />}
             onPress={() => navigate('SyncEmpresas')}
-            style={style.btnStyle}>
-            <Icon name="cloud-download"/>
-            <Text>Atualizar Empresas</Text>
-          </Button>
+            text='Atualizar Empresas'
+          />
 
           {role === 'admin' &&
-            <Button
-              block
+            <MenuItem
+              icon={<Icon color={brandColors.white} as={Ionicons} name="cube" />}
               onPress={() => navigate('Programacoes')}
-              style={style.btnStyle}>
-              <Icon name="cube"/>
-              <Text>Programações</Text>
-            </Button>
+              text='Programações'
+            />
           }
 
-          <Button
-            block
-            bordered
+          <MenuItem
+            icon={<Icon color={brandColors.primary} as={Ionicons} name="exit" />}
             onPress={() => this.logoff()}
-            style={style.btnStyle}>
-            <Icon name="exit"/>
-            <Text>Sair</Text>
-          </Button>
-        </View>
-      </View>
+            text='Sair'
+            invertColors
+          />
+
+        </Stack >
+      </Box>
     )
   }
 }
@@ -105,9 +88,3 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(AuthActions, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)
-
-const style = {
-  btnStyle: {
-    marginVertical: 5
-  }
-}

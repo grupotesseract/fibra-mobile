@@ -1,5 +1,5 @@
 import { extendTheme } from 'native-base';
-
+import brandColors from './brandColors';
 const customTheme = extendTheme({
   colors: {
     // Add new color
@@ -15,10 +15,8 @@ const customTheme = extendTheme({
       800: '#0b1341',
       900: '#04051b',
     },
-    // Redefinig only one shade, rest of the color will remain same.
-    mainColors: {
-      primary: '#1d2781',
-    },
+    //set brand colors for specif uses
+    brand: brandColors,
     fontConfig: {
       OpenSans: {
         100: { normal: 'OpenSans_Light' },
@@ -43,6 +41,11 @@ const customTheme = extendTheme({
       defaultProps: {
         size: 'md',
         variant: 'underlined',
+      },
+    },
+    Icon: {
+      defaultProps: {
+        size: 7,
       },
     },
   },
