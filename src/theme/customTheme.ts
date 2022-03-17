@@ -15,6 +15,10 @@ const customTheme = extendTheme({
       800: '#0b1341',
       900: '#04051b',
     },
+    // cinza para botões desabilitados
+    trueGray: {
+      300: brandColors.disabled,
+    },
     //set brand colors for specif uses
     brand: brandColors,
     fontConfig: {
@@ -46,6 +50,11 @@ const customTheme = extendTheme({
     Icon: {
       defaultProps: {
         size: 7,
+      },
+    },
+    Text: {
+      defaultProps: {
+        fontSize: 'md',
       },
     },
   },

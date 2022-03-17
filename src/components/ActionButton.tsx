@@ -17,7 +17,8 @@ const ActionButton = (props) => {
       }
     }} _spinner={{
       color: "white"
-    }} size='lg' rounded={0} {...restProps}>
+    }}
+      size='lg' rounded={0} {...restProps}>
       {children}
     </Button>
   )

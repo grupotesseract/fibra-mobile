@@ -1,8 +1,5 @@
-import { Container, Content, List, ListItem, Text } from 'native-base'
-import React, { Component } from 'react'
+import { Box, Text, Stack } from 'native-base'
 import { connect } from 'react-redux'
-
-import HeaderNav from '../../components/HeaderNav'
 import { ApplicationState } from '../../store'
 import { Usuario } from '../../store/ducks/usuarios/types'
 
@@ -12,32 +9,26 @@ interface StateProps {
 
 type Props = StateProps
 
-class Colaboradores extends Component<Props> {
+const Colaboradores = (props: Props) => {
 
-  render() {
-    const { usuarios } = this.props
-    const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico')
+  const { usuarios } = props
+  const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico')
 
-    return (
-      <Container>
-        <HeaderNav title="Colaboradores"/>
+  return (
 
-        <Content padder>
-          <List>
-            {colaboradores.map(colaborador => {
-              return (
-                <ListItem key={colaborador.id}>
-                  <Text>{colaborador.nome}</Text>
-                </ListItem>
-              )
-            })}
-          </List>
-        </Content>
-      </Container>
-    )
-  }
+    <Box padding={7}>
+      <Stack >
+        {colaboradores.map(colaborador => {
+          return (
+            <Box key={colaborador.id}>
+              <Text>{colaborador.nome}</Text>
+            </Box>
+          )
+        })}
+      </Stack>
+    </Box>
+  )
 }
-
 
 const mapStateToProps = (state: ApplicationState) => ({
   usuarios: state.usuariosReducer.listaUsuarios,

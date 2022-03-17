@@ -33,26 +33,27 @@ import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesR
 import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
 import AtividadesPendentes from "./screens/RDO/AtividadesPendentes/AtividadesPendentes";
 import TodosMateriaisItem from "./screens/ManutencaoIluminacao/TodosMateriaisItem";
+import brandColors from "./theme/brandColors";
 
 
 const AuthStack = createStackNavigator(
   {
-    Login: { screen: Login },
-    Menu: { screen: Menu },
+    Login: { screen: Login, navigationOptions: { headerShown: false } },
+    Menu: { screen: Menu, navigationOptions: { headerShown: false } },
     MenuVistoria: { screen: MenuVistoria },
     Estoque: { screen: EstoqueScreen },
-    EntradaMateriais: { screen: EntradaMateriais },
+    EntradaMateriais: { screen: EntradaMateriais, navigationOptions: {} },
     ManutencaoIluminacao: { screen: ManutencaoIluminacao },
     ScanQRCodeReader: { screen: ScanQRCodeReader },
     ManutencaoItem: { screen: ManutencaoItem },
     FotosItem: { screen: FotosItemScreen },
     ComentariosGerais: { screen: ComentariosGerais },
-    SelecionaPlanta: { screen: SelecionaPlanta },
+    SelecionaPlanta: { screen: SelecionaPlanta, navigationOptions: { title: 'Selecionar Planta' } },
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao },
     LiberarDocumento: { screen: LiberarDocumento },
     Colaboradores: { screen: Colaboradores },
-    SyncEmpresas: { screen: SyncEmpresas },
-    Programacoes: { screen: Programacoes },
+    SyncEmpresas: { screen: SyncEmpresas, navigationOptions: { title: 'Sincronizar Empresas' } },
+    Programacoes: { screen: Programacoes, navigationOptions: { title: 'Programações' } },
     SelecionaPlantaRDO: { screen: SelecionaPlantaRDO },
     RDOLiberarDocumentoEquipe: { screen: RDOLiberarDocumentoEquipe },
     RDOLiberarDocumentoRegistro: { screen: RDOLiberarDocumentoRegistro },
@@ -63,14 +64,20 @@ const AuthStack = createStackNavigator(
     ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios },
     AtividadesRealizadas: { screen: AtividadesRealizadas },
     EditaAtividade: { screen: EditaAtividade },
-    MenuPrincipalRDO: { screen: MenuPrincipalRDO },
-    SincronizacaoRDO: { screen: SincronizacaoRDO },
+    MenuPrincipalRDO: { screen: MenuPrincipalRDO, navigationOptions: { headerShown: false } },
+    SincronizacaoRDO: { screen: SincronizacaoRDO, navigationOptions: { title: 'Sincronizar RDOs' } },
     AtividadesPendentes: { screen: AtividadesPendentes },
     TodosMateriaisItem: { screen: TodosMateriaisItem },
   },
   {
-    headerMode: "none",
     initialRouteName: "Login",
+    headerMode: "screen",
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: brandColors.primary,
+      },
+      headerTintColor: '#fff',
+    },
   }
 );
 

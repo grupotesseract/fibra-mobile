@@ -1,25 +1,19 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import {
-  Body,
+  Box,
   Button,
   Card,
-  CardItem,
-  Container,
-  Content,
-  Left,
+  Spinner,
   Text,
   Toast,
 } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import HeaderNav from '../../components/HeaderNav';
 import { uploadFotos, uploadProgramacao } from '../../services/api';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { iso2ddmmaaaa } from '../../utils/utils';
-import { ActivityIndicator } from 'react-native';
+import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[];
@@ -33,13 +27,11 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-class Programacoes extends Component<Props> {
-  state = {
-    isSyncing: false,
-  };
+const Programacoes = (props: Props) => {
+  const [isSyncing, setIsSyncing] = useState(false)
+  const { updateProgramacao, programacoesRealizadas } = props;
 
-  syncProgramacao = async (idProgramacao: number) => {
-    const { updateProgramacao, programacoesRealizadas } = this.props;
+  const syncProgramacao = async (idProgramacao: number) => {
     const programacao = programacoesRealizadas.find(
       (p) => p.programacao.id === idProgramacao
     );
@@ -47,18 +39,20 @@ class Programacoes extends Component<Props> {
     let dadosEnviados = programacao.dadosEnviados || false;
     let errorSync = programacao.errorSync || false;
 
+
+
     if (programacao) {
       // Envia dados de programacao
-      this.setState({ isSyncing: true });
+      setIsSyncing(true)
       if (!dadosEnviados) {
         const res = await uploadProgramacao({ idProgramacao, programacao });
         if (res.error) {
           programacao.errorSync = true;
 
           Toast.show({
-            text: String(res.error),
-            buttonText: 'Ok',
-            type: 'danger',
+            title: String(res.error),
+            isClosable: true,
+            status: 'error',
           });
         } else {
           programacao.dadosEnviados = true;
@@ -80,9 +74,9 @@ class Programacoes extends Component<Props> {
             const res = await uploadFotos({ idProgramacao, idItem, fotos });
             if (res.error) {
               Toast.show({
-                text: String(res.error),
-                buttonText: 'Ok',
-                type: 'danger',
+                title: String(res.error),
+                isClosable: true,
+                status: 'error',
               });
             } else {
               fotoItem.fotosEnviadas = true;
@@ -90,9 +84,9 @@ class Programacoes extends Component<Props> {
             }
           } catch (err) {
             Toast.show({
-              text: String(err),
-              buttonText: 'Ok',
-              type: 'danger',
+              title: String(err),
+              isClosable: true,
+              status: 'error',
             });
           }
         }
@@ -109,108 +103,91 @@ class Programacoes extends Component<Props> {
           errorSync,
         },
       });
-      this.setState({ isSyncing: false });
+      setIsSyncing(false)
+
     }
   };
 
-  render() {
-    const { programacoesRealizadas } = this.props;
-    const { isSyncing } = this.state;
+  return (
+    <Box padding={7}>
+      {isSyncing ? <Spinner size='lg' /> : null}
 
-    return (
-      <Container>
-        <HeaderNav title='Programações' />
-        {isSyncing ? <ActivityIndicator color='blue' size='large' /> : null}
-
-        <Content padder>
-          {programacoesRealizadas?.map(
-            (programacaoRealizada: ProgramacaoRealizada) => {
-              const {
-                errorSync,
-                dadosEnviados,
-                fotosItens,
-              } = programacaoRealizada;
-              const inicio =
-                programacaoRealizada.programacao.data_inicio_prevista;
-              const fim = programacaoRealizada.programacao.data_fim_prevista;
-              const fotosEnviadas = fotosItens.reduce(
-                (fotosEnviadas, fotoItem) =>
-                  fotosEnviadas + Number(!!fotoItem.fotosEnviadas),
-                0
-              );
-              return (
-                <Card key={programacaoRealizada.programacao.id}>
-                  <CardItem header bordered>
-                    <Text>
-                      Programação #{programacaoRealizada.programacao.id}
-                    </Text>
-                  </CardItem>
-                  <CardItem>
-                    <Left>
-                      <Body>
-                        <Text style={{ marginVertical: 5, fontWeight: 'bold' }}>
-                          {`Sincronização `}
-                        </Text>
-
-                        <Text>
-                          {`Informações: ${
-                            errorSync
-                              ? 'reenvio pendente'
-                              : dadosEnviados
-                              ? 'sincronizadas'
-                              : 'pendente'
-                          }`}
-                        </Text>
-                        <Text>
-                          {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
-                        </Text>
-
-                        <Button
-                          full
-                          style={{ marginTop: 12 }}
-                          onPress={() =>
-                            this.syncProgramacao(
-                              programacaoRealizada.programacao.id
-                            )
-                          }
-                        >
-                          <Text>Sincronizar</Text>
-                        </Button>
-                      </Body>
-                    </Left>
-                  </CardItem>
-
-                  {programacaoRealizada.errorSync && (
-                    <CardItem footer bordered>
-                      <Text>
-                        Ocorreu um erro ao sincronizar, tente novamente.
+      <Box >
+        {programacoesRealizadas?.map(
+          (programacaoRealizada: ProgramacaoRealizada) => {
+            const {
+              errorSync,
+              dadosEnviados,
+              fotosItens,
+            } = programacaoRealizada;
+            const inicio =
+              programacaoRealizada.programacao.data_inicio_prevista;
+            const fim = programacaoRealizada.programacao.data_fim_prevista;
+            const fotosEnviadas = fotosItens.reduce(
+              (fotosEnviadas, fotoItem) =>
+                fotosEnviadas + Number(!!fotoItem.fotosEnviadas),
+              0
+            );
+            return (
+              <Card key={programacaoRealizada.programacao.id}>
+                <Box >
+                  <Text>
+                    Programação #{programacaoRealizada.programacao.id}
+                  </Text>
+                </Box>
+                <Box>
+                  <Box>
+                    <Box>
+                      <Text style={{ marginVertical: 5, fontWeight: 'bold' }}>
+                        {`Sincronização `}
                       </Text>
-                    </CardItem>
-                  )}
-                </Card>
-              );
-            }
-          )}
 
-          <Button full onPress={() => this.props.deleteProgramacoes()}>
-            <Text>Limpar programações</Text>
-          </Button>
-        </Content>
-      </Container>
-    );
-  }
+                      <Text>
+                        {`Informações: ${errorSync
+                          ? 'reenvio pendente'
+                          : dadosEnviados
+                            ? 'sincronizadas'
+                            : 'pendente'
+                          }`}
+                      </Text>
+                      <Text>
+                        {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
+                      </Text>
+
+                      <Button
+                        style={{ marginTop: 12 }}
+                        onPress={() =>
+                          syncProgramacao(
+                            programacaoRealizada.programacao.id
+                          )
+                        }
+                      >
+                        <Text>Sincronizar</Text>
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+
+                {programacaoRealizada.errorSync && (
+                  <Box >
+                    <Text>
+                      Ocorreu um erro ao sincronizar, tente novamente.
+                    </Text>
+                  </Box>
+                )}
+              </Card>
+            );
+          }
+        )}
+
+        <ActionButton onPress={() => props.deleteProgramacoes()}>
+          Limpar programações
+        </ActionButton>
+      </Box>
+    </Box>
+  );
+
 }
-
-const style = {
-  badgeSync: {
-    margin: 5,
-    height: 40,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-};
 
 const mapStateToProps = (state: ApplicationState) => ({
   programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,

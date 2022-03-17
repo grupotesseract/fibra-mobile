@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Icon, Box, Stack } from 'native-base'
 import { NavigationScreenProp } from 'react-navigation'
 import { connect } from 'react-redux'
@@ -17,69 +17,64 @@ interface Props {
   navigation: NavigationScreenProp<any, any>,
   authCancel(): void
 }
-class Menu extends Component<Props> {
 
-  logoff = async () => {
-    const { authCancel, navigation } = this.props
+const Menu = (props: Props) => {
+  const { authCancel, auth, navigation } = props
+  const { navigate } = navigation
+  const { role } = auth.data
+
+  const logoff = async () => {
     await authCancel()
     await checkAuth({ auth: {}, navigation })
   }
+  return (
+    <Box padding={7}>
+      <HeaderLogo />
 
-  render() {
-    const { navigation, auth } = this.props
-    const { navigate } = navigation
-    const { role } = auth.data
+      <Stack space={2} mt={9}>
+        <MenuItem
+          icon={<Icon color={brandColors.white} as={Ionicons} name="bulb" />}
+          onPress={() => navigate('SelecionaPlanta')}
+          text='Manutenção de Iluminação'
+        />
 
-    return (
-      <Box padding={7}>
-        <HeaderLogo />
+        <MenuItem
+          icon={<Icon color={brandColors.white} as={AntDesign} name="profile" />}
+          text='RDO'
+          onPress={() => navigate('MenuPrincipalRDO')}
+        />
 
-        <Stack space={2} mt={9}>
+        <MenuItem
+          icon={<Icon color={brandColors.white} as={Ionicons} name="person" />}
+          onPress={() => navigate('Colaboradores')}
+          text='Colaboradores'
+        />
+
+        <MenuItem
+          icon={<Icon color={brandColors.white} as={Ionicons} name="cloud-download" />}
+          onPress={() => navigate('SyncEmpresas')}
+          text='Atualizar Empresas'
+        />
+
+        {role === 'admin' &&
           <MenuItem
-            icon={<Icon color={brandColors.white} as={Ionicons} name="bulb" />}
-            onPress={() => navigate('SelecionaPlanta')}
-            text='Manutenção de Iluminação'
+            icon={<Icon color={brandColors.white} as={Ionicons} name="cube" />}
+            onPress={() => navigate('Programacoes')}
+            text='Programações'
           />
+        }
 
-          <MenuItem
-            icon={<Icon color={brandColors.white} as={AntDesign} name="profile" />}
-            text='RDO'
-            onPress={() => navigate('MenuPrincipalRDO')}
-          />
+        <MenuItem
+          icon={<Icon color={brandColors.primary} as={Ionicons} name="exit" />}
+          onPress={() => logoff()}
+          text='Sair'
+          invertColors
+        />
 
-          <MenuItem
-            icon={<Icon color={brandColors.white} as={Ionicons} name="person" />}
-            onPress={() => navigate('Colaboradores')}
-            text='Colaboradores'
-          />
-
-          <MenuItem
-            icon={<Icon color={brandColors.white} as={Ionicons} name="cloud-download" />}
-            onPress={() => navigate('SyncEmpresas')}
-            text='Atualizar Empresas'
-          />
-
-          {role === 'admin' &&
-            <MenuItem
-              icon={<Icon color={brandColors.white} as={Ionicons} name="cube" />}
-              onPress={() => navigate('Programacoes')}
-              text='Programações'
-            />
-          }
-
-          <MenuItem
-            icon={<Icon color={brandColors.primary} as={Ionicons} name="exit" />}
-            onPress={() => this.logoff()}
-            text='Sair'
-            invertColors
-          />
-
-        </Stack >
-      </Box>
-    )
-  }
+      </Stack >
+    </Box>
+  )
 }
-
 const mapStateToProps = (state) => ({
   auth: state.auth
 })

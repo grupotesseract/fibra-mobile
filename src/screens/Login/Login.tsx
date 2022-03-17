@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { NavigationAction } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -22,89 +22,65 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-interface State {
-  user: string;
-  password: string;
-  auth: AuthState;
-}
 
-class Login extends Component<Props, State> {
-  state = {
-    user: '',
-    password: '',
-    auth: {
-      loading: false,
-      error: false,
-    },
-  };
+const Login = (props: Props) => {
+  const [user, setUser] = useState('')
+  const [password, setPassword] = useState('')
+  const [auth, setAuth] = useState<AuthState>(props.auth)
 
-  authLogin() {
-    const { authRequest } = this.props;
-    const { user, password } = this.state;
+  useEffect(() => {
+    const { auth, navigation } = props;
+    checkAuth({ auth, navigation });
+    setAuth(props.auth)
+  }, [props])
 
-    this.setState({ password: '' });
+  function authLogin() {
+    const { authRequest } = props;
     authRequest({ user, password })
-
+    setPassword('');
   }
 
-  componentDidMount() {
-    const { auth, navigation } = this.props;
-    checkAuth({ auth, navigation });
-  }
+  return (
+    <Center flex={1}>
+      <KeyboardAvoidingView behavior='padding'>
+        <Stack>
+          <Logo center size='xlg' />
 
-  componentDidUpdate() {
-    const { auth, navigation } = this.props;
-    checkAuth({ auth, navigation });
-  }
+          <Text style={style.text}>44.0.0</Text>
 
-  render() {
-    const { user, password } = this.state;
-    const { auth } = this.props;
-
-    return (
-
-      <Center flex={1}>
-        <KeyboardAvoidingView behavior='padding'>
-          <Stack>
-            <Logo center size='xlg' />
-
-            <Text style={style.text}>44.0.0</Text>
-
-            <FormControl mt={10}>
-              <Stack space={4}>
-                <Stack>
-                  <FormControl.Label>Usuário</FormControl.Label>
-                  <Input
-                    padding={0}
-                    value={user}
-                    autoCapitalize='none'
-                    onChangeText={(user) => this.setState({ user })}
-                  />
-                </Stack>
-                <Stack>
-                  <FormControl.Label>Senha</FormControl.Label>
-                  <Input
-                    padding={0}
-                    value={password}
-                    secureTextEntry={true}
-                    onChangeText={(password) => this.setState({ password })}
-                  />
-                </Stack>
-                {auth.error && <Text>Usuário ou senha incorretos.</Text>}
+          <FormControl mt={10}>
+            <Stack space={4}>
+              <Stack>
+                <FormControl.Label>Usuário</FormControl.Label>
+                <Input
+                  padding={0}
+                  value={user}
+                  autoCapitalize='none'
+                  onChangeText={(user) => setUser(user)}
+                />
               </Stack>
-            </FormControl>
-            <ActionButton
-              block
-              onPress={() => this.authLogin()}
-              mt={60}
-              isLoading={auth.loading}
-            > Login
-            </ActionButton>
-          </Stack>
-        </KeyboardAvoidingView>
-      </Center >
-    );
-  }
+              <Stack>
+                <FormControl.Label>Senha</FormControl.Label>
+                <Input
+                  padding={0}
+                  value={password}
+                  secureTextEntry={true}
+                  onChangeText={(password) => setPassword(password)}
+                />
+              </Stack>
+              {auth.error && <Text>Usuário ou senha incorretos.</Text>}
+            </Stack>
+          </FormControl>
+          <ActionButton
+            onPress={() => authLogin()}
+            mt={60}
+            isLoading={auth.loading}
+          > Login
+          </ActionButton>
+        </Stack>
+      </KeyboardAvoidingView>
+    </Center >
+  )
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
