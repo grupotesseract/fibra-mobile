@@ -57,6 +57,11 @@ const customTheme = extendTheme({
         fontSize: 'md',
       },
     },
+    Divider: {
+      baseStyle: {
+        bg: brandColors.disabled,
+      },
+    },
   },
 });
 

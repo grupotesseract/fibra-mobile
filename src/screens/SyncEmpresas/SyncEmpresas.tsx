@@ -41,7 +41,7 @@ const SyncEmpresas = (props: Props) => {
 
     <Stack padding={7} flex={1} justifyContent='space-between' >
       <Stack space={5}>
-        <Box borderColor="coolGray.300" borderWidth="1" shadow={1} padding={4}>
+        <Box borderColor="transparent" borderWidth="1" shadow={1} padding={4}>
           <Text bold color={brandColors.primary} mb={2}>Empresas</Text>
           <Text>
             {listaEmpresas.length} empresas armazenadas neste dispositivo
