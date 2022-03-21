@@ -112,14 +112,14 @@ const SelecionaPlanta = (props: Props) => {
             fontSize='md'
             variant='unstyled'
           >
-            <Select.Item label='Selecione uma empresa' value='0' key={0} />
+            <Select.Item label='Selecione uma empresa' value='0' key={'e0'} />
             {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
               listaEmpresas.map((empresa) => {
                 return (
                   <Select.Item
                     label={empresa.nome}
                     value={`${empresa.id}`}
-                    key={empresa.id}
+                    key={`E${empresa.id}`}
                   />
                 );
               })
@@ -128,7 +128,7 @@ const SelecionaPlanta = (props: Props) => {
                 <Select.Item
                   label='Nenhuma empresa carregada'
                   value='0'
-                  key={0}
+                  key={'e1'}
                 />
               </>
             )}
@@ -147,14 +147,14 @@ const SelecionaPlanta = (props: Props) => {
             variant='unstyled'
 
           >
-            <Select.Item label='Selecione uma planta' value='0' key={0} />
+            <Select.Item label='Selecione uma planta' value='0' key={'p0'} />
             {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
               getPlantasFromEmpresa(empresaSelecionada).map(
                 (planta) => (
                   <Select.Item
                     label={planta.nome}
                     value={`${planta.id}`}
-                    key={planta.id}
+                    key={`P${planta.id}`}
                   />
                 )
               )
@@ -163,7 +163,7 @@ const SelecionaPlanta = (props: Props) => {
                 <Select.Item
                   label='Nenhuma empresa carregada'
                   value='0'
-                  key={0}
+                  key={'p1'}
                 />
               </>
             )}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Text, View } from 'native-base';
+import { Button, Icon, Stack, Text, Box } from 'native-base';
 import { ActivityIndicator } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -10,6 +10,9 @@ import { ApplicationState } from '../../store';
 import { Planta } from '../../store/ducks/planta/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+import MenuItem from '../../components/MenuItem';
+import brandColors from '../../theme/brandColors';
+import { Ionicons } from '@expo/vector-icons';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -17,7 +20,7 @@ interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[];
 }
 
-interface DispatchProps {}
+interface DispatchProps { }
 
 type Props = StateProps & DispatchProps;
 
@@ -34,51 +37,47 @@ class MenuVistoria extends Component<Props> {
     const { estoqueConcluido, entradaConcluida } = programacao;
 
     return (
-      <View>
+      <Box padding={7}>
         <HeaderLogo />
 
-        <View padder>
-          <Button
-            block
-            disabled={estoqueConcluido}
+        <Stack space={2} mt={9}>
+          <MenuItem
+            isDisabled={estoqueConcluido}
             onPress={() => this.props.navigation.navigate('Estoque')}
             style={style.btnStyle}
-          >
-            <Icon name='cube' />
-            <Text>Estoque de Materiais</Text>
-          </Button>
+            icon={<Icon color={brandColors.white} as={Ionicons} name='cube' />}
+            text='Estoque de Materiais'
+          />
 
-          <Button
-            block
-            disabled={entradaConcluida}
+          <MenuItem
+            isDisabled={entradaConcluida}
             onPress={() => this.props.navigation.navigate('EntradaMateriais')}
             style={style.btnStyle}
-          >
-            <Icon name='download' />
-            <Text>Entrada de Materiais</Text>
-          </Button>
+            icon={
+              <Icon color={brandColors.white} as={Ionicons} name='download' />
+            }
+            text='Entrada de Materiais'
+          />
 
-          <Button
-            block
+          <MenuItem
             onPress={() => this.props.navigation.navigate('ComentariosGerais')}
             style={style.btnStyle}
-          >
-            <Icon name='chatbox' />
-            <Text>Comentários Gerais</Text>
-          </Button>
+            icon={
+              <Icon color={brandColors.white} as={Ionicons} name='chatbox' />
+            }
+            text='Comentários Gerais'
+          />
 
-          <Button
-            block
+          <MenuItem
             onPress={() =>
               this.props.navigation.navigate('ManutencaoIluminacao')
             }
             style={style.btnStyle}
-          >
-            <Icon name='bulb' />
-            <Text>Manutenção Iluminação</Text>
-          </Button>
-        </View>
-      </View>
+            icon={<Icon color={brandColors.white} as={Ionicons} name='bulb' />}
+            text='Manutenção Iluminação'
+          />
+        </Stack>
+      </Box>
     );
   }
 }

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
   Container,
-  Content,
-  Form,
-  Item,
-  Label,
   Button,
   Text,
+  Box,
+  Stack,
+  HStack,
+  Divider,
 } from 'native-base';
 import HeaderNav from '../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -17,6 +17,7 @@ import { Planta } from '../../store/ducks/planta/types';
 import { ActivityIndicator, View } from 'react-native';
 import { iso2ddmmaaaa } from '../../utils/utils';
 import { NavigationScreenProp } from 'react-navigation';
+import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -57,34 +58,26 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
     )[0];
     const dataFimPrevista = proximaProgramacao.data_fim_prevista.split('T')[0];
     return (
-      <Container>
-        <HeaderNav title='Período Manutenção' />
-        <Content
-          padder
-          contentContainerStyle={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <View>
-            <Text>Confirmar período de Manutenção</Text>
-            <Form>
-              <Item>
-                <Label>Início</Label>
-                <Text>{iso2ddmmaaaa(dataInicioPrevista)}</Text>
-              </Item>
-              <Item>
-                <Label>Fim</Label>
-                <Text>{iso2ddmmaaaa(dataFimPrevista)}</Text>
-              </Item>
-            </Form>
-          </View>
-          <Button block onPress={() => this.confirmarPeriodo()}>
-            <Text>Confirmar período</Text>
-          </Button>
-        </Content>
-      </Container>
+      <Stack padding={7} flex={1}
+        justifyContent='space-between'
+      >
+        <Stack space={2}>
+          <Text>Confirmar período de Manutenção</Text>
+          <HStack space={2} alignItems='center'>
+            <Text bold ml={2} >Início</Text >
+            <Text>{iso2ddmmaaaa(dataInicioPrevista)}</Text>
+          </HStack>
+          <Divider />
+          <HStack space={2} alignItems='center'>
+            <Text bold ml={2}>Fim</Text>
+            <Text>{iso2ddmmaaaa(dataFimPrevista)}</Text>
+          </HStack>
+          <Divider />
+        </Stack>
+        <ActionButton onPress={() => this.confirmarPeriodo()}>
+          Confirmar período
+        </ActionButton>
+      </Stack>
     );
   }
 }
