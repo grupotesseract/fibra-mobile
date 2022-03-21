@@ -1,4 +1,4 @@
-import { Box, Text, Stack } from 'native-base'
+import { Box, Text, Stack, Divider } from 'native-base'
 import { connect } from 'react-redux'
 import { ApplicationState } from '../../store'
 import { Usuario } from '../../store/ducks/usuarios/types'
@@ -15,18 +15,16 @@ const Colaboradores = (props: Props) => {
   const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico')
 
   return (
-
-    <Box padding={7}>
-      <Stack >
-        {colaboradores.map(colaborador => {
-          return (
-            <Box key={colaborador.id}>
-              <Text>{colaborador.nome}</Text>
-            </Box>
-          )
-        })}
-      </Stack>
-    </Box>
+    <Stack padding={7}>
+      {colaboradores.map(colaborador => {
+        return (
+          <Box key={colaborador.id}>
+            <Text paddingY={3} >{colaborador.nome}</Text>
+            <Divider />
+          </Box>
+        )
+      })}
+    </Stack>
   )
 }
 

@@ -22,10 +22,6 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-interface State {
-}
-
-
 const SyncEmpresas = (props: Props) => {
 
   const { empresasUpdate, empresasReducer, usuariosReducer } = props;
@@ -41,7 +37,6 @@ const SyncEmpresas = (props: Props) => {
 
   const totalUsuarios = listaUsuarios.length;
 
-  const role = 'admin';
   return (
 
     <Stack padding={7} flex={1} justifyContent='space-between' >
@@ -69,7 +64,6 @@ const SyncEmpresas = (props: Props) => {
       </Stack>
       <ActionButton
         isLoading={loading}
-        isDisabled={(role !== 'admin')}
         onPress={() => atualizarEmpresas()}>
         Atualizar empresas e usuários
       </ActionButton>

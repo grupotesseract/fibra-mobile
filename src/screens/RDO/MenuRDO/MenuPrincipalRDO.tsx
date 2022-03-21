@@ -1,9 +1,11 @@
+import React, { Component } from 'react'
 import { NavigationScreenProp } from 'react-navigation'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import HeaderLogo from '../../../components/HeaderLogo'
+import { ApplicationState } from '../../../store'
 import * as RDOActions from '../../../store/ducks/rdo/actions'
-import { Box, Icon, Stack } from 'native-base'
+import { Box, Button, Icon, Stack, Text, View } from 'native-base'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import MenuItem from '../../../components/MenuItem'
 import brandColors from '../../../theme/brandColors'
@@ -19,36 +21,45 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps
 
-const MenuPrincipalRDO = (props: Props) => {
-  const { navigation, deleteRDOAtual, salvaHoraEntrada } = props;
+class MenuPrincipalRDO extends Component<Props> {
 
-  const handleInicioRDO = async () => {
-    await deleteRDOAtual();
-    await salvaHoraEntrada();
-    navigation.navigate('SelecionaPlantaRDO')
+
+  handleInicioRDO = () => {
+    this.setState({ loadingInicio: true }, async () => {
+      const { navigation, deleteRDOAtual, salvaHoraEntrada } = this.props;
+      await deleteRDOAtual();
+      await salvaHoraEntrada();
+      this.setState({ loadingInicio: false })
+      navigation.navigate('SelecionaPlantaRDO')
+    })
   }
 
-  return (
-    <Box padding={7}>
-      <HeaderLogo />
+  render() {
+    return (
+      <Box padding={7}>
+        <HeaderLogo />
 
-      <Stack space={2} mt={9}>
+        <Stack space={2} mt={9}>
 
-        <MenuItem
-          icon={<Icon color={brandColors.white} as={AntDesign} name='profile' />}
-          onPress={() => handleInicioRDO()}
-          text='Iniciar RDO' />
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={AntDesign} name='profile' />}
+            onPress={() => this.handleInicioRDO()}
+            text='Iniciar RDO' />
 
-        <MenuItem
-          icon={<Icon color={brandColors.white} as={Ionicons} name='cloud-upload' />}
-          onPress={() => navigation.navigate('SincronizacaoRDO')}
-          text='Sincronização' />
-      </Stack>
-    </Box>
-  )
+          <MenuItem
+            icon={<Icon color={brandColors.white} as={Ionicons} name='cloud-upload' />}
+            onPress={() => this.props.navigation.navigate('SincronizacaoRDO')}
+            text='Sincronização' />
+        </Stack>
+      </Box>
+    );
+  }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+})
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapDispatchToProps)(MenuPrincipalRDO)
+export default connect(mapStateToProps, mapDispatchToProps)(MenuPrincipalRDO)

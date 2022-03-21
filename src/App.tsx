@@ -54,7 +54,7 @@ const AuthStack = createStackNavigator(
     Colaboradores: { screen: Colaboradores },
     SyncEmpresas: { screen: SyncEmpresas, navigationOptions: { title: 'Sincronizar Empresas' } },
     Programacoes: { screen: Programacoes, navigationOptions: { title: 'Programações' } },
-    SelecionaPlantaRDO: { screen: SelecionaPlantaRDO },
+    SelecionaPlantaRDO: { screen: SelecionaPlantaRDO, navigationOptions: { title: 'Selecionar Planta' } },
     RDOLiberarDocumentoEquipe: { screen: RDOLiberarDocumentoEquipe },
     RDOLiberarDocumentoRegistro: { screen: RDOLiberarDocumentoRegistro },
     MenuRDO: { screen: MenuRDO },
