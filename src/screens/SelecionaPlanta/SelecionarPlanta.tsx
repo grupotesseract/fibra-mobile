@@ -69,7 +69,7 @@ const SelecionaPlanta = (props: Props) => {
     if (!proximaProgramacao) {
       Toast.show({
         title: 'Sem programação armazenada para esta planta!',
-        position: 'bottom',
+        placement: 'bottom',
       });
     } else {
       await setPlantaAtiva(plantaSelecionada);

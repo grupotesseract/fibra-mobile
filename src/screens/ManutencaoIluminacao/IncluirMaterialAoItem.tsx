@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card,
-  CardItem,
+  Stack,
   Text,
-  Body,
-  Item,
-  Left,
-  Label,
-  Right,
+  Box,
   Button,
-  Picker,
+  Select,
   Icon,
   View,
+  HStack,
+  IconButton,
+  Divider,
 } from 'native-base';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import NumericInput from 'react-native-numeric-input';
 import { ApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import ActionButton from '../../components/ActionButton';
+import { Ionicons } from '@expo/vector-icons';
 
 const IncluirMaterialAoItem = ({
   estoque,
@@ -48,155 +49,113 @@ const IncluirMaterialAoItem = ({
   };
 
   return (
-    <Card key={'novoitem-' + materialId}>
-      <CardItem header bordered style={{ justifyContent: 'space-between' }}>
-        <Text>Incluir material</Text>
-        <Button transparent onPress={cancelarInclusao}>
-          <Icon name='md-close' />
-        </Button>
-      </CardItem>
-      <CardItem>
-        <Body>
-          <Item picker style={{ width: '100%', height: 50, marginBottom: 3 }}>
-            <Picker
-              mode='dropdown'
-              iosIcon={<Icon name='arrow-down' />}
-              placeholder='Escolha um material'
-              placeholderStyle={{ color: '#bfc6ea' }}
-              placeholderIconColor='#007aff'
-              selectedValue={materialId}
-              onValueChange={(m) => setMaterialId(m)}
-            >
-              {estoque.map((material) => {
-                const label =
-                  (material.tipoMaterialTipo
-                    ? material.tipoMaterialTipo.substring(0, 3)
-                    : '') +
-                  ' ' +
-                  (material.tipoMaterialAbreviacao || '') +
-                  ' ' +
-                  (material.potencia ? material.potencia + 'W' : '') +
-                  ' ' +
-                  (material.tensao ? material.tensao + 'V' : '') +
-                  ' ' +
-                  (material.base || '') +
-                  ' ' +
-                  (material.reator || '') +
-                  ' ' +
-                  (material.nome || '') +
-                  ' ';
-                return <Picker.Item label={label} value={material.id} />;
-              })}
-            </Picker>
-          </Item>
-          {materialSelecionado && (
-            <Item style={{ borderBottomWidth: 0 }}>
-              <View
-                style={{
-                  marginBottom: 5,
-                  borderBottomWidth: 0,
-                  paddingBottom: 5,
-                  paddingTop: 5,
-                }}
-              >
-                {materialSelecionado.tipoMaterialTipo && (
-                  <Text>{materialSelecionado.tipoMaterialTipo}</Text>
-                )}
-                {materialSelecionado.tipoMaterial && (
-                  <Text>Tipo: {materialSelecionado.tipoMaterial}</Text>
-                )}
-                {materialSelecionado.base && (
-                  <Text>Base: {materialSelecionado.base}</Text>
-                )}
-                {materialSelecionado.reator && (
-                  <Text>Reator: {materialSelecionado.reator}</Text>
-                )}
-                {materialSelecionado.tensao && (
-                  <Text>Tensão: {materialSelecionado.tensao}</Text>
-                )}
-                {materialSelecionado.potencia && (
-                  <Text>Potência: {materialSelecionado.potencia}</Text>
-                )}
-              </View>
-            </Item>
-          )}
-          <Item
+    <Stack flex={1} borderColor="transparent" borderWidth="1" shadow={1} padding={4} alignItems='center'>
+      <HStack w='100%' justifyContent='space-between' alignItems='center'>
+        <Text color='primary.600' bold>Incluir material</Text>
+        <IconButton onPress={cancelarInclusao} icon={<Icon as={Ionicons} name='md-close' />} />
+      </HStack>
+      <Divider />
+      <Stack w='100%' space={2}>
+        <Select
+          placeholder='Escolha um material'
+          selectedValue={`${materialId}`}
+          onValueChange={(id) => setMaterialId(Number(id))}
+          fontSize='md'
+        >
+          {estoque.map((material) => {
+            const label =
+              (material.tipoMaterialTipo
+                ? material.tipoMaterialTipo.substring(0, 3)
+                : '') +
+              ' ' +
+              (material.tipoMaterialAbreviacao || '') +
+              ' ' +
+              (material.potencia ? material.potencia + 'W' : '') +
+              ' ' +
+              (material.tensao ? material.tensao + 'V' : '') +
+              ' ' +
+              (material.base || '') +
+              ' ' +
+              (material.reator || '') +
+              ' ' +
+              (material.nome || '') +
+              ' ';
+            return <Select.Item label={label} value={`${material.id}`} />;
+          })}
+        </Select>
+        {materialSelecionado && (
+          <Stack>
+            {materialSelecionado.tipoMaterialTipo && (
+              <Text>{materialSelecionado.tipoMaterialTipo}</Text>
+            )}
+            {materialSelecionado.tipoMaterial && (
+              <Text>Tipo: {materialSelecionado.tipoMaterial}</Text>
+            )}
+            {materialSelecionado.base && (
+              <Text>Base: {materialSelecionado.base}</Text>
+            )}
+            {materialSelecionado.reator && (
+              <Text>Reator: {materialSelecionado.reator}</Text>
+            )}
+            {materialSelecionado.tensao && (
+              <Text>Tensão: {materialSelecionado.tensao}</Text>
+            )}
+            {materialSelecionado.potencia && (
+              <Text>Potência: {materialSelecionado.potencia}</Text>
+            )}
+          </Stack>
+        )}
+
+        <HStack space={2} alignItems='center' >
+          <Text>Qtd. Instalada:</Text>
+          <NumericInput
+            minValue={0}
+            step={1}
+            editable={false}
+            rounded={true}
+            value={quantidade}
+            onChange={setQuantidade}
+          />
+        </HStack>
+
+        {materialSelecionado && materialSelecionado.base && (
+          <HStack
             style={{
               borderBottomWidth: 0,
               borderTopWidth: 0,
               marginVertical: 3,
             }}
           >
-            <Left>
-              <Label>Qtd. Instalada:</Label>
-            </Left>
-            <Right>
-              <NumericInput
-                minValue={0}
-                step={1}
-                editable={false}
-                rounded={true}
-                value={quantidade}
-                onChange={setQuantidade}
-              />
-            </Right>
-          </Item>
-
-          {materialSelecionado && materialSelecionado.base && (
-            <Item
-              style={{
-                borderBottomWidth: 0,
-                borderTopWidth: 0,
-                marginVertical: 3,
-              }}
-            >
-              <Left>
-                <Label>Qtd. Base:</Label>
-              </Left>
-              <Right>
-                <NumericInput
-                  minValue={0}
-                  step={1}
-                  editable={false}
-                  rounded={true}
-                  value={quantidadeBase}
-                  onChange={setQuantidadeBase}
-                />
-              </Right>
-            </Item>
-          )}
-          {materialSelecionado && materialSelecionado.reator && (
-            <Item style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
-              <Left>
-                <Label>Qtd. Reator:</Label>
-              </Left>
-              <Right>
-                <NumericInput
-                  minValue={0}
-                  step={1}
-                  editable={false}
-                  rounded={true}
-                  value={quantidadeReator}
-                  onChange={setQuantidadeReator}
-                />
-              </Right>
-            </Item>
-          )}
-        </Body>
-      </CardItem>
-      <CardItem footer bordered style={{ flexDirection: 'column' }}>
-        <Item style={{ borderBottomWidth: 0 }}>
-          <Button
-            small
-            disabled={!materialId}
-            rounded={true}
-            onPress={handleIncluir}
-          >
-            <Text>Incluir</Text>
-          </Button>
-        </Item>
-      </CardItem>
-    </Card>
+            <Text>Qtd. Base:</Text>
+            <NumericInput
+              minValue={0}
+              step={1}
+              editable={false}
+              rounded={true}
+              value={quantidadeBase}
+              onChange={setQuantidadeBase}
+            />
+          </HStack>
+        )}
+        {materialSelecionado && materialSelecionado.reator && (
+          <HStack style={{ borderBottomWidth: 0, borderTopWidth: 0 }}>
+            <Text>Qtd. Reator:</Text>
+            <NumericInput
+              minValue={0}
+              step={1}
+              editable={false}
+              rounded={true}
+              value={quantidadeReator}
+              onChange={setQuantidadeReator}
+            />
+          </HStack>
+        )}
+        <Divider />
+        <ActionButton mt={2} rounded='xl' isDisabled={!materialId} onPress={handleIncluir}>
+          Incluir
+        </ActionButton>
+      </Stack>
+    </Stack>
   );
 };
 
