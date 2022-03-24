@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import {
+  Box,
   Button,
-  Container,
-  Content,
-  Form,
+  FormControl,
   Text,
-  Textarea,
+  TextArea,
   View,
 } from 'native-base'
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
@@ -42,11 +41,11 @@ class ComentariosRDO extends Component<Props> {
 
     const { comentario } = this.state;
 
-    if(tipoComentario === 'LEM') {
+    if (tipoComentario === 'LEM') {
       await salvaHoraFinalLEM();
     }
 
-    if(tipoComentario === 'LET') {
+    if (tipoComentario === 'LET') {
       await salvaHoraFinalLET();
     }
 
@@ -62,9 +61,9 @@ class ComentariosRDO extends Component<Props> {
         case 'IT':
           return rdoAtual.liberacaoIT;
         case 'OS':
-          return  rdoAtual.liberacaoOS;
+          return rdoAtual.liberacaoOS;
         case 'LEM':
-          return  rdoAtual.liberacaoLEM;
+          return rdoAtual.liberacaoLEM;
         case 'LET':
           return rdoAtual.liberacaoLET;
         case 'problemas_encontrados':
@@ -91,7 +90,7 @@ class ComentariosRDO extends Component<Props> {
         case 'OS':
         case 'LEM':
         case 'LET':
-          return 'Registrar '+tipoComentario;
+          return 'Registrar ' + tipoComentario;
         case 'problemas_encontrados':
           return 'Problemas Encontrados';
         case 'informacoes_adicionais':
@@ -101,33 +100,31 @@ class ComentariosRDO extends Component<Props> {
       }
     })(tipoComentario);
 
-    return <Container>
+    return <Box>
       <HeaderNav title={title} />
-      <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView behavior="height">
-          <Form>
+          <FormControl>
             <ScrollView>
-              <Textarea
-                underline={false}
-                rowSpan={50}
-                bordered
+              <TextArea
+                numberOfLines={50}
                 value={comentario}
-                onChangeText={(comentario) => this.setState({comentario})}/>
+                onChangeText={(comentario) => this.setState({ comentario })} />
             </ScrollView>
-          </Form>
+          </FormControl>
         </KeyboardAvoidingView>
-      </Content>
+      </Box>
 
       <View style={{ flexDirection: 'row', padding: 20 }}>
         <Button
-          block
+
           onPress={() => this.salvaComentario()}
           style={style.btnStyle} >
           <Text>Concluído</Text>
         </Button>
       </View>
 
-    </Container>
+    </Box>
   };
 }
 

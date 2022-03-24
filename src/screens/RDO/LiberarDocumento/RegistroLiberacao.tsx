@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Button, ListItem, List, View, Input, H3, CheckBox } from 'native-base';
+import { Box, Text, Button } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store'
-import { Usuario } from '../../../store/ducks/usuarios/types';
 import { NavigationScreenProp } from 'react-navigation';
 
 interface StateProps {
@@ -39,7 +38,7 @@ class RegistroLiberacao extends Component<Props> {
   handlePressButton = async (tipoComentario: string) => {
     const { navigation, salvaHoraInicioLET, salvaHoraInicioLEM } = this.props;
 
-    switch(tipoComentario) {
+    switch (tipoComentario) {
       case 'LET':
         await salvaHoraInicioLET();
         break;
@@ -49,7 +48,7 @@ class RegistroLiberacao extends Component<Props> {
       case 'IT':
       case 'OS':
       default:
-       break;
+        break;
     }
     navigation.navigate({
       routeName: 'ComentariosRDO',
@@ -60,50 +59,50 @@ class RegistroLiberacao extends Component<Props> {
   render() {
 
     return (
-      <Container>
-        <HeaderNav title="Liberação de Documento"/>
+      <Box>
+        <HeaderNav title="Liberação de Documento" />
 
-        <Content padder>
+        <Box>
 
           <Button
-            block
+
             onPress={() => this.handlePressButton('IT')}
             style={style.btnStyle}>
             <Text>IT</Text>
           </Button>
           <Button
-            block
+
             onPress={() => this.handlePressButton('OS')}
             style={style.btnStyle}>
             <Text>OS</Text>
           </Button>
           <Button
-            block
+
             onPress={() => this.handlePressButton('LEM')}
             style={style.btnStyle}>
             <Text>LEM</Text>
           </Button>
           <Button
-            block
+
             onPress={() => this.handlePressButton('LET')}
             style={style.btnStyle}>
             <Text>LET</Text>
           </Button>
           <Button
-            block
+
             onPress={() => this.handleAtividadesPendentes()}
             style={style.btnStyle}>
             <Text>ATIVIDADES PENDENTES</Text>
           </Button>
 
           <Button
-            block
+
             onPress={() => this.liberarDocumento()}
           >
             <Text>Iniciar RDO</Text>
           </Button>
-        </Content>
-      </Container>
+        </Box>
+      </Box>
     );
   }
 }

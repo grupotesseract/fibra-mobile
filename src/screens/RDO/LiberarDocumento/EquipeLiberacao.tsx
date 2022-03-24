@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Button, ListItem, List, View, Input, H3, CheckBox, Item, Label } from 'native-base';
+import { Box, Text, Button, List, Input, Heading, Checkbox, Stack, Pressable } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
@@ -31,7 +31,7 @@ class EquipeLiberacao extends Component<Props> {
   onPressBotaoColaborador = (idColaborador: number) => {
     const { idsUsuariosSelecionados } = this.state;
     let listaIds = [];
-    if(!idsUsuariosSelecionados.includes(idColaborador)) {
+    if (!idsUsuariosSelecionados.includes(idColaborador)) {
       listaIds = [
         ...idsUsuariosSelecionados,
         idColaborador,
@@ -39,7 +39,7 @@ class EquipeLiberacao extends Component<Props> {
     } else {
       listaIds = idsUsuariosSelecionados.filter(id => id !== idColaborador)
     }
-    this.setState({idsUsuariosSelecionados: listaIds})
+    this.setState({ idsUsuariosSelecionados: listaIds })
   }
 
   liberarDocumento = async () => {
@@ -60,50 +60,49 @@ class EquipeLiberacao extends Component<Props> {
 
     const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico');
     return (
-      <Container>
-        <HeaderNav title="Liberação de Documento"/>
+      <Box>
+        <HeaderNav title="Liberação de Documento" />
 
-        <Content padder>
-          <H3>Equipe de fiscalização</H3>
-          <Item style={{ marginBottom: 30 }}>
-            <Label>Equipe:</Label>
+        <Box>
+          <Heading>Equipe de fiscalização</Heading>
+          <Stack style={{ marginBottom: 30 }}>
+            <Text>Equipe:</Text>
             <Input
               value={equipeFiscalizacao}
               onChangeText={equipeFiscalizacao => this.setState({ equipeFiscalizacao })} />
-          </Item>
-          <H3>Colaboradores</H3>
+          </Stack>
+          <Heading>Colaboradores</Heading>
           <List>
-            { colaboradores.map(colaborador => {
-              return <ListItem
+            {colaboradores.map(colaborador => {
+              return <Pressable
                 key={colaborador.id}
                 style={{
                   paddingBottom: 10,
                   paddingTop: 10,
                   paddingRight: 0,
                   marginLeft: 0,
-                  justifyContent: 'space-between',
 
                 }}
                 onPress={() => this.onPressBotaoColaborador(colaborador.id)}
               >
                 <Text>{colaborador.nome}</Text>
-                <CheckBox
-                  checked={idsUsuariosSelecionados.includes(colaborador.id)}
+                <Checkbox
+                  isChecked={idsUsuariosSelecionados.includes(colaborador.id)}
                   onPress={() => this.onPressBotaoColaborador(colaborador.id)}
-                  >
-                </CheckBox>
-              </ListItem>
+                >
+                </Checkbox>
+              </Pressable>
             })}
           </List>
           <Button
-            block
-            disabled={idsUsuariosSelecionados.length <= 0}
+
+            isDisabled={idsUsuariosSelecionados.length <= 0}
             onPress={() => this.liberarDocumento()}
           >
             <Text>Registrar Equipe</Text>
           </Button>
-        </Content>
-      </Container>
+        </Box>
+      </Box>
     );
   }
 }

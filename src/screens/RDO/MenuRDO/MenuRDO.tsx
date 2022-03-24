@@ -48,9 +48,9 @@ class MenuRDO extends Component<Props> {
       <View style={{ flexGrow: 1 }}>
         <HeaderLogo />
 
-        <View padder>
+        <View>
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate('AtividadesRealizadas')
             }
@@ -66,7 +66,7 @@ class MenuRDO extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate({
                 routeName: 'ComentariosRDO',
@@ -85,7 +85,7 @@ class MenuRDO extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate({
                 routeName: 'ComentariosRDO',
@@ -104,7 +104,7 @@ class MenuRDO extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate({
                 routeName: 'ComentariosRDO',
@@ -118,7 +118,7 @@ class MenuRDO extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() => this.props.navigation.navigate('FotosRDO')}
             style={style.btnStyle}
           >
@@ -127,8 +127,8 @@ class MenuRDO extends Component<Props> {
           </Button>
         </View>
 
-        <View padder style={{ justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Button block onPress={() => this.concluirManutencao()}>
+        <View style={{ justifyContent: 'flex-end', flexGrow: 1 }}>
+          <Button onPress={() => this.concluirManutencao()}>
             <AntDesign
               name='check'
               color='white'

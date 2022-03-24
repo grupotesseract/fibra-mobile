@@ -42,7 +42,7 @@ class ScanQRCodeReader extends Component<Props, ScanState> {
 
     if (!this.state.isFocused) {
       return (
-        <View contentContainerStyle={styles.container} style={styles.spinner}>
+        <View style={styles.container} style={styles.spinner}>
           <ActivityIndicator color='blue' size='large' />
         </View>
       );

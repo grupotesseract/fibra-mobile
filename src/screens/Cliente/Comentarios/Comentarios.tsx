@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import {
   Button,
-  Container,
-  Content,
-  Form,
+  Box,
+  FormControl,
   Text,
-  Textarea,
+  TextArea,
   View,
 } from 'native-base'
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
@@ -47,7 +46,7 @@ class ManutencaoClienteComentarios extends Component<Props> {
     if (idItem) {
       await armazenaComentarioItem({ idItem, idProgramacao, comentario });
     } else {
-      await armazenaComentariosGerais({ idProgramacao, comentario});
+      await armazenaComentariosGerais({ idProgramacao, comentario });
     }
     navigation.goBack();
   }
@@ -55,7 +54,7 @@ class ManutencaoClienteComentarios extends Component<Props> {
   componentDidMount() {
     const { plantaAtiva, programacoesRealizadas, navigation } = this.props;
     const idProgramacao = plantaAtiva.proximaProgramacao.id;
-    const programacao = programacoesRealizadas.find( (p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
+    const programacao = programacoesRealizadas.find((p: ProgramacaoRealizada) => p.programacao.id === idProgramacao);
     const idItem = navigation.state.params?.idItem || null;
     if (programacao) {
       if (idItem) {
@@ -74,32 +73,31 @@ class ManutencaoClienteComentarios extends Component<Props> {
 
   render() {
     const { comentario } = this.state;
-    return <Container>
+    return <Box>
       <HeaderNav title={"Comentários"} />
-      <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView behavior="height">
-          <Form>
+          <FormControl>
             <ScrollView>
-              <Textarea
-                rowSpan={50}
-                bordered
+              <TextArea
+                numberOfLines={50}
                 value={comentario}
-                onChangeText={(comentario) => this.setState({comentario})}/>
+                onChangeText={(comentario) => this.setState({ comentario })} />
             </ScrollView>
-          </Form>
+          </FormControl>
         </KeyboardAvoidingView>
-      </Content>
+      </Box>
 
       <View style={{ flexDirection: 'row', padding: 20 }}>
         <Button
-          block
+
           onPress={() => this.salvaComentario()}
           style={style.btnStyle} >
           <Text>Concluído</Text>
         </Button>
       </View>
 
-    </Container>
+    </Box>
   };
 }
 

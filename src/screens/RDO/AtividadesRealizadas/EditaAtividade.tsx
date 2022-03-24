@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import {
+  Box,
   Button,
-  Container,
-  Content,
-  Form,
+  FormControl,
   Text,
-  Textarea,
+  TextArea,
   View,
 } from 'native-base'
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
@@ -44,7 +43,7 @@ class EditaAtividade extends Component<Props> {
     await atualizaAtividade({ id, descricao, concluido });
     navigation.navigate({
       routeName: 'AtividadesRealizadas',
-      params: {id}
+      params: { id }
     });
   }
 
@@ -54,7 +53,7 @@ class EditaAtividade extends Component<Props> {
     const id = navigation.state.params?.id || null;
 
     const atividade = atividadesRealizadas.find(atividade => atividade.id === id)
-    if(!atividade) {
+    if (!atividade) {
       return;
     }
 
@@ -67,39 +66,38 @@ class EditaAtividade extends Component<Props> {
   render() {
     const { descricao, concluido } = this.state;
 
-    return <Container>
+    return <Box>
       <HeaderNav title='Edita Atividade' />
-      <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
         <KeyboardAvoidingView behavior="height">
-          <Form>
+          <FormControl>
             <ScrollView>
-              <Textarea
-                underline={false}
-                rowSpan={50}
-                bordered
+              <TextArea
+                variant='underlined'
+                numberOfLines={50}
                 value={descricao}
-                onChangeText={(descricao) => this.setState({descricao})}/>
+                onChangeText={(descricao) => this.setState({ descricao })} />
             </ScrollView>
-          </Form>
+          </FormControl>
         </KeyboardAvoidingView>
-      </Content>
+      </Box>
 
       <View style={{ flexDirection: 'row', padding: 20, justifyContent: 'space-between' }}>
         <Button
-          block
+
           onPress={() => this.salvaAtividade(false)}
-          style={{backgroundColor: 'red'}} >
+          style={{ backgroundColor: 'red' }} >
           <Text>Atualiza Pendente</Text>
         </Button>
         <Button
-          block
+
           onPress={() => this.salvaAtividade(true)}
-          style={{backgroundColor: 'green'}} >
+          style={{ backgroundColor: 'green' }} >
           <Text>Atualiza e conclui</Text>
         </Button>
       </View>
 
-    </Container>
+    </Box>
   };
 }
 

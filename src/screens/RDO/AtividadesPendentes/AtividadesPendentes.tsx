@@ -1,4 +1,4 @@
-import { Container, Content, List, ListItem, Text, Icon, Button } from 'native-base'
+import { Box, List, Stack, Text, Icon } from 'native-base'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -39,14 +39,14 @@ class AtividadesPendentes extends Component<Props> {
     const atividadesPendentes = planta.atividadesPendentes;
 
     return (
-      <Container>
+      <Box>
         <HeaderNav title="Atividades Pendentes" />
 
-        <Content padder>
+        <Box>
           <List>
             {atividadesPendentes.map(atividadePendente => {
               return (
-                <ListItem key={atividadePendente.id}>
+                <Stack key={atividadePendente.id}>
                   <Text style={{ flex: 1 }}>{atividadePendente.texto}</Text>
                   <Icon
                     type="AntDesign"
@@ -54,12 +54,12 @@ class AtividadesPendentes extends Component<Props> {
                     style={{ color: 'grey', padding: 5 }}
                     onPress={() => this.writeToClipboard(atividadePendente.texto)}
                   />
-                </ListItem>
+                </Stack>
               )
             })}
           </List>
-        </Content>
-      </Container>
+        </Box>
+      </Box>
     )
   }
 }

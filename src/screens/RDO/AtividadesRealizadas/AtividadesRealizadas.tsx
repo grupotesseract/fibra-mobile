@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import {
   Button,
-  Container,
-  Content,
   Text,
   View,
-  Card,
-  CardItem,
-  Icon,
+  Box,
+  Stack,
+  Icon
 } from 'native-base'
 import { ScrollView, Alert } from 'react-native'
 import { NavigationScreenProp } from 'react-navigation'
@@ -58,7 +56,7 @@ class AtividadesRealizadas extends Component<Props> {
     const { navigation } = this.props;
     navigation.navigate({
       routeName: 'EditaAtividade',
-      params: {id}
+      params: { id }
     })
   };
 
@@ -70,7 +68,7 @@ class AtividadesRealizadas extends Component<Props> {
       [
         {
           text: 'Cancelar',
-          onPress: () => {},
+          onPress: () => { },
           style: 'cancel',
         },
         {
@@ -93,58 +91,56 @@ class AtividadesRealizadas extends Component<Props> {
   render() {
     const { atividadesRealizadas } = this.state;
 
-    return <Container>
+    return <Box>
       <HeaderNav title='Atividades Realizadas' />
-      <Content padder contentContainerStyle={{ flex: 1, justifyContent: 'space-between' }}>
+      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
         <ScrollView>
           {atividadesRealizadas.length === 0 &&
             <Text> Nenhuma atividade cadastrada.</Text>
           }
           {
             atividadesRealizadas.map(atividade => {
-              return <Card key={atividade.id}>
-                <CardItem
-                  button
-                  bordered
-                  onPress={ () =>
-                    this.editaAtividade({ id: atividade.id})
+              return <Box key={atividade.id}>
+                <Stack
+                  onPress={() =>
+                    this.editaAtividade({ id: atividade.id })
                   }
                   style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}
                 >
                   {atividade.concluido ?
-                    <Icon type="AntDesign" name="checkcircle"  style={{color: 'green'}}/> :
-                    <Icon type="AntDesign" name="exclamationcircle" style={{color: 'red'}} />
+                    <Icon type="AntDesign" name="checkcircle" style={{ color: 'green' }} /> :
+                    <Icon type="AntDesign" name="exclamationcircle" style={{ color: 'red' }} />
                   }
                   <Text style={{ flex: 1 }}>{atividade.descricao || 'Atividade sem descrição'}</Text>
                   <Icon
                     type="AntDesign"
                     name="close"
-                    style={{color: 'grey', padding: 5}}
+                    style={{ color: 'grey', padding: 5 }}
                     onPress={() => this.excluiAtividade({ id: atividade.id })}
                   />
-                </CardItem>
-              </Card>
+                </Stack>
+              </Box>
             })
           }
         </ScrollView>
-      </Content>
+      </Box>
 
       <View style={{ flexDirection: 'row', padding: 20 }}>
         <Button
-          block
+
           onPress={() => this.addAtividade()}
           style={style.btnStyle} >
           <Text>Adicionar Atividade</Text>
         </Button>
         <Button
-          block
+
           onPress={() => this.concluir()}
           style={style.btnStyle} >
           <Text>Concluir</Text>
         </Button>
       </View>
 
-    </Container>
+    </Box>
   };
 }
 

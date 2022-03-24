@@ -29,23 +29,23 @@ class Menu extends Component<Props> {
 
     return (
       <View>
-        <HeaderLogo/>
+        <HeaderLogo />
 
-        <View padder>
+        <View>
           <Button
-            block
+
             onPress={() => navigate('SelecionaPlanta')}
             style={style.btnStyle}>
-            <Icon name="bulb"/>
+            <Icon name="bulb" />
             <Text>Manutenção de Iluminação</Text>
           </Button>
 
           <Button
-            block
-            bordered
+
+
             onPress={() => this.logoff()}
             style={style.btnStyle}>
-            <Icon name="exit"/>
+            <Icon name="exit" />
             <Text>Sair</Text>
           </Button>
         </View>

@@ -61,10 +61,10 @@ class ManutencaoCliente extends Component<Props> {
       <View style={{ flexGrow: 1 }}>
         <HeaderLogo />
 
-        <View padder>
+        <View>
           <Button
-            block
-            disabled={estoqueConcluido}
+
+            isDisabled={estoqueConcluido}
             onPress={() => this.props.navigation.navigate('QRCodeCliente')}
             style={style.btnStyle}
           >
@@ -78,7 +78,7 @@ class ManutencaoCliente extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate('FotosManutencaoEletrica')
             }
@@ -89,7 +89,7 @@ class ManutencaoCliente extends Component<Props> {
           </Button>
 
           <Button
-            block
+
             onPress={() =>
               this.props.navigation.navigate('ManutencaoClienteComentarios')
             }
@@ -100,8 +100,8 @@ class ManutencaoCliente extends Component<Props> {
           </Button>
         </View>
 
-        <View padder style={{ justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Button block onPress={() => this.concluirManutencao()}>
+        <View style={{ justifyContent: 'flex-end', flexGrow: 1 }}>
+          <Button onPress={() => this.concluirManutencao()}>
             <AntDesign
               name='check'
               color='white'
