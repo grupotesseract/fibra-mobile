@@ -15,6 +15,7 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
+import ActionButton from '../../../components/ActionButton'
 
 interface StateProps {
   rdoAtual: ManutencaoRDO,
@@ -56,6 +57,26 @@ class ComentariosRDO extends Component<Props> {
   componentDidMount() {
     const { navigation, rdoAtual } = this.props;
     const tipoComentario = navigation.state.params?.tipo || null;
+
+
+    const title = ((tipoComentario: String) => {
+      switch (tipoComentario) {
+        case 'IT':
+        case 'OS':
+        case 'LEM':
+        case 'LET':
+          return 'Registrar ' + tipoComentario;
+        case 'problemas_encontrados':
+          return 'Problemas Encontrados';
+        case 'informacoes_adicionais':
+          return 'Informações Adicionais';
+        case 'observacoes':
+          return 'Observações';
+      }
+    })(tipoComentario);
+    this.props.navigation.setParams({ title });
+
+
     const comentario = ((tipoComentario: String) => {
       switch (tipoComentario) {
         case 'IT':
@@ -80,60 +101,30 @@ class ComentariosRDO extends Component<Props> {
     })
   };
 
+  static navigationOptions = ({ navigation }) => {
+    const title = navigation.getParam('title')
+    return {
+      title: `${title}`
+    }
+  };
+
   render() {
-    const tipoComentario = this.props.navigation.state.params?.tipo || null;
     const { comentario } = this.state;
 
-    const title = ((tipoComentario: String) => {
-      switch (tipoComentario) {
-        case 'IT':
-        case 'OS':
-        case 'LEM':
-        case 'LET':
-          return 'Registrar ' + tipoComentario;
-        case 'problemas_encontrados':
-          return 'Problemas Encontrados';
-        case 'informacoes_adicionais':
-          return 'Informações Adicionais';
-        case 'observacoes':
-          return 'Observações';
-      }
-    })(tipoComentario);
-
-    return <Box>
-      <HeaderNav title={title} />
-      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
-        <KeyboardAvoidingView behavior="height">
-          <FormControl>
-            <ScrollView>
-              <TextArea
-                numberOfLines={50}
-                value={comentario}
-                onChangeText={(comentario) => this.setState({ comentario })} />
-            </ScrollView>
-          </FormControl>
-        </KeyboardAvoidingView>
-      </Box>
-
-      <View style={{ flexDirection: 'row', padding: 20 }}>
-        <Button
-
+    return (
+      <Box flex={1} padding={7} >
+        <TextArea flex={1} value={comentario} variant='outline' mb={2}
+          onChangeText={(comentario) => this.setState({ comentario })} />
+        <ActionButton
           onPress={() => this.salvaComentario()}
-          style={style.btnStyle} >
-          <Text>Concluído</Text>
-        </Button>
-      </View>
-
-    </Box>
+        >
+          Concluído
+        </ActionButton>
+      </Box>
+    )
   };
 }
 
-const style = {
-  btnStyle: {
-    marginVertical: 5,
-    flex: 1
-  }
-}
 
 const mapStateToProps = (state: ApplicationState) => ({
   rdoAtual: state.manutencaoRDOReducer.rdoAtual

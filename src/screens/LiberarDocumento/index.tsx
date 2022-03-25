@@ -100,7 +100,8 @@ class LiberarDocumento extends Component<Props> {
             onPress={() => this.liberarDocumento()}
           > Iniciar manutenção
           </ActionButton>
-        </ScrollView></Box>
+        </ScrollView>
+      </Box>
     );
   }
 }

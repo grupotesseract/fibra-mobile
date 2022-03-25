@@ -9,10 +9,10 @@ interface IMenuItem extends IPressableProps {
 }
 
 const MenuItem = (props: IMenuItem) => {
-  const { onPress, icon, text, disabled } = props;
+  const { onPress, icon, text, isDisabled } = props;
   const invertColors = props.invertColors || false;
   let colorsStyle = styles.default;
-  if (disabled) {
+  if (isDisabled) {
     colorsStyle = styles.disable;
   }
   if (invertColors) {

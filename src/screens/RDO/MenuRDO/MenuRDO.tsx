@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Text, View } from 'native-base';
+import { Box, Icon, Stack } from 'native-base';
 import { Alert } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -8,7 +8,9 @@ import { bindActionCreators, Dispatch } from 'redux';
 import HeaderLogo from '../../../components/HeaderLogo';
 import { ApplicationState } from '../../../store';
 import * as RDOActions from '../../../store/ducks/rdo/actions';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import MenuItem from '../../../components/MenuItem';
+import brandColors from '../../../theme/brandColors';
 
 interface StateProps {
   navigation: NavigationScreenProp<any, any>;
@@ -45,109 +47,93 @@ class MenuRDO extends Component<Props> {
 
   render() {
     return (
-      <View style={{ flexGrow: 1 }}>
+      <Box padding={7} flex={1} >
         <HeaderLogo />
+        <Stack justifyContent='space-between' flex={1}>
+          <Stack space={2} mt={9}>
 
-        <View>
-          <Button
-
-            onPress={() =>
-              this.props.navigation.navigate('AtividadesRealizadas')
-            }
-            style={style.btnStyle}
-          >
-            <AntDesign
-              name='profile'
-              color='white'
-              size={28}
-              style={{ marginLeft: 12 }}
+            <MenuItem
+              icon={<Icon
+                color={brandColors.white}
+                name='profile'
+                as={AntDesign}
+              />}
+              text='Atividades Realizadas no dia'
+              onPress={() =>
+                this.props.navigation.navigate('AtividadesRealizadas')
+              }
             />
-            <Text>Atividades Realizadas no dia</Text>
-          </Button>
 
-          <Button
-
-            onPress={() =>
-              this.props.navigation.navigate({
-                routeName: 'ComentariosRDO',
-                params: { tipo: 'problemas_encontrados' },
-              })
-            }
-            style={style.btnStyle}
-          >
-            <AntDesign
-              name='warning'
-              color='white'
-              size={24}
-              style={{ marginLeft: 14 }}
+            <MenuItem
+              icon={<Icon
+                color={brandColors.white}
+                name='warning'
+                as={AntDesign}
+              />}
+              text='Problemas Encontrados'
+              onPress={() =>
+                this.props.navigation.navigate({
+                  routeName: 'ComentariosRDO',
+                  params: { tipo: 'problemas_encontrados' },
+                })
+              }
             />
-            <Text>Problemas Encontrados</Text>
-          </Button>
 
-          <Button
-
-            onPress={() =>
-              this.props.navigation.navigate({
-                routeName: 'ComentariosRDO',
-                params: { tipo: 'informacoes_adicionais' },
-              })
-            }
-            style={style.btnStyle}
-          >
-            <AntDesign
-              name='infocirlceo'
-              color='white'
-              size={24}
-              style={{ marginLeft: 14 }}
+            <MenuItem
+              icon={<Icon
+                color={brandColors.white}
+                name='infocirlceo'
+                as={AntDesign}
+              />}
+              text='Informações Adicionais'
+              onPress={() =>
+                this.props.navigation.navigate({
+                  routeName: 'ComentariosRDO',
+                  params: { tipo: 'informacoes_adicionais' },
+                })
+              }
             />
-            <Text>Informações Adicionais</Text>
-          </Button>
 
-          <Button
+            <MenuItem
+              icon={<Icon
+                color={brandColors.white}
+                name='chatbox'
+                as={Ionicons}
+              />}
+              text='Observações'
+              onPress={() =>
+                this.props.navigation.navigate({
+                  routeName: 'ComentariosRDO',
+                  params: { tipo: 'observacoes' },
+                })
+              }
+            />
 
-            onPress={() =>
-              this.props.navigation.navigate({
-                routeName: 'ComentariosRDO',
-                params: { tipo: 'observacoes' },
-              })
-            }
-            style={style.btnStyle}
-          >
-            <Icon name='chatbox' />
-            <Text>Observações</Text>
-          </Button>
+            <MenuItem
+              icon={<Icon
+                color={brandColors.white}
+                name='camera'
+                as={Ionicons}
+              />}
+              text='Fotos'
+              onPress={() => this.props.navigation.navigate('FotosRDO')}
+            />
 
-          <Button
-
-            onPress={() => this.props.navigation.navigate('FotosRDO')}
-            style={style.btnStyle}
-          >
-            <Icon name='camera' />
-            <Text>Fotos</Text>
-          </Button>
-        </View>
-
-        <View style={{ justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Button onPress={() => this.concluirManutencao()}>
-            <AntDesign
+          </Stack>
+          <MenuItem
+            icon={<Icon
+              color={brandColors.white}
               name='check'
-              color='white'
-              size={28}
-              style={{ marginLeft: 10 }}
-            />
-            <Text>Concluir</Text>
-          </Button>
-        </View>
-      </View>
+              as={AntDesign}
+            />}
+            text='Concluir'
+            onPress={() => this.concluirManutencao()}
+          />
+        </Stack>
+      </Box>
     );
   }
 }
-
-const style = {
-  btnStyle: {
-    marginVertical: 5,
-  },
-};
 
 const mapStateToProps = (state: ApplicationState) => ({});
 

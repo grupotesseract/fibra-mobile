@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Box, Text, Button } from 'native-base';
-import HeaderNav from '../../../components/HeaderNav';
+import { Stack } from 'native-base';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../../store'
 import { NavigationScreenProp } from 'react-navigation';
+import ActionButton from '../../../components/ActionButton';
 
 interface StateProps {
   navigation: NavigationScreenProp<any, any>,
@@ -56,60 +56,32 @@ class RegistroLiberacao extends Component<Props> {
     })
   }
 
+
+
   render() {
 
     return (
-      <Box>
-        <HeaderNav title="Liberação de Documento" />
-
-        <Box>
-
-          <Button
-
-            onPress={() => this.handlePressButton('IT')}
-            style={style.btnStyle}>
-            <Text>IT</Text>
-          </Button>
-          <Button
-
-            onPress={() => this.handlePressButton('OS')}
-            style={style.btnStyle}>
-            <Text>OS</Text>
-          </Button>
-          <Button
-
-            onPress={() => this.handlePressButton('LEM')}
-            style={style.btnStyle}>
-            <Text>LEM</Text>
-          </Button>
-          <Button
-
-            onPress={() => this.handlePressButton('LET')}
-            style={style.btnStyle}>
-            <Text>LET</Text>
-          </Button>
-          <Button
-
-            onPress={() => this.handleAtividadesPendentes()}
-            style={style.btnStyle}>
-            <Text>ATIVIDADES PENDENTES</Text>
-          </Button>
-
-          <Button
-
-            onPress={() => this.liberarDocumento()}
-          >
-            <Text>Iniciar RDO</Text>
-          </Button>
-        </Box>
-      </Box>
+      <Stack padding={7} space={3}>
+        <ActionButton justifyContent='flex-start' onPress={() => this.handlePressButton('IT')}>
+          IT
+        </ActionButton>
+        <ActionButton justifyContent='flex-start' onPress={() => this.handlePressButton('OS')}>
+          OS
+        </ActionButton>
+        <ActionButton justifyContent='flex-start' onPress={() => this.handlePressButton('LEM')}>
+          LEM
+        </ActionButton>
+        <ActionButton justifyContent='flex-start' onPress={() => this.handlePressButton('LET')}>
+          LET
+        </ActionButton>
+        <ActionButton justifyContent='flex-start' onPress={() => this.handleAtividadesPendentes()}>
+          ATIVIDADES PENDENTES
+        </ActionButton>
+        <ActionButton justifyContent='flex-start' onPress={() => this.liberarDocumento()}>
+          Iniciar RDO
+        </ActionButton>
+      </Stack>
     );
-  }
-}
-
-const style = {
-  btnStyle: {
-    marginVertical: 5,
   }
 }
 

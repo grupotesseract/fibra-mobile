@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Box, Text, Button, List, Input, Heading, Checkbox, Stack, Pressable } from 'native-base';
-import HeaderNav from '../../../components/HeaderNav';
+import { Box, Text, Button, Input, Heading, Checkbox, Stack, HStack, Divider, ScrollView } from 'native-base';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { connect } from 'react-redux';
@@ -60,49 +59,43 @@ class EquipeLiberacao extends Component<Props> {
 
     const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico');
     return (
-      <Box>
-        <HeaderNav title="Liberação de Documento" />
-
-        <Box>
+      <ScrollView>
+        <Stack padding={7} flex={1} space={4}>
           <Heading>Equipe de fiscalização</Heading>
-          <Stack style={{ marginBottom: 30 }}>
-            <Text>Equipe:</Text>
-            <Input
-              value={equipeFiscalizacao}
-              onChangeText={equipeFiscalizacao => this.setState({ equipeFiscalizacao })} />
-          </Stack>
-          <Heading>Colaboradores</Heading>
-          <List>
-            {colaboradores.map(colaborador => {
-              return <Pressable
-                key={colaborador.id}
-                style={{
-                  paddingBottom: 10,
-                  paddingTop: 10,
-                  paddingRight: 0,
-                  marginLeft: 0,
 
-                }}
-                onPress={() => this.onPressBotaoColaborador(colaborador.id)}
-              >
-                <Text>{colaborador.nome}</Text>
-                <Checkbox
-                  isChecked={idsUsuariosSelecionados.includes(colaborador.id)}
-                  onPress={() => this.onPressBotaoColaborador(colaborador.id)}
-                >
-                </Checkbox>
-              </Pressable>
-            })}
-          </List>
+          <Box>
+            <HStack alignItems='center'>
+              <Text bold>Equipe: </Text>
+              <Input
+                value={equipeFiscalizacao}
+                onChangeText={equipeFiscalizacao => this.setState({ equipeFiscalizacao })}
+                flex={1}
+                variant='unstyled'
+              />
+            </HStack>
+            <Divider />
+          </Box>
+
+          <Heading>Colaboradores</Heading>
+          {colaboradores.map(colaborador => {
+            return <Checkbox
+              key={colaborador.id}
+              value={colaborador.id.toString()}
+              isChecked={idsUsuariosSelecionados.includes(colaborador.id)}
+              onChange={() => this.onPressBotaoColaborador(colaborador.id)}
+              ml={2}
+            > {colaborador.nome}
+            </Checkbox>
+          })}
           <Button
 
             isDisabled={idsUsuariosSelecionados.length <= 0}
             onPress={() => this.liberarDocumento()}
-          >
-            <Text>Registrar Equipe</Text>
+          >Registrar Equipe
           </Button>
-        </Box>
-      </Box>
+
+        </Stack>
+      </ScrollView>
     );
   }
 }
