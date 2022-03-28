@@ -1,47 +1,56 @@
 import React, { Component } from 'react';
-import { Container, Text, Button, Icon, Box, View, Input, Heading, Checkbox, Stack, ScrollView, Center, HStack } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
+import {
+  Text,
+  Box,
+  Input,
+  Heading,
+  Checkbox,
+  Stack,
+  ScrollView,
+  Center,
+  HStack,
+} from 'native-base';
 import { bindActionCreators, Dispatch } from 'redux';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
 import { connect } from 'react-redux';
-import { ApplicationState } from '../../store'
+
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
+import { ApplicationState } from '../../store';
 import { Planta } from '../../store/ducks/planta/types';
 import { Usuario } from '../../store/ducks/usuarios/types';
 import { NavigationScreenProp } from 'react-navigation';
-import { Pressable } from 'react-native';
 import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  usuarios: Usuario[],
-  navigation: NavigationScreenProp<any, any>,
+  plantaAtiva: Planta;
+  usuarios: Usuario[];
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  liberarDocumentoPlanta(idProgramacao: number, now: string, usuarios: number[]): void,
+  liberarDocumentoPlanta(
+    idProgramacao: number,
+    now: string,
+    usuarios: number[]
+  ): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 class LiberarDocumento extends Component<Props> {
-
   state = {
     idsUsuariosSelecionados: [],
     now: new Date().toISOString(),
-  }
+  };
 
   onPressBotaoColaborador = (idColaborador: number) => {
     const { idsUsuariosSelecionados } = this.state;
     let listaIds = [];
     if (!idsUsuariosSelecionados.includes(idColaborador)) {
-      listaIds = [
-        ...idsUsuariosSelecionados,
-        idColaborador,
-      ]
+      listaIds = [...idsUsuariosSelecionados, idColaborador];
     } else {
-      listaIds = idsUsuariosSelecionados.filter(id => id !== idColaborador)
+      listaIds = idsUsuariosSelecionados.filter((id) => id !== idColaborador);
     }
-    this.setState({ idsUsuariosSelecionados: listaIds })
-  }
+    this.setState({ idsUsuariosSelecionados: listaIds });
+  };
 
   liberarDocumento = async () => {
     const { navigation, liberarDocumentoPlanta, plantaAtiva } = this.props;
@@ -51,8 +60,8 @@ class LiberarDocumento extends Component<Props> {
     this.setState({ now });
 
     await liberarDocumentoPlanta(idProgramacao, now, idsUsuariosSelecionados);
-    navigation.navigate({ routeName: 'MenuVistoria' })
-  }
+    navigation.navigate({ routeName: 'MenuVistoria' });
+  };
 
   render() {
     const { usuarios } = this.props;
@@ -61,13 +70,15 @@ class LiberarDocumento extends Component<Props> {
     const hora = nowDateObj.getHours();
     const minuto = nowDateObj.getMinutes();
 
-    const colaboradores = usuarios.filter(usuario => usuario.role === 'tecnico');
+    const colaboradores = usuarios.filter(
+      (usuario) => usuario.role === 'tecnico'
+    );
     return (
       <Box padding={7}>
         <ScrollView>
           <Stack space={5}>
             <Heading>Colaboradores</Heading>
-            {colaboradores.map(colaborador => {
+            {colaboradores.map((colaborador) => {
               return (
                 <Checkbox
                   key={colaborador.id}
@@ -75,8 +86,10 @@ class LiberarDocumento extends Component<Props> {
                   isChecked={idsUsuariosSelecionados.includes(colaborador.id)}
                   onChange={() => this.onPressBotaoColaborador(colaborador.id)}
                   ml={2}
-                > {colaborador.nome}
-                </Checkbox>)
+                >
+                  {colaborador.nome}
+                </Checkbox>
+              );
             })}
           </Stack>
           <Stack space={4} marginY={30}>
@@ -86,19 +99,25 @@ class LiberarDocumento extends Component<Props> {
                 <Input
                   fontSize='35'
                   value={hora < 10 ? '0' + hora.toString() : hora.toString()}
-                  keyboardType="numeric" />
+                  keyboardType='numeric'
+                />
                 <Text fontSize='35'>:</Text>
                 <Input
                   fontSize='35'
-                  value={minuto < 10 ? '0' + minuto.toString() : minuto.toString()}
-                  keyboardType="numeric" />
-                <Text fontSize='35'>h</Text></HStack>
+                  value={
+                    minuto < 10 ? '0' + minuto.toString() : minuto.toString()
+                  }
+                  keyboardType='numeric'
+                />
+                <Text fontSize='35'>h</Text>
+              </HStack>
             </Center>
           </Stack>
           <ActionButton
             isDisabled={idsUsuariosSelecionados.length <= 0}
             onPress={() => this.liberarDocumento()}
-          > Iniciar manutenção
+          >
+            Iniciar manutenção
           </ActionButton>
         </ScrollView>
       </Box>
@@ -109,9 +128,9 @@ class LiberarDocumento extends Component<Props> {
 const mapStateToProps = (state: ApplicationState) => ({
   usuarios: state.usuariosReducer.listaUsuarios,
   plantaAtiva: state.plantaReducer.plantaAtiva,
-})
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LiberarDocumento)
+export default connect(mapStateToProps, mapDispatchToProps)(LiberarDocumento);

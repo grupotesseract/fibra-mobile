@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 16,
-    borderRadius: 2
+    borderRadius: 2,
   },
   default: {
     backgroundColor: brandColors.primary,

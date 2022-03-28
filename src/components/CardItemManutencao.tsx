@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Text, VStack,
-  Divider,
-  HStack
-} from 'native-base';
+import { Button, Text, VStack, Divider, HStack } from 'native-base';
 import NumericInput from 'react-native-numeric-input';
 import { Material } from '../store/ducks/planta/types';
 
 type Props = {
-  material: Material,
-  onChangeQuantidadeBase: (idMaterial: number, quantidadeBase: number) => void,
-  onChangeQuantidadeReator: (idMaterial: number, quantidadeReator: number) => void,
-  onChangeQuantidade: (idMaterial: number, quantidade: number) => void,
-  onPressBotaoOK: (idMaterial: number, quantidadeConfirmada: boolean) => void,
-  permiteAlteracao: boolean
-}
+  material: Material;
+  onChangeQuantidadeBase: (idMaterial: number, quantidadeBase: number) => void;
+  onChangeQuantidadeReator: (
+    idMaterial: number,
+    quantidadeReator: number
+  ) => void;
+  onChangeQuantidade: (idMaterial: number, quantidade: number) => void;
+  onPressBotaoOK: (idMaterial: number, quantidadeConfirmada: boolean) => void;
+  permiteAlteracao: boolean;
+};
 
 export class CardItemManutencao extends Component<Props> {
   shouldComponentUpdate(nextProps, nextState) {
@@ -50,8 +48,13 @@ export class CardItemManutencao extends Component<Props> {
     } = this.props;
 
     return (
-      <VStack space={2} borderColor="transparent" borderWidth="1" shadow={1} padding={4} >
-
+      <VStack
+        space={2}
+        borderColor='transparent'
+        borderWidth='1'
+        shadow={1}
+        padding={4}
+      >
         <Text color='primary.600' bold mb={2}>
           LÂMPADA
         </Text>
@@ -67,7 +70,9 @@ export class CardItemManutencao extends Component<Props> {
           <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
         </VStack>
         <Divider />
-        <Text bold textAlign={'center'}>Trocas</Text>
+        <Text bold textAlign={'center'}>
+          Trocas
+        </Text>
         {material.base && (
           <HStack marginTop={3} space={2} alignItems='center'>
             <Text>Bases:</Text>
@@ -112,19 +117,24 @@ export class CardItemManutencao extends Component<Props> {
           />
         </HStack>
 
-
         <Button
-          margin={3} size='lg'
-          rounded='2xl' alignContent='center'
+          margin={3}
+          size='lg'
+          rounded='2xl'
+          alignContent='center'
           isDisabled={!permiteAlteracao}
-          colorScheme={material.quantidadeConfirmada && permiteAlteracao ? 'success' : 'warning'}
-          onPress={() => onPressBotaoOK(
-            material.id,
-            material.quantidadeConfirmada
-          )}
-        >Confirmar</Button>
+          colorScheme={
+            material.quantidadeConfirmada && permiteAlteracao
+              ? 'success'
+              : 'warning'
+          }
+          onPress={() =>
+            onPressBotaoOK(material.id, material.quantidadeConfirmada)
+          }
+        >
+          Confirmar
+        </Button>
       </VStack>
-
     );
   }
 }

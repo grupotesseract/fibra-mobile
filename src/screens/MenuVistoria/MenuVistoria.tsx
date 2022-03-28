@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Stack, Text, Box } from 'native-base';
+import { Icon, Stack, Box } from 'native-base';
 import { ActivityIndicator } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -20,7 +20,7 @@ interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[];
 }
 
-interface DispatchProps { }
+interface DispatchProps {}
 
 type Props = StateProps & DispatchProps;
 

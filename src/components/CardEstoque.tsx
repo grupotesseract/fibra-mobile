@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Text, VStack,
-  Divider,
-  HStack
-} from 'native-base';
+import { Button, Text, VStack, Divider, HStack } from 'native-base';
 import NumericInput from 'react-native-numeric-input';
 
 type Props = {
-  itemMaterial: any,
-  onChangeQuantidade: (idMaterial: any, quantidade: any) => void
-  onPressBotaoOK: (idMaterial: any, quantidadeConfirmada: any) => void
-}
+  itemMaterial: any;
+  onChangeQuantidade: (idMaterial: any, quantidade: any) => void;
+  onPressBotaoOK: (idMaterial: any, quantidadeConfirmada: any) => void;
+};
 
 export class CardEstoque extends Component<Props> {
   shouldComponentUpdate(nextProps, nextState) {
@@ -32,7 +27,13 @@ export class CardEstoque extends Component<Props> {
     const { itemMaterial, onChangeQuantidade, onPressBotaoOK } = this.props;
 
     return (
-      <VStack borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2}>
+      <VStack
+        borderColor='transparent'
+        borderWidth='1'
+        shadow={1}
+        padding={4}
+        mb={2}
+      >
         <Text color='primary.600' bold mb={2}>
           {itemMaterial.nome
             ? itemMaterial.nome
@@ -46,9 +47,7 @@ export class CardEstoque extends Component<Props> {
           {itemMaterial.potencia && (
             <Text>Potência: {itemMaterial.potencia}</Text>
           )}
-          {itemMaterial.tensao && (
-            <Text>Tensão: {itemMaterial.tensao}</Text>
-          )}
+          {itemMaterial.tensao && <Text>Tensão: {itemMaterial.tensao}</Text>}
           {itemMaterial.base && <Text>Base: {itemMaterial.base}</Text>}
         </VStack>
 
@@ -60,20 +59,27 @@ export class CardEstoque extends Component<Props> {
             editable={false}
             rounded={true}
             value={itemMaterial.quantidade}
-            onChange={(quantidade) => onChangeQuantidade(itemMaterial.id, quantidade)} />
+            onChange={(quantidade) =>
+              onChangeQuantidade(itemMaterial.id, quantidade)
+            }
+          />
 
           <Button
-            ml={3} size='lg'
-            rounded='2xl' alignContent='center'
-            colorScheme={itemMaterial.quantidadeConfirmada ? 'success' : 'warning'}
-            onPress={() => onPressBotaoOK(
-              itemMaterial.id,
-              itemMaterial.quantidadeConfirmada
-            )}
-          >OK</Button>
+            ml={3}
+            size='lg'
+            rounded='2xl'
+            alignContent='center'
+            colorScheme={
+              itemMaterial.quantidadeConfirmada ? 'success' : 'warning'
+            }
+            onPress={() =>
+              onPressBotaoOK(itemMaterial.id, itemMaterial.quantidadeConfirmada)
+            }
+          >
+            OK
+          </Button>
         </HStack>
       </VStack>
-
     );
   }
 }

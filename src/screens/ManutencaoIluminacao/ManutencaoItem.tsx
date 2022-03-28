@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Container,
   Text,
-  Button,
-  View,
   Icon,
   Image,
   Badge,
@@ -11,26 +8,24 @@ import {
   HStack,
   Stack,
   Pressable,
-  Center,
 } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
-import NumericInput from 'react-native-numeric-input';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
+import { ScrollView } from 'react-native';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { NavigationScreenProp } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+
 import {
   Planta,
   Item as ItemPlanta,
   Material,
 } from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
-import { NavigationScreenProp } from 'react-navigation';
 import {
   QuantidadeSubstituida,
   ProgramacaoRealizada,
 } from '../../store/ducks/programacoes/types';
-import { Ionicons } from '@expo/vector-icons';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { CardItemManutencao } from '../../components/CardItemManutencao';
 import ActionButton from '../../components/ActionButton';
 
@@ -220,13 +215,17 @@ class ManutencaoItem extends Component<Props> {
           'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.',
       });
     }
-    this.props.navigation.setParams({ verTodosMateriais: this.verTodosMateriais });
+    this.props.navigation.setParams({
+      verTodosMateriais: this.verTodosMateriais,
+    });
   }
 
   verTodosMateriais = () => {
     const { navigation } = this.props;
     const { idItem, permiteAlteracao, error } = this.state;
-    !error && permiteAlteracao && navigation.navigate('TodosMateriaisItem', { idItem });
+    !error &&
+      permiteAlteracao &&
+      navigation.navigate('TodosMateriaisItem', { idItem });
   };
 
   static navigationOptions = ({ navigation }) => {
@@ -238,11 +237,13 @@ class ManutencaoItem extends Component<Props> {
         >
           <Stack alignItems='center'>
             <Icon name='md-git-compare' as={Ionicons} color='white' size='sm' />
-            <Text fontSize='sm' color='white'>Editar</Text>
+            <Text fontSize='sm' color='white'>
+              Editar
+            </Text>
           </Stack>
         </Pressable>
       ),
-    }
+    };
   };
 
   render() {
@@ -270,9 +271,9 @@ class ManutencaoItem extends Component<Props> {
 
     if (error) {
       return (
-        <Center>
+        <Box padding={7} flex={1}>
           <Text>{error}</Text>
-        </Center>
+        </Box>
       );
     }
 
@@ -280,12 +281,29 @@ class ManutencaoItem extends Component<Props> {
       <Box padding={7} flex={1}>
         <ScrollView>
           <Stack space={2}>
-            <HStack space={2} borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2} alignItems='center'>
-              <Image size='sm' rounded='full' source={require('../../../assets/qrcode.png')} alt='qrcode image placeholder' />
+            <HStack
+              space={2}
+              borderColor='transparent'
+              borderWidth='1'
+              shadow={1}
+              padding={4}
+              mb={2}
+              alignItems='center'
+            >
+              <Image
+                size='sm'
+                rounded='full'
+                source={require('../../../assets/qrcode.png')}
+                alt='qrcode image placeholder'
+              />
               <Stack flex={1}>
                 <HStack alignItems='center' justifyContent='space-between'>
                   <Text>{qrcode}</Text>
-                  <Badge rounded='full' colorScheme={emergencia ? 'danger' : 'info'} >{emergencia ? 'E' : 'N'}
+                  <Badge
+                    rounded='full'
+                    colorScheme={emergencia ? 'danger' : 'info'}
+                  >
+                    {emergencia ? 'E' : 'N'}
                   </Badge>
                 </HStack>
                 <Text>{nome}</Text>
@@ -348,7 +366,6 @@ class ManutencaoItem extends Component<Props> {
     );
   }
 }
-
 
 const style = {
   btnStyle: {

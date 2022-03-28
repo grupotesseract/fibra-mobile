@@ -47,17 +47,14 @@ class MenuRDO extends Component<Props> {
 
   render() {
     return (
-      <Box padding={7} flex={1} >
+      <Box padding={7} flex={1}>
         <HeaderLogo />
         <Stack justifyContent='space-between' flex={1}>
           <Stack space={2} mt={9}>
-
             <MenuItem
-              icon={<Icon
-                color={brandColors.white}
-                name='profile'
-                as={AntDesign}
-              />}
+              icon={
+                <Icon color={brandColors.white} name='profile' as={AntDesign} />
+              }
               text='Atividades Realizadas no dia'
               onPress={() =>
                 this.props.navigation.navigate('AtividadesRealizadas')
@@ -65,11 +62,9 @@ class MenuRDO extends Component<Props> {
             />
 
             <MenuItem
-              icon={<Icon
-                color={brandColors.white}
-                name='warning'
-                as={AntDesign}
-              />}
+              icon={
+                <Icon color={brandColors.white} name='warning' as={AntDesign} />
+              }
               text='Problemas Encontrados'
               onPress={() =>
                 this.props.navigation.navigate({
@@ -80,11 +75,13 @@ class MenuRDO extends Component<Props> {
             />
 
             <MenuItem
-              icon={<Icon
-                color={brandColors.white}
-                name='infocirlceo'
-                as={AntDesign}
-              />}
+              icon={
+                <Icon
+                  color={brandColors.white}
+                  name='infocirlceo'
+                  as={AntDesign}
+                />
+              }
               text='Informações Adicionais'
               onPress={() =>
                 this.props.navigation.navigate({
@@ -95,11 +92,9 @@ class MenuRDO extends Component<Props> {
             />
 
             <MenuItem
-              icon={<Icon
-                color={brandColors.white}
-                name='chatbox'
-                as={Ionicons}
-              />}
+              icon={
+                <Icon color={brandColors.white} name='chatbox' as={Ionicons} />
+              }
               text='Observações'
               onPress={() =>
                 this.props.navigation.navigate({
@@ -110,22 +105,17 @@ class MenuRDO extends Component<Props> {
             />
 
             <MenuItem
-              icon={<Icon
-                color={brandColors.white}
-                name='camera'
-                as={Ionicons}
-              />}
+              icon={
+                <Icon color={brandColors.white} name='camera' as={Ionicons} />
+              }
               text='Fotos'
               onPress={() => this.props.navigation.navigate('FotosRDO')}
             />
-
           </Stack>
           <MenuItem
-            icon={<Icon
-              color={brandColors.white}
-              name='check'
-              as={AntDesign}
-            />}
+            icon={
+              <Icon color={brandColors.white} name='check' as={AntDesign} />
+            }
             text='Concluir'
             onPress={() => this.concluirManutencao()}
           />

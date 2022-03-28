@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Card,
   Stack,
   Text,
-  Box,
-  Button,
   Select,
   Icon,
-  View,
   HStack,
   IconButton,
   Divider,
 } from 'native-base';
+import { connect } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import NumericInput from 'react-native-numeric-input';
 import { ApplicationState } from '../../store';
 import { bindActionCreators, Dispatch } from 'redux';
-import { connect } from 'react-redux';
 import ActionButton from '../../components/ActionButton';
-import { Ionicons } from '@expo/vector-icons';
 
 const IncluirMaterialAoItem = ({
   estoque,
@@ -49,10 +46,22 @@ const IncluirMaterialAoItem = ({
   };
 
   return (
-    <Stack flex={1} borderColor="transparent" borderWidth="1" shadow={1} padding={4} alignItems='center'>
+    <Stack
+      flex={1}
+      borderColor='transparent'
+      borderWidth='1'
+      shadow={1}
+      padding={4}
+      alignItems='center'
+    >
       <HStack w='100%' justifyContent='space-between' alignItems='center'>
-        <Text color='primary.600' bold>Incluir material</Text>
-        <IconButton onPress={cancelarInclusao} icon={<Icon as={Ionicons} name='md-close' />} />
+        <Text color='primary.600' bold>
+          Incluir material
+        </Text>
+        <IconButton
+          onPress={cancelarInclusao}
+          icon={<Icon as={Ionicons} name='md-close' />}
+        />
       </HStack>
       <Divider />
       <Stack w='100%' space={2}>
@@ -106,7 +115,7 @@ const IncluirMaterialAoItem = ({
           </Stack>
         )}
 
-        <HStack space={2} alignItems='center' >
+        <HStack space={2} alignItems='center'>
           <Text>Qtd. Instalada:</Text>
           <NumericInput
             minValue={0}
@@ -151,7 +160,12 @@ const IncluirMaterialAoItem = ({
           </HStack>
         )}
         <Divider />
-        <ActionButton mt={2} rounded='xl' isDisabled={!materialId} onPress={handleIncluir}>
+        <ActionButton
+          mt={2}
+          rounded='xl'
+          isDisabled={!materialId}
+          onPress={handleIncluir}
+        >
           Incluir
         </ActionButton>
       </Stack>

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Divider,
-  HStack,
-  Stack,
-  Text,
-  Toast,
-} from 'native-base';
+import { Box, Divider, HStack, Stack, Text, Toast } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -15,10 +7,7 @@ import { ApplicationState } from '../../../store';
 import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { Alert, ScrollView, ActivityIndicator } from 'react-native';
-import {
-  uploadInfosRDO,
-  uploadFotosRDO,
-} from '../../../services/api';
+import { uploadInfosRDO, uploadFotosRDO } from '../../../services/api';
 import ActionButton from '../../../components/ActionButton';
 import brandColors from '../../../theme/brandColors';
 
@@ -33,45 +22,44 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-
 const CardRDO = ({ rdo, sincronizarRDO }) => {
-  const {
-    id,
-    errorSync,
-    dadosEnviados,
-    fotosEnviadas,
-    fotos,
-    loading,
-  } = rdo;
+  const { id, errorSync, dadosEnviados, fotosEnviadas, fotos, loading } = rdo;
 
   return (
-    <Stack space={2} key={rdo.id} borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2}>
-      <HStack space={2}>{loading && <ActivityIndicator color='blue' />}
-        <Text bold color={brandColors.primary}> RDO Planta #{id}</Text></HStack>
+    <Stack
+      space={2}
+      key={rdo.id}
+      borderColor='transparent'
+      borderWidth='1'
+      shadow={1}
+      padding={4}
+      mb={2}
+    >
+      <HStack space={2}>
+        {loading && <ActivityIndicator color='blue' />}
+        <Text bold color={brandColors.primary}>
+          RDO Planta #{id}
+        </Text>
+      </HStack>
       <Divider />
       <Box>
-        <Text bold>
-          Sincronização
-        </Text>
+        <Text bold>Sincronização</Text>
 
         <Text>
           Informações:{' '}
           {errorSync
             ? 'reenvio pendente'
             : dadosEnviados
-              ? 'sincronizadas'
-              : 'pendente'}
+            ? 'sincronizadas'
+            : 'pendente'}
         </Text>
         <Text>
           Fotos: {fotos.length} fotos{' '}
           {fotosEnviadas ? 'sincronizadas' : 'pendentes'}
         </Text>
-
       </Box>
-      <ActionButton
-        onPress={() => sincronizarRDO(rdo)}
-        isLoading={loading}
-      >  Sincronizar
+      <ActionButton onPress={() => sincronizarRDO(rdo)} isLoading={loading}>
+        Sincronizar
       </ActionButton>
 
       {errorSync && (
@@ -91,7 +79,7 @@ const SincronizacaoRDO = (props: Props) => {
       [
         {
           text: 'Cancelar',
-          onPress: () => null
+          onPress: () => null,
         },
         { text: 'OK', onPress: () => deleteRDOs() },
       ]
@@ -165,13 +153,11 @@ const SincronizacaoRDO = (props: Props) => {
             sincronizarRDO={syncRDO}
           />
         ))}
-        <ActionButton onPress={() => limpaRDOs()}>
-          Limpar RDOs
-        </ActionButton>
+        <ActionButton onPress={() => limpaRDOs()}>Limpar RDOs</ActionButton>
       </ScrollView>
     </Box>
   );
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   rdos: state.manutencaoRDOReducer.rdos,

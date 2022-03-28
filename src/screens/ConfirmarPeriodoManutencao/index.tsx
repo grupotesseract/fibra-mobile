@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  Button,
-  Text,
-  Box,
-  Stack,
-  HStack,
-  Divider,
-} from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
+import { Text, Stack, HStack, Divider } from 'native-base';
 import { bindActionCreators, Dispatch } from 'redux';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
 import { Planta } from '../../store/ducks/planta/types';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { iso2ddmmaaaa } from '../../utils/utils';
 import { NavigationScreenProp } from 'react-navigation';
 import ActionButton from '../../components/ActionButton';
@@ -58,18 +49,20 @@ class ConfirmarPeriodoManutencao extends Component<Props> {
     )[0];
     const dataFimPrevista = proximaProgramacao.data_fim_prevista.split('T')[0];
     return (
-      <Stack padding={7} flex={1}
-        justifyContent='space-between'
-      >
+      <Stack padding={7} flex={1} justifyContent='space-between'>
         <Stack space={2}>
           <Text>Confirmar período de Manutenção</Text>
           <HStack space={2} alignItems='center'>
-            <Text bold ml={2} >Início</Text >
+            <Text bold ml={2}>
+              Início
+            </Text>
             <Text>{iso2ddmmaaaa(dataInicioPrevista)}</Text>
           </HStack>
           <Divider />
           <HStack space={2} alignItems='center'>
-            <Text bold ml={2}>Fim</Text>
+            <Text bold ml={2}>
+              Fim
+            </Text>
             <Text>{iso2ddmmaaaa(dataFimPrevista)}</Text>
           </HStack>
           <Divider />

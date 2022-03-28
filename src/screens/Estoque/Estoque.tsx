@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Box, Divider, FlatList
-} from 'native-base';
+import { Box, FlatList } from 'native-base';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { bindActionCreators, Dispatch } from 'redux';
@@ -101,7 +99,8 @@ class EstoqueScreen extends Component<Props> {
               return tudoConfirmado && material.quantidadeConfirmada;
             }, true)
           }
-        >Concluído
+        >
+          Concluído
         </ActionButton>
       </Box>
     );

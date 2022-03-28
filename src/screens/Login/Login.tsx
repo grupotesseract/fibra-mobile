@@ -22,21 +22,20 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-
 const Login = (props: Props) => {
-  const [user, setUser] = useState('')
-  const [password, setPassword] = useState('')
-  const [auth, setAuth] = useState<AuthState>(props.auth)
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [auth, setAuth] = useState<AuthState>(props.auth);
 
   useEffect(() => {
     const { auth, navigation } = props;
     checkAuth({ auth, navigation });
-    setAuth(props.auth)
-  }, [props])
+    setAuth(props.auth);
+  }, [props]);
 
   function authLogin() {
     const { authRequest } = props;
-    authRequest({ user, password })
+    authRequest({ user, password });
     setPassword('');
   }
 
@@ -75,13 +74,14 @@ const Login = (props: Props) => {
             onPress={() => authLogin()}
             mt={60}
             isLoading={auth.loading}
-          > Login
+          >
+            Login
           </ActionButton>
         </Stack>
       </KeyboardAvoidingView>
-    </Center >
-  )
-}
+    </Center>
+  );
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   auth: state.auth,

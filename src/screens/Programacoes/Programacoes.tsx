@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import {
   Box,
-  Button,
-  Card,
   Divider,
   ScrollView,
   Spinner,
@@ -12,6 +10,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import { uploadFotos, uploadProgramacao } from '../../services/api';
 import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
@@ -32,7 +31,7 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 const Programacoes = (props: Props) => {
-  const [isSyncing, setIsSyncing] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false);
   const { updateProgramacao, programacoesRealizadas } = props;
 
   const syncProgramacao = async (idProgramacao: number) => {
@@ -43,11 +42,9 @@ const Programacoes = (props: Props) => {
     let dadosEnviados = programacao.dadosEnviados || false;
     let errorSync = programacao.errorSync || false;
 
-
-
     if (programacao) {
       // Envia dados de programacao
-      setIsSyncing(true)
+      setIsSyncing(true);
       if (!dadosEnviados) {
         const res = await uploadProgramacao({ idProgramacao, programacao });
         if (res.error) {
@@ -107,8 +104,7 @@ const Programacoes = (props: Props) => {
           errorSync,
         },
       });
-      setIsSyncing(false)
-
+      setIsSyncing(false);
     }
   };
 
@@ -130,23 +126,30 @@ const Programacoes = (props: Props) => {
               0
             );
             return (
-              <Stack borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2} key={programacaoRealizada.programacao.id} space={2}>
+              <Stack
+                borderColor='transparent'
+                borderWidth='1'
+                shadow={1}
+                padding={4}
+                mb={2}
+                key={programacaoRealizada.programacao.id}
+                space={2}
+              >
                 <Text bold color={brandColors.primary}>
                   Programação #{programacaoRealizada.programacao.id}
                 </Text>
                 <Divider />
                 <Box>
-                  <Text bold>
-                    Sincronização
-                  </Text>
+                  <Text bold>Sincronização</Text>
 
                   <Text>
-                    {`Informações: ${errorSync
-                      ? 'reenvio pendente'
-                      : dadosEnviados
+                    {`Informações: ${
+                      errorSync
+                        ? 'reenvio pendente'
+                        : dadosEnviados
                         ? 'sincronizadas'
                         : 'pendente'
-                      }`}
+                    }`}
                   </Text>
                   <Text>
                     {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
@@ -155,16 +158,14 @@ const Programacoes = (props: Props) => {
 
                 <ActionButton
                   onPress={() =>
-                    syncProgramacao(
-                      programacaoRealizada.programacao.id
-                    )
+                    syncProgramacao(programacaoRealizada.programacao.id)
                   }
                 >
                   Sincronizar
                 </ActionButton>
 
                 {programacaoRealizada.errorSync && (
-                  <Box >
+                  <Box>
                     <Text>
                       Ocorreu um erro ao sincronizar, tente novamente.
                     </Text>
@@ -181,8 +182,7 @@ const Programacoes = (props: Props) => {
       </ScrollView>
     </Box>
   );
-
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,

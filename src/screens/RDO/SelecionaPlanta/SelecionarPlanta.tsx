@@ -9,6 +9,7 @@ import {
   Divider,
 } from 'native-base';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
@@ -95,9 +96,7 @@ class SelecionaPlantaRDO extends Component<Props, State> {
     const { listaEmpresas } = empresas;
 
     return (
-      <Stack padding={7} flex={1}
-        justifyContent='space-between'
-      >
+      <Stack padding={7} flex={1} justifyContent='space-between'>
         <FormControl>
           <HStack height={'50px'} alignItems='center'>
             <Text bold>Empresa</Text>
@@ -141,19 +140,16 @@ class SelecionaPlantaRDO extends Component<Props, State> {
               flex={1}
               fontSize='md'
               variant='unstyled'
-
             >
               <Select.Item label='Selecione uma planta' value='0' key={0} />
               {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
-                this.getPlantasFromEmpresa(empresaSelecionada).map(
-                  (planta) => (
-                    <Select.Item
-                      label={planta.nome}
-                      value={`${planta.id}`}
-                      key={planta.id}
-                    />
-                  )
-                )
+                this.getPlantasFromEmpresa(empresaSelecionada).map((planta) => (
+                  <Select.Item
+                    label={planta.nome}
+                    value={`${planta.id}`}
+                    key={planta.id}
+                  />
+                ))
               ) : (
                 <>
                   <Select.Item
@@ -171,20 +167,18 @@ class SelecionaPlantaRDO extends Component<Props, State> {
             <Text bold>Obra/Atividade</Text>
             <Input
               value={obraAtividade}
-              onChangeText={(obraAtividade) =>
-                this.setState({ obraAtividade })
-              }
+              onChangeText={(obraAtividade) => this.setState({ obraAtividade })}
               flex={1}
               variant='unstyled'
             />
           </HStack>
           <Divider />
-
         </FormControl>
         <ActionButton
           isDisabled={empresaSelecionada === null}
           onPress={() => this.iniciaRDO()}
-        >Iniciar RDO
+        >
+          Iniciar RDO
         </ActionButton>
       </Stack>
     );

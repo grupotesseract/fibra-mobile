@@ -33,15 +33,14 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 const SelecionaPlanta = (props: Props) => {
-
-  const [empresaSelecionada, setEmpresaSelecionada] = useState(0)
-  const [plantaSelecionada, setPlantaSelecionada] = useState(null)
-  const [listaEmpresas, setListaEmpresas] = useState(props.empresas.listaEmpresas)
+  const [empresaSelecionada, setEmpresaSelecionada] = useState(0);
+  const [plantaSelecionada, setPlantaSelecionada] = useState(null);
+  const [listaEmpresas, setListaEmpresas] = useState(
+    props.empresas.listaEmpresas
+  );
 
   const selectEmpresa = (novaEmpresaSelecionada: number) => {
-    setEmpresaSelecionada(novaEmpresaSelecionada),
-      setPlantaSelecionada(null)
-
+    setEmpresaSelecionada(novaEmpresaSelecionada), setPlantaSelecionada(null);
   };
 
   const selectPlanta = (idPlantaSelecionada: number) => {
@@ -49,7 +48,7 @@ const SelecionaPlanta = (props: Props) => {
     const novaPlantaSelecionada = plantas.find(
       (planta) => planta.id === idPlantaSelecionada
     );
-    setPlantaSelecionada(novaPlantaSelecionada)
+    setPlantaSelecionada(novaPlantaSelecionada);
   };
 
   const getPlantasFromEmpresa = (idEmpresa: number) => {
@@ -88,7 +87,6 @@ const SelecionaPlanta = (props: Props) => {
     }
   };
 
-
   if ((listaEmpresas || []).length === 0) {
     return (
       <Box padding={7}>
@@ -98,9 +96,7 @@ const SelecionaPlanta = (props: Props) => {
   }
 
   return (
-    <Stack padding={7} flex={1}
-      justifyContent='space-between'
-    >
+    <Stack padding={7} flex={1} justifyContent='space-between'>
       <FormControl>
         <HStack height={'50px'} alignItems='center'>
           <Text bold>Empresa</Text>
@@ -145,19 +141,16 @@ const SelecionaPlanta = (props: Props) => {
             flex={1}
             fontSize='md'
             variant='unstyled'
-
           >
             <Select.Item label='Selecione uma planta' value='0' key={'p0'} />
             {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
-              getPlantasFromEmpresa(empresaSelecionada).map(
-                (planta) => (
-                  <Select.Item
-                    label={planta.nome}
-                    value={`${planta.id}`}
-                    key={`P${planta.id}`}
-                  />
-                )
-              )
+              getPlantasFromEmpresa(empresaSelecionada).map((planta) => (
+                <Select.Item
+                  label={planta.nome}
+                  value={`${planta.id}`}
+                  key={`P${planta.id}`}
+                />
+              ))
             ) : (
               <>
                 <Select.Item
@@ -170,7 +163,6 @@ const SelecionaPlanta = (props: Props) => {
           </Select>
         </HStack>
         <Divider />
-
       </FormControl>
       <ActionButton
         isDisabled={empresaSelecionada === 0}
@@ -180,7 +172,7 @@ const SelecionaPlanta = (props: Props) => {
       </ActionButton>
     </Stack>
   );
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   empresas: state.empresasReducer,

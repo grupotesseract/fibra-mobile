@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {
-  Box,
-} from 'native-base';
+import { Box } from 'native-base';
 import { FlatList } from 'react-native';
-import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
-import { Entrada } from '../../store/ducks/programacoes/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+
+import { Planta } from '../../store/ducks/planta/types';
+import { Entrada } from '../../store/ducks/programacoes/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ApplicationState } from '../../store';
 import ActionButton from '../../components/ActionButton';
@@ -90,7 +89,6 @@ class EntradaMateriais extends Component<Props> {
     const { materiais } = this.state;
     return (
       <Box padding={5} flex={1}>
-
         <FlatList
           data={materiais}
           renderItem={this.renderItem}
@@ -104,7 +102,8 @@ class EntradaMateriais extends Component<Props> {
               return tudoConfirmado && material.quantidadeConfirmada;
             }, true)
           }
-        >Concluído
+        >
+          Concluído
         </ActionButton>
       </Box>
     );

@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { NavigationScreenProp } from 'react-navigation';
+import {
+  NavigationEventSubscription,
+  NavigationScreenProp,
+} from 'react-navigation';
 import { QRCodeReader } from '../../components/QRCodeReader';
 
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import { Spinner, View } from 'native-base';
 
 interface ScanProps {
   navigation: NavigationScreenProp<any, any>;
@@ -15,6 +19,9 @@ type ScanState = {
 type Props = ScanProps;
 
 class ScanQRCodeReader extends Component<Props, ScanState> {
+  focusListener: NavigationEventSubscription;
+  blurListener: NavigationEventSubscription;
+
   constructor(props) {
     super(props);
 
@@ -42,24 +49,13 @@ class ScanQRCodeReader extends Component<Props, ScanState> {
 
     if (!this.state.isFocused) {
       return (
-        <View style={styles.container} style={styles.spinner}>
-          <ActivityIndicator color='blue' size='large' />
+        <View flex={1}>
+          <Spinner size={'lg'} />
         </View>
       );
     }
     return <QRCodeReader navigation={navigation} />;
   }
 }
-
-const styles = {
-  container: {
-    flexGrow: 1,
-  },
-  spinner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-};
 
 export default ScanQRCodeReader;

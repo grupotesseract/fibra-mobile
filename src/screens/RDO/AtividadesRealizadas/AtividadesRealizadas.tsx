@@ -66,7 +66,7 @@ class AtividadesRealizadas extends Component<Props> {
     Alert.alert('Excluir Atividade', 'Deseja excluir esta atividade?', [
       {
         text: 'Cancelar',
-        onPress: () => { },
+        onPress: () => {},
         style: 'cancel',
       },
       {

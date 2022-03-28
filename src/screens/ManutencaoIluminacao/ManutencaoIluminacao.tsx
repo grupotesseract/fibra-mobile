@@ -14,12 +14,12 @@ import { Alert } from 'react-native';
 import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import { ApplicationState } from '../../store';
 import { Item, Planta } from '../../store/ducks/planta/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import brandColors from '../../theme/brandColors';
 import { Ionicons } from '@expo/vector-icons';
 import { SquareButton } from '../../components/SquareButton';
@@ -47,8 +47,6 @@ class ManutencaoIluminacao extends Component<Props> {
   };
 
   async componentDidMount() {
-    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
-
     const imagePickerStatus = await BarCodeScanner.getPermissionsAsync();
 
     if (imagePickerStatus.status !== 'granted') {

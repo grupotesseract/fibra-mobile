@@ -1,43 +1,39 @@
-import React, { Component } from 'react'
-import {
-  Box,
-  Button,
-  FormControl,
-  Text,
-  TextArea,
-  View,
-} from 'native-base'
-import { KeyboardAvoidingView, ScrollView } from 'react-native'
-import { NavigationScreenProp } from 'react-navigation'
-import { connect } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
-import HeaderNav from '../../../components/HeaderNav'
-import { ApplicationState } from '../../../store'
-import * as RDOActions from '../../../store/ducks/rdo/actions'
+import React, { Component } from 'react';
+import { Box, TextArea } from 'native-base';
+import { NavigationScreenProp } from 'react-navigation';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+
+import { ApplicationState } from '../../../store';
+import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
-import ActionButton from '../../../components/ActionButton'
+import ActionButton from '../../../components/ActionButton';
 
 interface StateProps {
-  rdoAtual: ManutencaoRDO,
-  navigation: NavigationScreenProp<any, any>,
+  rdoAtual: ManutencaoRDO;
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  atualizaComentario({ tipoComentario, comentario }): void
-  salvaHoraFinalLEM(): void
-  salvaHoraFinalLET(): void
+  atualizaComentario({ tipoComentario, comentario }): void;
+  salvaHoraFinalLEM(): void;
+  salvaHoraFinalLET(): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 class ComentariosRDO extends Component<Props> {
-
   state = {
     comentario: '',
-  }
+  };
 
   salvaComentario = async () => {
-    const { navigation, atualizaComentario, salvaHoraFinalLEM, salvaHoraFinalLET } = this.props;
+    const {
+      navigation,
+      atualizaComentario,
+      salvaHoraFinalLEM,
+      salvaHoraFinalLET,
+    } = this.props;
     const tipoComentario = navigation.state.params?.tipo || null;
 
     const { comentario } = this.state;
@@ -52,12 +48,11 @@ class ComentariosRDO extends Component<Props> {
 
     await atualizaComentario({ tipoComentario, comentario });
     navigation.goBack();
-  }
+  };
 
   componentDidMount() {
     const { navigation, rdoAtual } = this.props;
     const tipoComentario = navigation.state.params?.tipo || null;
-
 
     const title = ((tipoComentario: String) => {
       switch (tipoComentario) {
@@ -75,7 +70,6 @@ class ComentariosRDO extends Component<Props> {
       }
     })(tipoComentario);
     this.props.navigation.setParams({ title });
-
 
     const comentario = ((tipoComentario: String) => {
       switch (tipoComentario) {
@@ -97,40 +91,42 @@ class ComentariosRDO extends Component<Props> {
     })(tipoComentario);
 
     this.setState({
-      comentario
-    })
-  };
+      comentario,
+    });
+  }
 
   static navigationOptions = ({ navigation }) => {
-    const title = navigation.getParam('title')
+    const title = navigation.getParam('title');
     return {
-      title: `${title}`
-    }
+      title: `${title}`,
+    };
   };
 
   render() {
     const { comentario } = this.state;
 
     return (
-      <Box flex={1} padding={7} >
-        <TextArea flex={1} value={comentario} variant='outline' mb={2}
-          onChangeText={(comentario) => this.setState({ comentario })} />
-        <ActionButton
-          onPress={() => this.salvaComentario()}
-        >
+      <Box flex={1} padding={7}>
+        <TextArea
+          flex={1}
+          value={comentario}
+          variant='outline'
+          mb={2}
+          onChangeText={(comentario) => this.setState({ comentario })}
+        />
+        <ActionButton onPress={() => this.salvaComentario()}>
           Concluído
         </ActionButton>
       </Box>
-    )
-  };
+    );
+  }
 }
 
-
 const mapStateToProps = (state: ApplicationState) => ({
-  rdoAtual: state.manutencaoRDOReducer.rdoAtual
-})
+  rdoAtual: state.manutencaoRDOReducer.rdoAtual,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(ComentariosRDO)
+export default connect(mapStateToProps, mapDispatchToProps)(ComentariosRDO);
