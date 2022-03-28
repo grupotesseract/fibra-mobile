@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Box,
   Button,
-  Container,
+  Divider,
+  HStack,
+  Stack,
   Text,
   Toast,
 } from 'native-base';
@@ -13,13 +15,12 @@ import { ApplicationState } from '../../../store';
 import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { Alert, ScrollView, ActivityIndicator } from 'react-native';
-import { iso2ddmmaaaa } from '../../../utils/utils';
 import {
   uploadInfosRDO,
-  uploadFotos,
   uploadFotosRDO,
 } from '../../../services/api';
 import ActionButton from '../../../components/ActionButton';
+import brandColors from '../../../theme/brandColors';
 
 interface StateProps {
   rdos: ManutencaoRDO[];
@@ -32,7 +33,6 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-interface State { }
 
 const CardRDO = ({ rdo, sincronizarRDO }) => {
   const {
@@ -41,62 +41,45 @@ const CardRDO = ({ rdo, sincronizarRDO }) => {
     dadosEnviados,
     fotosEnviadas,
     fotos,
-    dataHoraEntrada,
-    dataHoraSaida,
     loading,
   } = rdo;
 
   return (
-    <Box key={rdo.id}>
+    <Stack space={2} key={rdo.id} borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2}>
+      <HStack space={2}>{loading && <ActivityIndicator color='blue' />}
+        <Text bold color={brandColors.primary}> RDO Planta #{id}</Text></HStack>
+      <Divider />
       <Box>
-        {loading && <ActivityIndicator color='blue' />}
-        <Text> RDO Planta #{id}</Text>
+        <Text bold>
+          Sincronização
+        </Text>
+
+        <Text>
+          Informações:{' '}
+          {errorSync
+            ? 'reenvio pendente'
+            : dadosEnviados
+              ? 'sincronizadas'
+              : 'pendente'}
+        </Text>
+        <Text>
+          Fotos: {fotos.length} fotos{' '}
+          {fotosEnviadas ? 'sincronizadas' : 'pendentes'}
+        </Text>
+
       </Box>
-      <Box>
-        <Box>
-          <Box>
-            {/* <Text>Entrada:</Text>
-          <Text note>{iso2ddmmaaaa(dataHoraEntrada)}</Text>
-          <Text>Saída:</Text>
-          <Text note>{iso2ddmmaaaa(dataHoraSaida)}</Text> */}
-
-            <Text style={{ marginVertical: 7, fontWeight: 'bold' }}>
-              Sincronização
-            </Text>
-
-            <Text>
-              Informações:{' '}
-              {errorSync
-                ? 'reenvio pendente'
-                : dadosEnviados
-                  ? 'sincronizadas'
-                  : 'pendente'}
-            </Text>
-            <Text>
-              Fotos: {fotos.length} fotos{' '}
-              {fotosEnviadas ? 'sincronizadas' : 'pendentes'}
-            </Text>
-
-            <Button
-              style={{ marginTop: 12 }}
-              onPress={() => sincronizarRDO(rdo)}
-            >
-              {loading ? (
-                <ActivityIndicator color='white' />
-              ) : (
-                <Text>Sincronizar</Text>
-              )}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+      <ActionButton
+        onPress={() => sincronizarRDO(rdo)}
+        isLoading={loading}
+      >  Sincronizar
+      </ActionButton>
 
       {errorSync && (
         <Box>
           <Text>Ocorreu um erro ao sincronizar, tente novamente.</Text>
         </Box>
       )}
-    </Box>
+    </Stack>
   );
 };
 const SincronizacaoRDO = (props: Props) => {

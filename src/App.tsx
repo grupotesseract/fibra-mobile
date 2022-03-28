@@ -27,8 +27,6 @@ import MenuPrincipalRDO from "./screens/RDO/MenuRDO/MenuPrincipalRDO";
 import SincronizacaoRDO from "./screens/RDO/Sincronizacao/Sincronizacao";
 import ComentariosRDO from "./screens/RDO/Comentarios/Comentarios";
 import FotosRDO from "./screens/RDO/FotosRDO/FotosRDO";
-import ManutencaoCliente from "./screens/Cliente/ManutencaoCliente/ManutencaoCliente";
-import ManutencaoClienteComentarios from "./screens/Cliente/Comentarios/Comentarios";
 import AtividadesRealizadas from "./screens/RDO/AtividadesRealizadas/AtividadesRealizadas";
 import EditaAtividade from "./screens/RDO/AtividadesRealizadas/EditaAtividade";
 import AtividadesPendentes from "./screens/RDO/AtividadesPendentes/AtividadesPendentes";
@@ -44,26 +42,24 @@ const AuthStack = createStackNavigator(
     Estoque: { screen: EstoqueScreen, navigationOptions: { title: 'Estoque de Materiais' } },
     EntradaMateriais: { screen: EntradaMateriais, navigationOptions: { title: 'Entrada de Materiais' } },
     ManutencaoIluminacao: { screen: ManutencaoIluminacao, navigationOptions: { title: 'Manutenção Iluminação' } },
-    ScanQRCodeReader: { screen: ScanQRCodeReader, navigationOptions: {} },
+    ScanQRCodeReader: { screen: ScanQRCodeReader, navigationOptions: { headerShown: false } },
     ManutencaoItem: { screen: ManutencaoItem, navigationOptions: { title: 'Manutenção' } },
     FotosItem: { screen: FotosItemScreen },
     ComentariosGerais: { screen: ComentariosGerais, navigationOptions: { title: 'Comentários' } },
     SelecionaPlanta: { screen: SelecionaPlanta, navigationOptions: { title: 'Selecionar Planta' } },
     ConfirmarPeriodoManutencao: { screen: ConfirmarPeriodoManutencao, navigationOptions: { title: 'Período Manutenção' } },
     LiberarDocumento: { screen: LiberarDocumento, navigationOptions: { title: 'Liberação de Documento' } },
-    Colaboradores: { screen: Colaboradores, navigationOptions: {} },
+    Colaboradores: { screen: Colaboradores },
     SyncEmpresas: { screen: SyncEmpresas, navigationOptions: { title: 'Sincronizar Empresas' } },
     Programacoes: { screen: Programacoes, navigationOptions: { title: 'Programações' } },
     SelecionaPlantaRDO: { screen: SelecionaPlantaRDO, navigationOptions: { title: 'Selecionar Planta' } },
     RDOLiberarDocumentoEquipe: { screen: RDOLiberarDocumentoEquipe, navigationOptions: { title: 'Liberação de Documento' } },
     RDOLiberarDocumentoRegistro: { screen: RDOLiberarDocumentoRegistro, navigationOptions: { title: 'Liberação de Documento' } },
     MenuRDO: { screen: MenuRDO, navigationOptions: { headerShown: false } },
-    ComentariosRDO: { screen: ComentariosRDO, navigationOptions: {} },
-    FotosRDO: { screen: FotosRDO, navigationOptions: {} },
-    ManutencaoCliente: { screen: ManutencaoCliente, navigationOptions: {} },
-    ManutencaoClienteComentarios: { screen: ManutencaoClienteComentarios, navigationOptions: {} },
-    AtividadesRealizadas: { screen: AtividadesRealizadas, navigationOptions: {} },
-    EditaAtividade: { screen: EditaAtividade, navigationOptions: {} },
+    ComentariosRDO: { screen: ComentariosRDO },
+    FotosRDO: { screen: FotosRDO, navigationOptions: { title: 'Fotos RDO' } },
+    AtividadesRealizadas: { screen: AtividadesRealizadas, navigationOptions: { title: "Atividades Realizadas" } },
+    EditaAtividade: { screen: EditaAtividade, navigationOptions: { title: "Edita Atividade" } },
     MenuPrincipalRDO: { screen: MenuPrincipalRDO, navigationOptions: { headerShown: false } },
     SincronizacaoRDO: { screen: SincronizacaoRDO, navigationOptions: { title: 'Sincronizar RDOs' } },
     AtividadesPendentes: { screen: AtividadesPendentes, navigationOptions: { title: "Atividades Pendentes" } },
@@ -76,7 +72,7 @@ const AuthStack = createStackNavigator(
       headerStyle: {
         backgroundColor: brandColors.primary,
       },
-      headerTintColor: '#fff',
+      headerTintColor: brandColors.white,
     },
   }
 );

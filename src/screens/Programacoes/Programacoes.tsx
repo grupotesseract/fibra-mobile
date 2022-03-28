@@ -3,7 +3,10 @@ import {
   Box,
   Button,
   Card,
+  Divider,
+  ScrollView,
   Spinner,
+  Stack,
   Text,
   Toast,
 } from 'native-base';
@@ -14,6 +17,7 @@ import { ApplicationState } from '../../store';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import ActionButton from '../../components/ActionButton';
+import brandColors from '../../theme/brandColors';
 
 interface StateProps {
   programacoesRealizadas: ProgramacaoRealizada[];
@@ -112,7 +116,7 @@ const Programacoes = (props: Props) => {
     <Box padding={7}>
       {isSyncing ? <Spinner size='lg' /> : null}
 
-      <Box >
+      <ScrollView>
         {programacoesRealizadas?.map(
           (programacaoRealizada: ProgramacaoRealizada) => {
             const {
@@ -120,53 +124,44 @@ const Programacoes = (props: Props) => {
               dadosEnviados,
               fotosItens,
             } = programacaoRealizada;
-            const inicio =
-              programacaoRealizada.programacao.data_inicio_prevista;
-            const fim = programacaoRealizada.programacao.data_fim_prevista;
             const fotosEnviadas = fotosItens.reduce(
               (fotosEnviadas, fotoItem) =>
                 fotosEnviadas + Number(!!fotoItem.fotosEnviadas),
               0
             );
             return (
-              <Card key={programacaoRealizada.programacao.id}>
-                <Box >
+              <Stack borderColor="transparent" borderWidth="1" shadow={1} padding={4} mb={2} key={programacaoRealizada.programacao.id} space={2}>
+                <Text bold color={brandColors.primary}>
+                  Programação #{programacaoRealizada.programacao.id}
+                </Text>
+                <Divider />
+                <Box>
+                  <Text bold>
+                    Sincronização
+                  </Text>
+
                   <Text>
-                    Programação #{programacaoRealizada.programacao.id}
+                    {`Informações: ${errorSync
+                      ? 'reenvio pendente'
+                      : dadosEnviados
+                        ? 'sincronizadas'
+                        : 'pendente'
+                      }`}
+                  </Text>
+                  <Text>
+                    {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
                   </Text>
                 </Box>
-                <Box>
-                  <Box>
-                    <Box>
-                      <Text style={{ marginVertical: 5, fontWeight: 'bold' }}>
-                        {`Sincronização `}
-                      </Text>
 
-                      <Text>
-                        {`Informações: ${errorSync
-                          ? 'reenvio pendente'
-                          : dadosEnviados
-                            ? 'sincronizadas'
-                            : 'pendente'
-                          }`}
-                      </Text>
-                      <Text>
-                        {`Fotos de itens: ${fotosEnviadas} de ${fotosItens.length} sincronizadas`}
-                      </Text>
-
-                      <Button
-                        style={{ marginTop: 12 }}
-                        onPress={() =>
-                          syncProgramacao(
-                            programacaoRealizada.programacao.id
-                          )
-                        }
-                      >
-                        <Text>Sincronizar</Text>
-                      </Button>
-                    </Box>
-                  </Box>
-                </Box>
+                <ActionButton
+                  onPress={() =>
+                    syncProgramacao(
+                      programacaoRealizada.programacao.id
+                    )
+                  }
+                >
+                  Sincronizar
+                </ActionButton>
 
                 {programacaoRealizada.errorSync && (
                   <Box >
@@ -175,7 +170,7 @@ const Programacoes = (props: Props) => {
                     </Text>
                   </Box>
                 )}
-              </Card>
+              </Stack>
             );
           }
         )}
@@ -183,7 +178,7 @@ const Programacoes = (props: Props) => {
         <ActionButton onPress={() => props.deleteProgramacoes()}>
           Limpar programações
         </ActionButton>
-      </Box>
+      </ScrollView>
     </Box>
   );
 

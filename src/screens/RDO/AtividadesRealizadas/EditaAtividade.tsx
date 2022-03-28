@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  HStack,
   Text,
   TextArea,
   View,
@@ -15,6 +16,7 @@ import HeaderNav from '../../../components/HeaderNav'
 import { ApplicationState } from '../../../store'
 import * as RDOActions from '../../../store/ducks/rdo/actions'
 import { AtividadeRealizada } from '../../../store/ducks/rdo/types';
+import ActionButton from '../../../components/ActionButton'
 
 interface StateProps {
   atividadesRealizadas: AtividadeRealizada[],
@@ -64,40 +66,26 @@ class EditaAtividade extends Component<Props> {
   };
 
   render() {
-    const { descricao, concluido } = this.state;
+    const { descricao } = this.state;
 
-    return <Box>
-      <HeaderNav title='Edita Atividade' />
-      <Box style={{ flex: 1, justifyContent: 'space-between' }}>
-        <KeyboardAvoidingView behavior="height">
-          <FormControl>
-            <ScrollView>
-              <TextArea
-                variant='underlined'
-                numberOfLines={50}
-                value={descricao}
-                onChangeText={(descricao) => this.setState({ descricao })} />
-            </ScrollView>
-          </FormControl>
-        </KeyboardAvoidingView>
+    return (
+      <Box padding={7} flex={1}>
+        <TextArea flex={1} value={descricao} variant='outline' mb={2}
+          onChangeText={(descricao) => this.setState({ descricao })} />
+        <HStack space={2}>
+          <ActionButton flex={1}
+            colorScheme='danger'
+            onPress={() => this.salvaAtividade(false)} >
+            Atualiza Pendente
+          </ActionButton>
+          <ActionButton flex={1}
+            colorScheme='success'
+            onPress={() => this.salvaAtividade(true)}  >
+            Atualiza e conclui
+          </ActionButton>
+        </HStack>
       </Box>
-
-      <View style={{ flexDirection: 'row', padding: 20, justifyContent: 'space-between' }}>
-        <Button
-
-          onPress={() => this.salvaAtividade(false)}
-          style={{ backgroundColor: 'red' }} >
-          <Text>Atualiza Pendente</Text>
-        </Button>
-        <Button
-
-          onPress={() => this.salvaAtividade(true)}
-          style={{ backgroundColor: 'green' }} >
-          <Text>Atualiza e conclui</Text>
-        </Button>
-      </View>
-
-    </Box>
+    )
   };
 }
 

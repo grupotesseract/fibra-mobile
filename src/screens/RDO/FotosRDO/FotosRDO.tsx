@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Text, Button, Icon, Fab, Box } from 'native-base';
+import { Image, Text, Button, Icon, Fab, Box, Stack } from 'native-base';
 import HeaderNav from '../../../components/HeaderNav';
-import { Image, View, FlatList, Platform, SafeAreaView } from 'react-native';
+import { View, FlatList, Platform, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { NavigationScreenProp } from 'react-navigation';
 import * as RDOActions from '../../../store/ducks/rdo/actions'
@@ -11,6 +11,8 @@ import { ApplicationState } from '../../../store';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 //import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
+import { Ionicons } from '@expo/vector-icons';
+import ActionButton from '../../../components/ActionButton';
 
 interface StateProps {
   rdoAtual: ManutencaoRDO,
@@ -157,41 +159,33 @@ class FotosRDO extends Component<Props> {
 
   render() {
     const { photos } = this.state;
-    return <Box>
-      <HeaderNav title={"Fotos RDO"} />
-      <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
-        <FlatList
-          data={photos}
-          renderItem={({ item }) => (
-            <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-              <Image style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 130,
-                maxWidth: 100
-              }} source={{ uri: item.uri }} />
-            </View>
-          )}
-          //Setting the number of column
-          numColumns={3}
-          keyExtractor={(item, index) => String(index)}
-        />
-        <Fab
-          placement='bottom-right'
-          style={{ backgroundColor: "#13328c" }}
-          onPress={() => { this.pickImage() }}>
-          <Icon name='md-camera' />
-        </Fab>
-      </SafeAreaView>
-      <Button
-
-        onPress={() => this.storePhotos()}
-        style={{ marginVertical: 5 }}
-        isDisabled={photos.length <= 0}
-      >
-        <Text>Concluído</Text>
-      </Button>
-    </Box>
+    return (
+      <Stack padding={7} flex={1}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <FlatList
+            data={photos}
+            renderItem={({ item, index }) => (
+              <Box flex={1} m={1}>
+                <Image height={130} width={100} source={{ uri: item.uri }} alt={`imagem #${index}`} />
+              </Box>
+            )}
+            numColumns={3}
+            keyExtractor={(item, index) => String(index)}
+          />
+          <Fab
+            placement='bottom-right'
+            renderInPortal={false}
+            icon={<Icon as={Ionicons} name='md-camera' />}
+            onPress={() => { this.pickImage() }} />
+        </SafeAreaView>
+        <ActionButton
+          onPress={() => this.storePhotos()}
+          isDisabled={photos.length <= 0}
+        >
+          Concluído
+        </ActionButton>
+      </Stack>
+    )
   }
 }
 
