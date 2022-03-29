@@ -1,76 +1,72 @@
-import React, { Component } from 'react'
-import { Button, Icon, Text, View } from 'native-base'
-import { NavigationScreenProp } from 'react-navigation'
-import { connect } from 'react-redux'
-import { bindActionCreators, Dispatch } from 'redux'
+import React, { Component } from 'react';
+import { NavigationScreenProp } from 'react-navigation';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Box, Icon, Stack } from 'native-base';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
-import HeaderLogo from '../../../components/HeaderLogo'
-import { ApplicationState } from '../../../store'
-import * as RDOActions from '../../../store/ducks/rdo/actions'
-import { AntDesign } from '@expo/vector-icons';
+import HeaderLogo from '../../../components/HeaderLogo';
+import { ApplicationState } from '../../../store';
+import * as RDOActions from '../../../store/ducks/rdo/actions';
+import MenuItem from '../../../components/MenuItem';
+import brandColors from '../../../theme/brandColors';
 
 interface StateProps {
-  navigation: NavigationScreenProp<any, any>,
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  deleteRDOAtual(): void,
-  salvaHoraEntrada(): void
+  deleteRDOAtual(): void;
+  salvaHoraEntrada(): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 class MenuPrincipalRDO extends Component<Props> {
-
-
   handleInicioRDO = () => {
     this.setState({ loadingInicio: true }, async () => {
       const { navigation, deleteRDOAtual, salvaHoraEntrada } = this.props;
       await deleteRDOAtual();
       await salvaHoraEntrada();
-      this.setState({ loadingInicio: false })
-      navigation.navigate('SelecionaPlantaRDO')
-    })
-  }
+      this.setState({ loadingInicio: false });
+      navigation.navigate('SelecionaPlantaRDO');
+    });
+  };
 
   render() {
     return (
-      <View style={{flexGrow: 1}}>
-        <HeaderLogo/>
+      <Box padding={7}>
+        <HeaderLogo />
 
-        <View padder>
-          <Button
-            block
+        <Stack space={2} mt={9}>
+          <MenuItem
+            icon={
+              <Icon color={brandColors.white} as={AntDesign} name='profile' />
+            }
             onPress={() => this.handleInicioRDO()}
-            style={style.btnStyle}>
-            <AntDesign name="profile" color="white" size={28} style={{ marginLeft: 12 }}/>
-            <Text>Iniciar RDO</Text>
-          </Button>
+            text='Iniciar RDO'
+          />
 
-          <Button
-            block
+          <MenuItem
+            icon={
+              <Icon
+                color={brandColors.white}
+                as={Ionicons}
+                name='cloud-upload'
+              />
+            }
             onPress={() => this.props.navigation.navigate('SincronizacaoRDO')}
-            style={style.btnStyle}>
-            <Icon name="cloud-upload"/>
-            <Text>Sincronização</Text>
-          </Button>
-        </View>
-      </View>
+            text='Sincronização'
+          />
+        </Stack>
+      </Box>
     );
   }
 }
 
-const style = {
-  btnStyle: {
-    marginVertical: 5,
-  }
-}
-
-
-const mapStateToProps = (state: ApplicationState) => ({
-})
+const mapStateToProps = (state: ApplicationState) => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(RDOActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuPrincipalRDO)
+export default connect(mapStateToProps, mapDispatchToProps)(MenuPrincipalRDO);

@@ -1,27 +1,16 @@
 import React, { Component } from 'react';
-import {
-  Container,
-  Icon,
-  Content,
-  Button,
-  Text,
-  Fab,
-  Card,
-  CardItem,
-  Body,
-  Item,
-  Label,
-} from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView, FlatList, View } from 'react-native';
-import NumericInput from 'react-native-numeric-input';
-import { Planta } from '../../store/ducks/planta/types';
+import { Box } from 'native-base';
+import { FlatList } from 'react-native';
 import { NavigationScreenProp } from 'react-navigation';
-import { Entrada } from '../../store/ducks/programacoes/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+
+import { Planta } from '../../store/ducks/planta/types';
+import { Entrada } from '../../store/ducks/programacoes/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ApplicationState } from '../../store';
+import ActionButton from '../../components/ActionButton';
+import { CardEstoque } from '../../components/CardEstoque';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -88,7 +77,7 @@ class EntradaMateriais extends Component<Props> {
 
   renderItem = ({ item }) => {
     return (
-      <OptionItem
+      <CardEstoque
         itemMaterial={item}
         onChangeQuantidade={this.onChangeQuantidade}
         onPressBotaoOK={this.onPressBotaoOK}
@@ -99,120 +88,27 @@ class EntradaMateriais extends Component<Props> {
   render() {
     const { materiais } = this.state;
     return (
-      <Container>
-        <HeaderNav title='Entrada de Materiais' />
-        <KeyboardAvoidingView
-          behavior='height'
-          style={{ flex: 1, justifyContent: 'space-between', padding: 10 }}
+      <Box padding={5} flex={1}>
+        <FlatList
+          data={materiais}
+          renderItem={this.renderItem}
+          keyExtractor={(item) => item.id}
+        ></FlatList>
+
+        <ActionButton
+          onPress={() => this.concluiEntrada()}
+          isDisabled={
+            !materiais.reduce((tudoConfirmado, material) => {
+              return tudoConfirmado && material.quantidadeConfirmada;
+            }, true)
+          }
         >
-          <FlatList
-            data={materiais}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => item.id}
-          ></FlatList>
-
-          <Button
-            block
-            onPress={() => this.concluiEntrada()}
-            style={style.btnStyle}
-            disabled={
-              !materiais.reduce((tudoConfirmado, material) => {
-                return tudoConfirmado && material.quantidadeConfirmada;
-              }, true)
-            }
-          >
-            <Text>Concluído</Text>
-          </Button>
-        </KeyboardAvoidingView>
-      </Container>
+          Concluído
+        </ActionButton>
+      </Box>
     );
   }
 }
-
-class OptionItem extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    const quantidade = nextProps.itemMaterial.quantidade;
-    const prevQuantidade = this.props.itemMaterial.quantidade;
-
-    const quantidadeConfirmada = nextProps.itemMaterial.quantidadeConfirmada;
-    const prevQuantidadeConfirmada = this.props.itemMaterial
-      .quantidadeConfirmada;
-
-    return (
-      quantidade !== prevQuantidade ||
-      quantidadeConfirmada !== prevQuantidadeConfirmada
-    );
-  }
-
-  render() {
-    const { itemMaterial, onChangeQuantidade, onPressBotaoOK } = this.props;
-
-    return (
-      <Item>
-        <Card>
-          <CardItem header bordered>
-            <Text>
-              {itemMaterial.nome
-                ? itemMaterial.nome
-                : itemMaterial.tipoMaterialTipo.toUpperCase()}
-            </Text>
-          </CardItem>
-          <CardItem>
-            <Body>
-              {itemMaterial.tipoMaterial && (
-                <Text>Tipo: {itemMaterial.tipoMaterial}</Text>
-              )}
-              {itemMaterial.potencia && (
-                <Text>Potência: {itemMaterial.potencia}</Text>
-              )}
-              {itemMaterial.tensao && (
-                <Text>Tensão: {itemMaterial.tensao}</Text>
-              )}
-              {itemMaterial.base && <Text>Base: {itemMaterial.base}</Text>}
-            </Body>
-          </CardItem>
-
-          <CardItem footer bordered>
-            <Item style={{ borderBottomColor: 'transparent' }}>
-              <Label>Qtde. Estoque:</Label>
-              <NumericInput
-                minValue={0}
-                step={+!itemMaterial.quantidadeConfirmada}
-                editable={false}
-                rounded={true}
-                value={itemMaterial.quantidade}
-                onChange={(quantidade) =>
-                  onChangeQuantidade(itemMaterial.id, quantidade)
-                }
-              />
-
-              <Button
-                style={{ marginLeft: 10 }}
-                rounded={true}
-                warning={!itemMaterial.quantidadeConfirmada}
-                success={itemMaterial.quantidadeConfirmada}
-                onPress={() =>
-                  onPressBotaoOK(
-                    itemMaterial.id,
-                    itemMaterial.quantidadeConfirmada
-                  )
-                }
-              >
-                <Text>OK</Text>
-              </Button>
-            </Item>
-          </CardItem>
-        </Card>
-      </Item>
-    );
-  }
-}
-
-const style = {
-  btnStyle: {
-    marginVertical: 10,
-  },
-};
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,

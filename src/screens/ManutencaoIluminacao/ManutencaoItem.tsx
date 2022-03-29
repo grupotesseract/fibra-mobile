@@ -1,38 +1,33 @@
 import React, { Component } from 'react';
 import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  Body,
   Text,
-  Label,
-  Item,
-  Button,
-  View,
   Icon,
-  Left,
-  Thumbnail,
+  Image,
   Badge,
-  Right,
+  Box,
+  HStack,
+  Stack,
+  Pressable,
 } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
-import NumericInput from 'react-native-numeric-input';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
+import { ScrollView } from 'react-native';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { NavigationScreenProp } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+
 import {
   Planta,
   Item as ItemPlanta,
   Material,
 } from '../../store/ducks/planta/types';
 import { ApplicationState } from '../../store';
-import { NavigationScreenProp } from 'react-navigation';
 import {
   QuantidadeSubstituida,
   ProgramacaoRealizada,
 } from '../../store/ducks/programacoes/types';
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
+import { CardItemManutencao } from '../../components/CardItemManutencao';
+import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -64,6 +59,7 @@ class ManutencaoItem extends Component<Props> {
 
   onChangeQuantidade = (idMaterial: number, quantidade: number) => {
     const { materiais } = this.state;
+
     const novosMateriais = materiais.map((material: Material) => {
       if (material.id !== idMaterial) {
         return material;
@@ -219,29 +215,36 @@ class ManutencaoItem extends Component<Props> {
           'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.',
       });
     }
+    this.props.navigation.setParams({
+      verTodosMateriais: this.verTodosMateriais,
+    });
   }
 
   verTodosMateriais = () => {
     const { navigation } = this.props;
-    const { idItem, permiteAlteracao } = this.state;
-
-    permiteAlteracao && navigation.navigate('TodosMateriaisItem', { idItem });
+    const { idItem, permiteAlteracao, error } = this.state;
+    !error &&
+      permiteAlteracao &&
+      navigation.navigate('TodosMateriaisItem', { idItem });
   };
 
-  botaoTodosMateriais = (
-    <Button
-      transparent
-      style={{
-        paddingRight: 0,
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-      onPress={this.verTodosMateriais}
-    >
-      <Icon name='md-git-compare' style={{ color: 'white' }} />
-      <Text style={{ fontSize: 10, marginLeft: -12 }}>Editar</Text>
-    </Button>
-  );
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerRight: () => (
+        <Pressable
+          marginRight={3}
+          onPress={navigation.getParam('verTodosMateriais')}
+        >
+          <Stack alignItems='center'>
+            <Icon name='md-git-compare' as={Ionicons} color='white' size='sm' />
+            <Text fontSize='sm' color='white'>
+              Editar
+            </Text>
+          </Stack>
+        </Pressable>
+      ),
+    };
+  };
 
   render() {
     const {
@@ -268,230 +271,98 @@ class ManutencaoItem extends Component<Props> {
 
     if (error) {
       return (
-        <Container>
-          <HeaderNav title={'Manutenção'} />
-          <Content padder>
-            <Text>{error}</Text>
-          </Content>
-        </Container>
+        <Box padding={7} flex={1}>
+          <Text>{error}</Text>
+        </Box>
       );
     }
 
     return (
-      <Container>
-        <HeaderNav
-          title={'Manutenção'}
-          rightContent={this.botaoTodosMateriais}
-        />
-        <Content padder>
-          <KeyboardAvoidingView behavior='height'>
-            <Card>
-              <CardItem>
-                <Left>
-                  <Thumbnail source={require('../../../assets/qrcode.png')} />
-                  <Body>
-                    <Text note>{qrcode}</Text>
-                    <Text note>{nome}</Text>
-                    <Badge warning={emergencia} primary={!emergencia}>
-                      <Text>{emergencia ? 'E' : 'N'}</Text>
-                    </Badge>
-                  </Body>
-                </Left>
-              </CardItem>
-            </Card>
-            <ScrollView>
-              {materiais?.map((material: Material) => {
-                return (
-                  <OptionItem
-                    key={material.id}
-                    material={material}
-                    onChangeQuantidade={this.onChangeQuantidade}
-                    onChangeQuantidadeBase={this.onChangeQuantidadeBase}
-                    onChangeQuantidadeReator={this.onChangeQuantidadeReator}
-                    permiteAlteracao={permiteAlteracao}
-                    onPressBotaoOK={this.onPressBotaoOK}
-                  />
-                );
-              })}
-            </ScrollView>
-            <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-              <Button
+      <Box padding={7} flex={1}>
+        <ScrollView>
+          <Stack space={2}>
+            <HStack
+              space={2}
+              borderColor='transparent'
+              borderWidth='1'
+              shadow={1}
+              padding={4}
+              mb={2}
+              alignItems='center'
+            >
+              <Image
+                size='sm'
+                rounded='full'
+                source={require('../../../assets/qrcode.png')}
+                alt='qrcode image placeholder'
+              />
+              <Stack flex={1}>
+                <HStack alignItems='center' justifyContent='space-between'>
+                  <Text>{qrcode}</Text>
+                  <Badge
+                    rounded='full'
+                    colorScheme={emergencia ? 'danger' : 'info'}
+                  >
+                    {emergencia ? 'E' : 'N'}
+                  </Badge>
+                </HStack>
+                <Text>{nome}</Text>
+              </Stack>
+            </HStack>
+            {materiais?.map((material: Material) => {
+              return (
+                <CardItemManutencao
+                  key={material.id}
+                  material={material}
+                  onChangeQuantidade={this.onChangeQuantidade}
+                  onChangeQuantidadeBase={this.onChangeQuantidadeBase}
+                  onChangeQuantidadeReator={this.onChangeQuantidadeReator}
+                  permiteAlteracao={permiteAlteracao}
+                  onPressBotaoOK={this.onPressBotaoOK}
+                />
+              );
+            })}
+            <HStack space={2}>
+              <ActionButton
                 onPress={() => this.verFotosItem(idItem)}
-                style={{ flex: 1, marginRight: 3 }}
-                iconLeft
-                bordered
-                disabled={
+                flex={1}
+                variant='outline'
+                startIcon={<Icon as={Ionicons} name='images' />}
+                isDisabled={
                   !materiais.reduce((tudoConfirmado, material) => {
                     return tudoConfirmado && material.quantidadeConfirmada;
                   }, true)
                 }
               >
-                <Icon name='images' />
-                <Text>Fotos</Text>
-              </Button>
-              <Button
+                Fotos
+              </ActionButton>
+              <ActionButton
                 onPress={() => this.editarComentarioItem(idItem)}
-                style={{ flex: 1, marginLeft: 3 }}
-                iconLeft
-                bordered
-                disabled={
+                flex={1}
+                variant='outline'
+                startIcon={<Icon as={Ionicons} name='chatbox' />}
+                isDisabled={
                   !materiais.reduce((tudoConfirmado, material) => {
                     return tudoConfirmado && material.quantidadeConfirmada;
                   }, true)
                 }
               >
-                <Icon name='chatbox' />
-                <Text>Comentário</Text>
-              </Button>
-            </View>
-            <Button
-              block
+                Comentário
+              </ActionButton>
+            </HStack>
+            <ActionButton
               onPress={() => this.concluirItem(idItem)}
-              style={style.btnStyle}
-              disabled={
+              isDisabled={
                 !materiais.reduce((tudoConfirmado, material) => {
                   return tudoConfirmado && material.quantidadeConfirmada;
                 }, true) || qtdFotos === 0
               }
             >
-              <Text>Concluído</Text>
-            </Button>
-          </KeyboardAvoidingView>
-        </Content>
-      </Container>
-    );
-  }
-}
-
-class OptionItem extends Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    const quantidade = nextProps.material.quantidade;
-    const prevQuantidade = this.props.material.quantidade;
-
-    const quantidadeBase = nextProps.material.quantidadeBase;
-    const prevQuantidadeBase = this.props.material.quantidadeBase;
-
-    const quantidadeReator = nextProps.material.quantidadeReator;
-    const prevQuantidadeReator = this.props.material.quantidadeReator;
-
-    const quantidadeConfirmada = nextProps.material.quantidadeConfirmada;
-    const prevQuantidadeConfirmada = this.props.material.quantidadeConfirmada;
-
-    return (
-      quantidade !== prevQuantidade ||
-      quantidadeConfirmada !== prevQuantidadeConfirmada ||
-      quantidadeBase !== prevQuantidadeBase ||
-      quantidadeReator !== prevQuantidadeReator
-    );
-  }
-
-  render() {
-    const {
-      material,
-      onChangeQuantidadeBase,
-      onChangeQuantidadeReator,
-      onChangeQuantidade,
-      onPressBotaoOK,
-      permiteAlteracao,
-    } = this.props;
-
-    return (
-      <Card key={material.id}>
-        <CardItem header bordered>
-          <Text>LÂMPADA</Text>
-        </CardItem>
-        <CardItem>
-          <Body>
-            <View
-              style={{
-                marginBottom: 5,
-                borderBottomWidth: 0,
-                paddingBottom: 5,
-              }}
-            >
-              <Text>Tipo: {material.tipoMaterial}</Text>
-              {material.base && <Text>Base: {material.base}</Text>}
-              {material.reator && <Text>Reator : {material.reator}</Text>}
-            </View>
-
-            {material.potencia && <Text>Potência: {material.potencia}</Text>}
-            {material.tensao && <Text>Tensão: {material.tensao}</Text>}
-            <Text>Quantidade Instalada: {material.quantidadeInstalada}</Text>
-          </Body>
-        </CardItem>
-        <CardItem footer bordered style={{ flexDirection: 'column' }}>
-          <Text style={{ marginVertical: 3 }}>Trocas</Text>
-          {material.base && (
-            <Item style={style.itemSubstituicao}>
-              <Left>
-                <Label>Bases:</Label>
-              </Left>
-              <Right>
-                <NumericInput
-                  minValue={0}
-                  step={+!material.quantidadeConfirmada}
-                  editable={false}
-                  rounded={true}
-                  value={material.quantidadeBase}
-                  onChange={(quantidade) =>
-                    onChangeQuantidadeBase(material.id, quantidade)
-                  }
-                />
-              </Right>
-            </Item>
-          )}
-          {material.reator && (
-            <Item style={style.itemSubstituicao}>
-              <Left>
-                <Label>Reatores:</Label>
-              </Left>
-              <Right>
-                <NumericInput
-                  minValue={0}
-                  step={+!material.quantidadeConfirmada}
-                  editable={false}
-                  rounded={true}
-                  value={material.quantidadeReator}
-                  onChange={(quantidade) =>
-                    onChangeQuantidadeReator(material.id, quantidade)
-                  }
-                />
-              </Right>
-            </Item>
-          )}
-          <Item style={style.itemSubstituicao}>
-            <Left>
-              <Label>Lâmpadas:</Label>
-            </Left>
-            <Right>
-              <NumericInput
-                minValue={0}
-                step={+!material.quantidadeConfirmada}
-                editable={false}
-                rounded={true}
-                value={material.quantidade}
-                onChange={(quantidade) =>
-                  onChangeQuantidade(material.id, quantidade)
-                }
-              />
-            </Right>
-          </Item>
-          <Item style={style.itemSubstituicao}>
-            <Button
-              small
-              disabled={!permiteAlteracao}
-              rounded={true}
-              warning={!material.quantidadeConfirmada && permiteAlteracao}
-              success={material.quantidadeConfirmada && permiteAlteracao}
-              onPress={() =>
-                onPressBotaoOK(material.id, material.quantidadeConfirmada)
-              }
-            >
-              <Text>Confirmar</Text>
-            </Button>
-          </Item>
-        </CardItem>
-      </Card>
+              Concluído
+            </ActionButton>
+          </Stack>
+        </ScrollView>
+      </Box>
     );
   }
 }

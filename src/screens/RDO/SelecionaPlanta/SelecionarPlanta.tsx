@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
 import {
-  Container,
-  Content,
-  Button,
   Text,
-  Icon,
-  Form,
-  Picker,
-  Item,
-  Label,
-  Toast,
+  FormControl,
+  Stack,
+  Select,
   Input,
+  HStack,
+  Divider,
 } from 'native-base';
-import HeaderNav from '../../../components/HeaderNav';
 import { bindActionCreators, Dispatch } from 'redux';
+
 import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { connect } from 'react-redux';
 import { EmpresasState } from '../../../store/ducks/empresas/types';
 import { ApplicationState } from '../../../store';
 import { Planta } from '../../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
+import ActionButton from '../../../components/ActionButton';
 
 interface StateProps {
   empresas: EmpresasState;
@@ -99,102 +96,91 @@ class SelecionaPlantaRDO extends Component<Props, State> {
     const { listaEmpresas } = empresas;
 
     return (
-      <Container>
-        <HeaderNav title='Selecionar Planta' />
-        <Content
-          padder
-          contentContainerStyle={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
+      <Stack padding={7} flex={1} justifyContent='space-between'>
+        <FormControl>
+          <HStack height={'50px'} alignItems='center'>
+            <Text bold>Empresa</Text>
+            <Select
+              placeholder='Selecione uma empresa'
+              selectedValue={`${empresaSelecionada}`}
+              onValueChange={(value) => this.selectEmpresa(Number(value))}
+              flex={1}
+              fontSize='md'
+              variant='unstyled'
+            >
+              <Select.Item label='Selecione uma empresa' value='0' key={0} />
+              {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
+                listaEmpresas.map((empresa) => {
+                  return (
+                    <Select.Item
+                      label={empresa.nome}
+                      value={`${empresa.id}`}
+                      key={empresa.id}
+                    />
+                  );
+                })
+              ) : (
+                <>
+                  <Select.Item
+                    label='Nenhuma empresa carregada'
+                    value='0'
+                    key={0}
+                  />
+                </>
+              )}
+            </Select>
+          </HStack>
+          <Divider />
+          <HStack height={'50px'} alignItems='center'>
+            <Text bold>Planta</Text>
+            <Select
+              placeholder='Selecione uma planta'
+              selectedValue={`${plantaSelecionada?.id}`}
+              onValueChange={(value) => this.selectPlanta(Number(value))}
+              flex={1}
+              fontSize='md'
+              variant='unstyled'
+            >
+              <Select.Item label='Selecione uma planta' value='0' key={0} />
+              {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
+                this.getPlantasFromEmpresa(empresaSelecionada).map((planta) => (
+                  <Select.Item
+                    label={planta.nome}
+                    value={`${planta.id}`}
+                    key={planta.id}
+                  />
+                ))
+              ) : (
+                <>
+                  <Select.Item
+                    label='Nenhuma empresa carregada'
+                    value='0'
+                    key={0}
+                  />
+                </>
+              )}
+            </Select>
+          </HStack>
+          <Divider />
+
+          <HStack alignItems='center'>
+            <Text bold>Obra/Atividade</Text>
+            <Input
+              value={obraAtividade}
+              onChangeText={(obraAtividade) => this.setState({ obraAtividade })}
+              flex={1}
+              variant='unstyled'
+            />
+          </HStack>
+          <Divider />
+        </FormControl>
+        <ActionButton
+          isDisabled={empresaSelecionada === null}
+          onPress={() => this.iniciaRDO()}
         >
-          <Form>
-            <Item style={{ height: 50 }}>
-              <Label>Empresa</Label>
-              <Picker
-                mode='dropdown'
-                placeholder='Selecione uma empresa'
-                iosHeader='Selecione uma empresa'
-                iosIcon={<Icon name='arrow-down' />}
-                style={{ width: undefined }}
-                selectedValue={empresaSelecionada}
-                onValueChange={(value) => this.selectEmpresa(value)}
-              >
-                <Picker.Item label='Selecione uma empresa' value='0' key={0} />
-                {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
-                  listaEmpresas.map((empresa) => {
-                    return (
-                      <Picker.Item
-                        label={empresa.nome}
-                        value={empresa.id}
-                        key={empresa.id}
-                      />
-                    );
-                  })
-                ) : (
-                  <>
-                    <Picker.Item
-                      label='Nenhuma empresa carregada'
-                      value='0'
-                      key={0}
-                    />
-                  </>
-                )}
-              </Picker>
-            </Item>
-            <Item style={{ height: 50 }}>
-              <Label>Planta</Label>
-              <Picker
-                mode='dropdown'
-                placeholder='Selecione uma planta'
-                iosHeader='Selecione uma planta'
-                iosIcon={<Icon name='arrow-down' />}
-                style={{ width: undefined }}
-                selectedValue={plantaSelecionada?.id}
-                onValueChange={(value) => this.selectPlanta(value)}
-              >
-                <Picker.Item label='Selecione uma planta' value='0' key={0} />
-                {Array.isArray(listaEmpresas) && listaEmpresas.length > 0 ? (
-                  this.getPlantasFromEmpresa(empresaSelecionada).map(
-                    (planta) => (
-                      <Picker.Item
-                        label={planta.nome}
-                        value={planta.id}
-                        key={planta.id}
-                      />
-                    )
-                  )
-                ) : (
-                  <>
-                    <Picker.Item
-                      label='Nenhuma empresa carregada'
-                      value='0'
-                      key={0}
-                    />
-                  </>
-                )}
-              </Picker>
-            </Item>
-            <Item>
-              <Label>Obra/Atividade</Label>
-              <Input
-                value={obraAtividade}
-                onChangeText={(obraAtividade) =>
-                  this.setState({ obraAtividade })
-                }
-              />
-            </Item>
-          </Form>
-          <Button
-            block
-            disabled={empresaSelecionada === null}
-            onPress={() => this.iniciaRDO()}
-          >
-            <Text>Iniciar RDO</Text>
-          </Button>
-        </Content>
-      </Container>
+          Iniciar RDO
+        </ActionButton>
+      </Stack>
     );
   }
 }

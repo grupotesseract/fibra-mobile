@@ -1,30 +1,28 @@
 import React, { Component } from 'react';
 import {
   Badge,
-  Button,
-  Container,
+  Box,
+  FlatList,
+  HStack,
   Icon,
-  Left,
-  List,
-  ListItem,
-  Right,
+  Spinner,
+  Pressable,
   Text,
-  View,
-  Content,
+  Divider,
 } from 'native-base';
-//import * as Permissions from 'expo-permissions';
-import { ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { Alert } from 'react-native';
 import { NavigationScreenProp, withNavigationFocus } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
-import HeaderNav from '../../components/HeaderNav';
 import { ApplicationState } from '../../store';
 import { Item, Planta } from '../../store/ducks/planta/types';
 import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Camera } from 'expo-camera';
+import brandColors from '../../theme/brandColors';
+import { Ionicons } from '@expo/vector-icons';
+import { SquareButton } from '../../components/SquareButton';
 
 interface StateProps {
   plantaAtiva: Planta;
@@ -49,21 +47,24 @@ class ManutencaoIluminacao extends Component<Props> {
   };
 
   async componentDidMount() {
-    // const { status } = await Permissions.askAsync(Permissions.CAMERA);
-
-    const imagePickerStatus  = await BarCodeScanner.getPermissionsAsync();
+    const imagePickerStatus = await BarCodeScanner.getPermissionsAsync();
 
     if (imagePickerStatus.status !== 'granted') {
-      alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
-      const { status, expires } = await BarCodeScanner.requestPermissionsAsync();
+      alert(
+        'Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir'
+      );
+      const {
+        status,
+        expires,
+      } = await BarCodeScanner.requestPermissionsAsync();
       this.setState({ hasCameraPermission: status === 'granted' });
 
       if (expires !== 'never') {
-        alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
+        alert(
+          'A permissão liberada não foi a definitiva. O app pode não funcionar corretamente'
+        );
       }
     }
-
-
 
     this.carregaItens();
   }
@@ -138,71 +139,68 @@ class ManutencaoIluminacao extends Component<Props> {
     });
   };
 
+  renderItem = ({ item }) => {
+    return <OptionItem item={item} openItem={this.openItem} />;
+  };
+
   render() {
     const { itens, loadingConcluir } = this.state;
 
     return (
-      <Container>
-        <HeaderNav title='Manutenção Iluminação' />
-
-        <Content padder contentContainerStyle={{ flex: 1 }}>
-          <ScrollView>
-            <List>
-              {!itens || itens.length === 0 ? (
-                <ActivityIndicator color='blue' size='large' />
-              ) : (
-                itens.map((item: Item) => {
-                  const isEmergencia = item.circuito === 'Emergência';
-                  return (
-                    <OptionItem
-                      key={item.id}
-                      item={item}
-                      openItem={this.openItem}
-                      isEmergencia={isEmergencia}
-                    />
-                  );
-                })
-              )}
-            </List>
-          </ScrollView>
-          <View
-            style={{ flexDirection: 'row', marginRight: -10, marginLeft: -10 }}
-          >
-            <Button
-              style={style.botaoQuadrado}
-              onPress={() => this.ativaQRCodeReader()}
-            >
-              <Icon name='qr-code' style={{ fontSize: 48 }} />
-              <Text style={style.txtBtn}>LER QRCODE</Text>
-            </Button>
-            <Button
-              style={style.botaoQuadrado}
-              onPress={() => this.concluirManutencaoDia()}
-            >
-              <Icon name='md-stopwatch' style={{ fontSize: 48 }} />
-              <Text style={style.txtBtn}>CONCLUIR DIA</Text>
-            </Button>
-            <Button
-              style={style.botaoQuadrado}
-              onPress={() => this.concluirManutencao()}
-            >
-              {loadingConcluir ? (
-                <ActivityIndicator color='white' />
-              ) : (
-                <>
-                  <Icon name='md-checkmark' style={{ fontSize: 40 }} />
-                  <Text style={style.txtBtn}>CONCLUIR FINAL</Text>
-                </>
-              )}
-            </Button>
-          </View>
-        </Content>
-      </Container>
+      <Box padding={7} flex={1}>
+        <FlatList
+          data={itens}
+          renderItem={this.renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <Divider />}
+          ListEmptyComponent={<Spinner size='lg' />}
+        ></FlatList>
+        <HStack space={2}>
+          <SquareButton
+            onPress={() => this.ativaQRCodeReader()}
+            icon={
+              <Icon
+                color={brandColors.white}
+                as={Ionicons}
+                name='qr-code'
+                size='lg'
+              />
+            }
+            text='LER QRCODE'
+          />
+          <SquareButton
+            onPress={() => this.concluirManutencaoDia()}
+            icon={
+              <Icon
+                color={brandColors.white}
+                as={Ionicons}
+                name='md-stopwatch'
+                size='lg'
+              />
+            }
+            text='CONCLUIR DIA'
+          />
+          <SquareButton
+            onPress={() => this.concluirManutencao()}
+            loading={loadingConcluir}
+            icon={
+              <Icon
+                color={brandColors.white}
+                as={Ionicons}
+                name='md-checkmark'
+                size='lg'
+              />
+            }
+            text='CONCLUIR FINAL'
+          />
+        </HStack>
+      </Box>
     );
   }
 }
 
-class OptionItem extends Component {
+type OptionProps = { item: Item; openItem: (item: Item) => void };
+class OptionItem extends Component<OptionProps> {
   shouldComponentUpdate(nextProps, nextState) {
     const concluido = nextProps.item.concluido;
     const prevConcluido = this.props.item.concluido;
@@ -211,54 +209,37 @@ class OptionItem extends Component {
   }
 
   render() {
-    const { item, openItem, isEmergencia } = this.props;
-
+    const { item, openItem } = this.props;
+    const isEmergencia = item.circuito === 'Emergência';
     return (
-      <ListItem key={item.id} onPress={() => openItem(item)}>
-        <Left>
+      <Pressable width='100%' onPress={() => openItem(item)} my={2}>
+        <HStack alignItems='center' justifyContent='space-between' space={2}>
+          <HStack alignItems='center' flex={1} space={2}>
+            {isEmergencia ? (
+              <Badge fontSize='md' rounded='full' colorScheme='danger'>
+                E
+              </Badge>
+            ) : (
+              <Badge rounded='full' colorScheme='info'>
+                N
+              </Badge>
+            )}
+            <Text flexShrink={1}>{item.nome}</Text>
+          </HStack>
+
           <Badge
-            warning={isEmergencia}
-            primary={!isEmergencia}
-            style={{ marginRight: 10 }}
-          >
-            <Text>{isEmergencia ? 'E' : 'N'}</Text>
-          </Badge>
-          <Text>{item.nome}</Text>
-        </Left>
-        <Right>
-          <Badge
-            danger={!item.concluido}
-            success={item.concluido}
+            colorScheme={item.concluido ? 'success' : 'danger'}
+            rounded='full'
+            variant='solid'
             style={{ marginLeft: 10, width: 26 }}
-          ></Badge>
-        </Right>
-      </ListItem>
+          >
+            {' '}
+          </Badge>
+        </HStack>
+      </Pressable>
     );
   }
 }
-
-const style = {
-  btnStyle: {
-    marginVertical: 5,
-  },
-  txtBtn: {
-    fontSize: 13,
-    textAlign: 'center',
-    marginRight: -2,
-    marginLeft: -2,
-    padding: 0,
-  },
-  botaoQuadrado: {
-    margin: 4,
-    marginTop: 20,
-    padding: 4,
-    paddingBottom: 10,
-    height: 110,
-    flex: 1,
-    justifyContent: 'space-evenly',
-    flexDirection: 'column',
-  },
-};
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,

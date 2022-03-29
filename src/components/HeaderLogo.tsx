@@ -1,28 +1,14 @@
 import React from 'react';
-import { Header, Left } from 'native-base';
-import { Platform, StatusBar, StyleSheet } from 'react-native';
-
+import { Box, Center } from 'native-base';
 import Logo from './Logo';
 
 const HeaderLogo = () => {
   return (
-    <Header transparent style={styles.header}>
-      <Left>
-        <Logo size='xlg' />
-      </Left>
-    </Header>
+    <Center>
+      <Box safeAreaTop />
+      <Logo size='xlg' />
+    </Center>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    justifyContent: 'space-between',
-  },
-  text: {
-    fontFamily: 'OpenSans_Light',
-    fontSize: 13,
-  },
-});
 
 export default HeaderLogo;

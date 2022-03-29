@@ -1,33 +1,37 @@
 import React, { Component } from 'react';
-import { Container, Content, Card, CardItem, Body, Text, Label, Item, Button, View, Icon, Left, Thumbnail, Badge, Right } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Box, Text, Button, Image, Stack, HStack, Divider } from 'native-base';
+import { ScrollView } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
-import * as PlantaActions from '../../store/ducks/planta/actions'
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Planta, Item as ItemPlanta, Material } from '../../store/ducks/planta/types';
-import { ApplicationState } from '../../store';
 import { NavigationScreenProp } from 'react-navigation';
-import { QuantidadeSubstituida, ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
+
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
+import * as PlantaActions from '../../store/ducks/planta/actions';
+import {
+  Planta,
+  Item as ItemPlanta,
+  Material,
+} from '../../store/ducks/planta/types';
+import { ApplicationState } from '../../store';
+import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import IncluirMaterialAoItem from './IncluirMaterialAoItem';
+import ActionButton from '../../components/ActionButton';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  programacoesRealizadas: ProgramacaoRealizada[],
-  navigation: NavigationScreenProp<any, any>,
+  plantaAtiva: Planta;
+  programacoesRealizadas: ProgramacaoRealizada[];
+  navigation: NavigationScreenProp<any, any>;
 }
 
 interface DispatchProps {
-  setItemAlterado({ idProgramacao, idItem, materiaisAlterados }): void
-  setTodosMateriaisItem({ idItem, todosMateriais }): void
+  setItemAlterado({ idProgramacao, idItem, materiaisAlterados }): void;
+  setTodosMateriaisItem({ idItem, todosMateriais }): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 class TodosMateriaisItem extends Component<Props> {
-
   state = {
     materiais: [],
     nome: 'Item',
@@ -37,9 +41,12 @@ class TodosMateriaisItem extends Component<Props> {
     idItem: null,
     permiteAlteracao: false,
     incluindoMaterial: false,
-  }
+  };
 
-  onChangeQuantidadeInstalada = (idMaterial: number, quantidadeInstalada: number) => {
+  onChangeQuantidadeInstalada = (
+    idMaterial: number,
+    quantidadeInstalada: number
+  ) => {
     const { materiais } = this.state;
     const novosMateriais = materiais.map((material: Material) => {
       if (material.id !== idMaterial) {
@@ -47,11 +54,11 @@ class TodosMateriaisItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidadeInstalada
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeInstalada,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onChangeQuantidadeBase = (idMaterial: number, quantidadeBase: number) => {
     const { materiais } = this.state;
@@ -61,11 +68,11 @@ class TodosMateriaisItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidadeBase
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeBase,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onChangeQuantidadeReator = (idMaterial: number, quantidadeReator: number) => {
     const { materiais } = this.state;
@@ -75,25 +82,25 @@ class TodosMateriaisItem extends Component<Props> {
       }
       return {
         ...material,
-        quantidadeReator
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeReator,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   onPressBotaoOK = (idMaterial: number, quantidadeConfirmada: boolean) => {
     const { materiais } = this.state;
-    const novosMateriais = materiais.map(material => {
+    const novosMateriais = materiais.map((material) => {
       if (material.id !== idMaterial) {
         return material;
       }
       return {
         ...material,
-        quantidadeConfirmada: !quantidadeConfirmada
-      }
-    })
-    this.setState({ materiais: novosMateriais })
-  }
+        quantidadeConfirmada: !quantidadeConfirmada,
+      };
+    });
+    this.setState({ materiais: novosMateriais });
+  };
 
   salvaQuantidades = async () => {
     const { setItemAlterado, plantaAtiva, navigation } = this.props;
@@ -102,11 +109,11 @@ class TodosMateriaisItem extends Component<Props> {
     await setItemAlterado({
       idProgramacao,
       idItem,
-      materiaisAlterados: materiais
+      materiaisAlterados: materiais,
     });
 
     navigation.goBack();
-  }
+  };
 
   handleIncluirMaterial = async (material) => {
     const { materiais, idItem } = this.state;
@@ -115,10 +122,10 @@ class TodosMateriaisItem extends Component<Props> {
     await setTodosMateriaisItem({
       idItem,
       todosMateriais: materiais,
-    })
+    });
 
-    this.setState({ incluindoMaterial: false })
-  }
+    this.setState({ incluindoMaterial: false });
+  };
 
   componentDidMount() {
     const { plantaAtiva, navigation } = this.props;
@@ -126,25 +133,29 @@ class TodosMateriaisItem extends Component<Props> {
     const { itens } = plantaAtiva;
     let item: ItemPlanta;
     if (idItem) {
-      item = itens.find(item => item.id === idItem);
+      item = itens.find((item) => item.id === idItem);
     } else if (qrcode) {
-      item = itens.find(item => item.qrcode === qrcode);
+      item = itens.find((item) => item.qrcode === qrcode);
     }
-    this.setState({permiteAlteracao : true});
+    this.setState({ permiteAlteracao: true });
     if (item) {
       const { todosMateriais, circuito, qrcode, nome, id } = item;
       const { programacoesRealizadas } = this.props;
       const idProgramacao = plantaAtiva.proximaProgramacao.id;
-      const programacao = programacoesRealizadas?.find(pr => pr.programacao.id === idProgramacao)
+      const programacao = programacoesRealizadas?.find(
+        (pr) => pr.programacao.id === idProgramacao
+      );
       const { itensAlterados } = programacao;
-      const itemAlterado = itensAlterados?.find(item => item.item_id === id);
+      const itemAlterado = itensAlterados?.find((item) => item.item_id === id);
 
-      const materiais = todosMateriais.map(material => {
+      const materiais = todosMateriais.map((material) => {
         let { quantidadeInstalada } = material;
         let quantidadeConfirmada = false;
         //Busca se material já foi alterado para esta programacao
-        const materialAlterado = itemAlterado?.materiais?.find(materialAlterado => materialAlterado.id === material.id)
-        if(materialAlterado) {
+        const materialAlterado = itemAlterado?.materiais?.find(
+          (materialAlterado) => materialAlterado.id === material.id
+        );
+        if (materialAlterado) {
           quantidadeInstalada = materialAlterado.quantidadeInstalada;
           quantidadeConfirmada = true;
         }
@@ -152,23 +163,31 @@ class TodosMateriaisItem extends Component<Props> {
           ...material,
           quantidadeInstalada,
           quantidadeConfirmada,
-        }
+        };
       });
-
 
       this.setState({
         materiais,
         qrcode,
         emergencia: circuito === 'Emergência',
         nome,
-        idItem: item.id
+        idItem: item.id,
       });
+      this.props.navigation.setParams({ nome: item.nome });
     } else {
       this.setState({
-        error: 'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.'
-      })
+        error:
+          'Não foi possível carregar este Item. Verifique se o item se encontra na planta selecionada para esta manutenção.',
+      });
     }
   }
+
+  static navigationOptions = ({ navigation }) => {
+    const nome = navigation.getParam('nome');
+    return {
+      title: `${nome} - Materiais`,
+    };
+  };
 
   render() {
     const {
@@ -181,197 +200,174 @@ class TodosMateriaisItem extends Component<Props> {
       incluindoMaterial,
     } = this.state;
     if (error) {
-      return <Container>
-        <HeaderNav title={nome + ' - Materiais'} />
-        <Content padder>
+      return (
+        <Box padding={7} flex={1}>
           <Text>{error}</Text>
-        </Content>
-      </Container>
+        </Box>
+      );
     }
 
     return (
-      <Container padder>
-        <HeaderNav title={nome + " - Materiais"} />
-        <Content padder>
-          <KeyboardAvoidingView behavior="height">
-            <Card>
-              <CardItem>
-                <Left>
-                  <Thumbnail source={require("../../../assets/qrcode.png")} />
-                  <Body>
-                    <Text note>{qrcode}</Text>
-                    <Text note>{nome}</Text>
-                    <Badge warning={emergencia} primary={!emergencia}>
-                      <Text>{emergencia ? "E" : "N"}</Text>
-                    </Badge>
-                  </Body>
-                </Left>
-              </CardItem>
-            </Card>
-            <ScrollView>
-              {materiais?.map((material: Material) => {
-                return (
-                  <Card key={material.id}>
-                    <CardItem header bordered>
-                      <Text>
-                        {material.nome
-                          ? material.nome
-                          : material.tipoMaterialTipo?.toUpperCase()}
-                      </Text>
-                    </CardItem>
-                    <CardItem>
-                      <Body>
-                        <View
-                          style={{
-                            marginBottom: 5,
-                            borderBottomWidth: 0,
-                            paddingBottom: 5
-                          }}
-                        >
-                          <Text>Tipo: {material.tipoMaterial}</Text>
-                          {material.base && <Text>Base: {material.base}</Text>}
-                          {material.reator && (
-                            <Text>Reator : {material.reator}</Text>
-                          )}
-                        </View>
-                        {material.potencia && (
-                          <Text>Potência: {material.potencia}</Text>
-                        )}
-                        {material.tensao && (
-                          <Text>Tensão: {material.tensao}</Text>
-                        )}
-                      </Body>
-                    </CardItem>
-                    <CardItem
-                      footer
-                      bordered
-                      style={{ flexDirection: "column" }}
-                    >
-                      <Text style={{ marginVertical: 3 }}>Trocas</Text>
+      <Box padding={7} flex={1}>
+        <ScrollView>
+          <Stack space={2}>
+            <HStack
+              space={2}
+              borderColor='transparent'
+              borderWidth='1'
+              shadow={1}
+              padding={4}
+              mb={2}
+              alignItems='center'
+            >
+              <Image
+                size='sm'
+                rounded='full'
+                source={require('../../../assets/qrcode.png')}
+                alt='qrcode image placeholder'
+              />
+              <Stack flex={1}>
+                <Text>{qrcode}</Text>
+                <Text>{nome}</Text>
+              </Stack>
+            </HStack>
+            {materiais?.map((material: Material) => {
+              return (
+                <Stack
+                  key={material.id}
+                  space={2}
+                  borderColor='transparent'
+                  borderWidth='1'
+                  shadow={1}
+                  padding={4}
+                >
+                  <Text color='primary.600' bold mb={2}>
+                    {material.nome
+                      ? material.nome
+                      : material.tipoMaterialTipo?.toUpperCase()}
+                  </Text>
+                  <Divider />
+                  <Stack>
+                    <Text>Tipo: {material.tipoMaterial}</Text>
+                    {material.base && <Text>Base: {material.base}</Text>}
+                    {material.reator && <Text>Reator : {material.reator}</Text>}
+                  </Stack>
+                  <Stack>
+                    {material.potencia && (
+                      <Text>Potência: {material.potencia}</Text>
+                    )}
+                    {material.tensao && <Text>Tensão: {material.tensao}</Text>}
+                  </Stack>
+                  <Divider />
 
-                      <Item style={style.itemSubstituicao}>
-                        <Left>
-                          <Label>Qtd. Instalada:</Label>
-                        </Left>
-                        <Right>
-                          <NumericInput
-                            minValue={0}
-                            step={Number(!material.quantidadeConfirmada)}
-                            editable={false}
-                            rounded={true}
-                            value={material.quantidadeInstalada}
-                            onChange={quantidade =>
-                              this.onChangeQuantidadeInstalada(
-                                material.id,
-                                quantidade
-                              )
-                            }
-                          />
-                        </Right>
-                      </Item>
-
-                      {material.base && material.novoMaterial &&
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Qtd. Base:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={Number(!material.quantidadeConfirmada)}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeBase}
-                              onChange={quantidadeBase =>
-                                this.onChangeQuantidadeBase(
-                                  material.id,
-                                  quantidadeBase
-                                )
-                              }
-                            />
-                          </Right>
-                        </Item>
+                  <HStack marginTop={3} space={2} alignItems='center'>
+                    <Text>Qtd. Instalada:</Text>
+                    <NumericInput
+                      minValue={0}
+                      step={Number(!material.quantidadeConfirmada)}
+                      editable={false}
+                      rounded={true}
+                      value={material.quantidadeInstalada}
+                      onChange={(quantidade) =>
+                        this.onChangeQuantidadeInstalada(
+                          material.id,
+                          quantidade
+                        )
                       }
+                    />
+                  </HStack>
 
-                      {material.reator && material.novoMaterial &&
-                        <Item style={style.itemSubstituicao}>
-                          <Left>
-                            <Label>Qtd. Base:</Label>
-                          </Left>
-                          <Right>
-                            <NumericInput
-                              minValue={0}
-                              step={Number(!material.quantidadeConfirmada)}
-                              editable={false}
-                              rounded={true}
-                              value={material.quantidadeReator}
-                              onChange={quantidadeReator =>
-                                this.onChangeQuantidadeReator(
-                                  material.id,
-                                  quantidadeReator
-                                )
-                              }
-                            />
-                          </Right>
-                        </Item>
-                      }
+                  {material.base && material.novoMaterial && (
+                    <HStack marginTop={3} space={2} alignItems='center'>
+                      <Text>Qtd. Base:</Text>
+                      <NumericInput
+                        minValue={0}
+                        step={Number(!material.quantidadeConfirmada)}
+                        editable={false}
+                        rounded={true}
+                        value={material.quantidadeBase}
+                        onChange={(quantidadeBase) =>
+                          this.onChangeQuantidadeBase(
+                            material.id,
+                            quantidadeBase
+                          )
+                        }
+                      />
+                    </HStack>
+                  )}
 
-                      <Item style={style.itemSubstituicao}>
-                        <Button
-                          small
-                          disabled={!permiteAlteracao}
-                          rounded={true}
-                          warning={
-                            !material.quantidadeConfirmada && permiteAlteracao
-                          }
-                          success={
-                            material.quantidadeConfirmada && permiteAlteracao
-                          }
-                          onPress={() =>
-                            this.onPressBotaoOK(
-                              material.id,
-                              material.quantidadeConfirmada
-                            )
-                          }
-                        >
-                          <Text>Confirmar</Text>
-                        </Button>
-                      </Item>
-                    </CardItem>
-                  </Card>
-                );
-              })}
-            </ScrollView>
+                  {material.reator && material.novoMaterial && (
+                    <HStack marginTop={3} space={2} alignItems='center'>
+                      <Text>Qtd. Base:</Text>
+                      <NumericInput
+                        minValue={0}
+                        step={Number(!material.quantidadeConfirmada)}
+                        editable={false}
+                        rounded={true}
+                        value={material.quantidadeReator}
+                        onChange={(quantidadeReator) =>
+                          this.onChangeQuantidadeReator(
+                            material.id,
+                            quantidadeReator
+                          )
+                        }
+                      />
+                    </HStack>
+                  )}
+
+                  <Button
+                    margin={3}
+                    size='lg'
+                    rounded='2xl'
+                    alignContent='center'
+                    isDisabled={!permiteAlteracao}
+                    colorScheme={
+                      material.quantidadeConfirmada && permiteAlteracao
+                        ? 'success'
+                        : 'warning'
+                    }
+                    onPress={() =>
+                      this.onPressBotaoOK(
+                        material.id,
+                        material.quantidadeConfirmada
+                      )
+                    }
+                  >
+                    Confirmar
+                  </Button>
+                </Stack>
+              );
+            })}
             {incluindoMaterial ? (
               <IncluirMaterialAoItem
                 incluirMaterial={this.handleIncluirMaterial}
-                cancelarInclusao={() => this.setState({ incluindoMaterial: false })}
+                cancelarInclusao={() =>
+                  this.setState({ incluindoMaterial: false })
+                }
               />
             ) : (
-              <Button
-                block
-                light
+              <ActionButton
+                variant='outline'
                 onPress={() => this.setState({ incluindoMaterial: true })}
                 style={style.btnStyle}
               >
-                <Text>Incluir Material</Text>
-              </Button>
+                Incluir Material
+              </ActionButton>
             )}
-            <Button
-              block
+            <ActionButton
               onPress={() => this.salvaQuantidades()}
               style={style.btnStyle}
-              disabled={
+              isDisabled={
                 !materiais.reduce((tudoConfirmado, material) => {
                   return tudoConfirmado && material.quantidadeConfirmada;
                 }, true) || incluindoMaterial
               }
             >
-              <Text>Concluído</Text>
-            </Button>
-          </KeyboardAvoidingView>
-        </Content>
-      </Container>
+              Concluído
+            </ActionButton>
+          </Stack>
+        </ScrollView>
+      </Box>
     );
   }
 }
@@ -384,14 +380,14 @@ const style = {
     marginVertical: 2,
     borderBottomColor: 'transparent',
   },
-}
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
-  programacoesRealizadas : state.programacoesReducer.programacoesRealizadas
-})
+  programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators({ ...ProgramacoesActions, ...PlantaActions }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodosMateriaisItem)
+export default connect(mapStateToProps, mapDispatchToProps)(TodosMateriaisItem);

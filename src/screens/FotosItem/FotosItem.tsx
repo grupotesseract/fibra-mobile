@@ -1,72 +1,67 @@
 import React, { Component } from 'react';
-import { Text, Container, Button, Content, Icon, Fab, Grid, Col } from 'native-base';
-import HeaderNav from '../../components/HeaderNav';
-import { Image, View, FlatList, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
+import { Image, Icon, Fab, Stack, Spinner, Box } from 'native-base';
+import { View, FlatList, Platform, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-//import * as Permissions from 'expo-permissions';
 import { Planta } from '../../store/ducks/planta/types';
 import { NavigationScreenProp } from 'react-navigation';
-import * as ProgramacoesActions from '../../store/ducks/programacoes/actions'
+import * as ProgramacoesActions from '../../store/ducks/programacoes/actions';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
 import { ProgramacaoRealizada } from '../../store/ducks/programacoes/types';
 import * as MediaLibrary from 'expo-media-library';
+import ActionButton from '../../components/ActionButton';
+import { Ionicons } from '@expo/vector-icons';
 
 interface StateProps {
-  plantaAtiva: Planta,
-  programacoesRealizadas: ProgramacaoRealizada[],
-  navigation: NavigationScreenProp<any, any>,
+  plantaAtiva: Planta;
+  programacoesRealizadas: ProgramacaoRealizada[];
+  navigation: NavigationScreenProp<any, any>;
 }
-
 
 interface DispatchProps {
-    armazenaFotos(idProgramacao: number, idItem: number, fotos): void,
+  armazenaFotos(idProgramacao: number, idItem: number, fotos): void;
 }
 
-type Props = StateProps & DispatchProps
+type Props = StateProps & DispatchProps;
 
 class FotosItemScreen extends Component<Props> {
-    state = {
-        photos: [],
-        isLoading: false
-    };
+  state = {
+    photos: [],
+    isLoading: false,
+  };
 
-    setPhotos = (photos) => {
-        this.setState({
-            photos,
-        })
-    };
+  setPhotos = (photos) => {
+    this.setState({
+      photos,
+    });
+  };
 
-    pickImage = async () => {
-        const { photos } = this.state;
-        const { navigation } = this.props;
-        const { idItem } = navigation.state.params;
+  pickImage = async () => {
+    const { photos } = this.state;
+    const { navigation } = this.props;
+    const { idItem } = navigation.state.params;
 
-        this.setState({isLoading: true})
+    this.setState({ isLoading: true });
 
-        ImagePicker.launchCameraAsync({quality: 0.2})
-        .then(img => {
+    ImagePicker.launchCameraAsync({ quality: 0.2 })
+      .then((img) => {
+        if (!img.cancelled) {
+          this.setPhotos([...photos, img]);
 
-          if (!img.cancelled) {
-            this.setPhotos([
-                ...photos,
-                img
-            ])
-
-
-
-            MediaLibrary.createAssetAsync(img.uri)
-            .then(asset => {
-
-              MediaLibrary.getAlbumAsync('Iluminação Item '+idItem)
-              .then(album => {
+          MediaLibrary.createAssetAsync(img.uri).then((asset) => {
+            MediaLibrary.getAlbumAsync('Iluminação Item ' + idItem).then(
+              (album) => {
                 if (!album) {
-                  MediaLibrary.createAlbumAsync('Iluminação Item '+idItem, asset, false)
+                  MediaLibrary.createAlbumAsync(
+                    'Iluminação Item ' + idItem,
+                    asset,
+                    false
+                  )
                     .then(() => {
                       console.log('Album created!');
                     })
-                    .catch(error => {
+                    .catch((error) => {
                       alert('Erro ao criar novo album ' + error);
                     });
                 } else {
@@ -74,141 +69,165 @@ class FotosItemScreen extends Component<Props> {
                     .then(() => {
                       console.log('Asset inserted!');
                     })
-                    .catch(error => {
+                    .catch((error) => {
                       alert('Erro ao adicionar foto no álbum ' + error);
                       console.log('err', error);
                     });
                 }
-              })
-            })
-          }
-
-          this.setState({isLoading: false})
-        })
-        .catch(err => {
-          alert('Erro ao tirar foto ' + err);
-          console.log("ERRO NA IMG", err);
-          this.setState({isLoading: false});
-        })
-    };
-
-    componentDidMount() {
-      this.getPermissionAsync();
-      const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
-      const { idItem } = navigation.state.params;
-      const idProgramacao = plantaAtiva.proximaProgramacao.id;
-
-      const programacaoRealizada = programacoesRealizadas.find(programacaoRealizada => programacaoRealizada.programacao.id === idProgramacao);
-      if (programacaoRealizada) {
-          const fotosItem = programacaoRealizada.fotosItens?.find(fotoItem => fotoItem.id_item === idItem);
-          if (fotosItem) {
-              this.setPhotos(fotosItem.fotos);
-          }
-      }
-    }
-
-    getPermissionAsync = async () => {
-      const imagePickerStatus  = await ImagePicker.getCameraPermissionsAsync();
-      console.log('imagePickerStatus', imagePickerStatus);
-      if (imagePickerStatus.status !== 'granted') {
-        alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
-        if (Platform.OS !== 'web') {
-          const { status, expires } = await ImagePicker.requestCameraPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Permissão não foi concedida! A câmera não funcionará!');
-          }
-
-          if (expires !== 'never') {
-            alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
-          }
+              }
+            );
+          });
         }
-      }
 
+        this.setState({ isLoading: false });
+      })
+      .catch((err) => {
+        alert('Erro ao tirar foto ' + err);
+        console.log('ERRO NA IMG', err);
+        this.setState({ isLoading: false });
+      });
+  };
 
-      const mediaLibrarystatus  = await MediaLibrary.getPermissionsAsync();
-      console.log('mediaLibrarystatus', mediaLibrarystatus);
-      if (mediaLibrarystatus.status !== 'granted') {
-        alert('Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir');
-        if (Platform.OS !== 'web') {
-          const { status, expires } = await MediaLibrary.requestPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Permissão não foi concedida! As imagens não serão salvas na galeria!');
-          }
+  componentDidMount() {
+    this.getPermissionAsync();
+    const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
+    const { idItem } = navigation.state.params;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
 
-          if (expires !== 'never') {
-            alert('A permissão liberada não foi a definitiva. O app pode não funcionar corretamente');
-          }
-        }
-      }
-    }
-
-    storePhotos = async () => {
-        const { navigation, plantaAtiva, armazenaFotos } = this.props;
-        const { idItem } = navigation.state.params;
-        const { photos } = this.state;
-        const idProgramacao = plantaAtiva.proximaProgramacao.id;
-        await armazenaFotos(idProgramacao, idItem, photos);
-
-        navigation.navigate({
-            routeName: 'ManutencaoItem',
-            params: {
-                idItem
-            }
-        })
-    }
-
-    renderItem = ({ item }) => {
-      return (
-        <OptionItem
-          source={item.uri}
-        />
+    const programacaoRealizada = programacoesRealizadas.find(
+      (programacaoRealizada) =>
+        programacaoRealizada.programacao.id === idProgramacao
+    );
+    if (programacaoRealizada) {
+      const fotosItem = programacaoRealizada.fotosItens?.find(
+        (fotoItem) => fotoItem.id_item === idItem
       );
-    };
-
-    render() {
-        const { photos, isLoading } = this.state;
-        const { idItem } = this.props.navigation.state.params;
-
-        return <Container>
-            <HeaderNav title={"Fotos Item #"+idItem} />
-            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
-                {isLoading ? (
-                    <ActivityIndicator color='blue' size='large' />
-                  ) : (
-                    <FlatList
-                    data={photos}
-                    getItemLayout={(item, index) => (
-                      {length: 130, offset: 130 * index, index}
-                    )}
-                    renderItem={this.renderItem}
-                    //Setting the number of column
-                    numColumns={3}
-                    keyExtractor={(item, index) => String(index)}
-                />
-                  )}
-
-                {!isLoading ? (
-                  <Fab
-                    position="bottomRight"
-                    style={{ backgroundColor: "#13328c" }}
-                    onPress={() => { this.pickImage() }}>
-                  <Icon name='md-camera'/>
-                  </Fab>
-                ) : (
-                  <View />
-                )}
-
-            </SafeAreaView>
-            <Button
-                block
-                onPress={() => this.storePhotos()}
-                style={{ marginVertical: 5 }}
-                disabled={photos.length <= 0}
-            >
-                <Text>Concluído</Text>
-            </Button>
-        </Container>
+      if (fotosItem) {
+        this.setPhotos(fotosItem.fotos);
+      }
     }
+  }
+
+  getPermissionAsync = async () => {
+    const imagePickerStatus = await ImagePicker.getCameraPermissionsAsync();
+    console.log('imagePickerStatus', imagePickerStatus);
+    if (imagePickerStatus.status !== 'granted') {
+      alert(
+        'Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir'
+      );
+      if (Platform.OS !== 'web') {
+        const {
+          status,
+          expires,
+        } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permissão não foi concedida! A câmera não funcionará!');
+        }
+
+        if (expires !== 'never') {
+          alert(
+            'A permissão liberada não foi a definitiva. O app pode não funcionar corretamente'
+          );
+        }
+      }
+    }
+
+    const mediaLibrarystatus = await MediaLibrary.getPermissionsAsync();
+    console.log('mediaLibrarystatus', mediaLibrarystatus);
+    if (mediaLibrarystatus.status !== 'granted') {
+      alert(
+        'Atenção com as permissões do app!! Confirme as permissões e cheque se as mesmas estão corretas antes de prosseguir'
+      );
+      if (Platform.OS !== 'web') {
+        const {
+          status,
+          expires,
+        } = await MediaLibrary.requestPermissionsAsync();
+        if (status !== 'granted') {
+          alert(
+            'Permissão não foi concedida! As imagens não serão salvas na galeria!'
+          );
+        }
+
+        if (expires !== 'never') {
+          alert(
+            'A permissão liberada não foi a definitiva. O app pode não funcionar corretamente'
+          );
+        }
+      }
+    }
+  };
+
+  storePhotos = async () => {
+    const { navigation, plantaAtiva, armazenaFotos } = this.props;
+    const { idItem } = navigation.state.params;
+    const { photos } = this.state;
+    const idProgramacao = plantaAtiva.proximaProgramacao.id;
+    await armazenaFotos(idProgramacao, idItem, photos);
+
+    navigation.navigate({
+      routeName: 'ManutencaoItem',
+      params: {
+        idItem,
+      },
+    });
+  };
+
+  static navigationOptions = ({ navigation }) => {
+    const idItem = navigation.getParam('idItem');
+    return {
+      title: `Fotos Item #${idItem}`,
+    };
+  };
+
+  renderItem = ({ item, index }) => {
+    return <OptionItem source={item.uri} index={index} />;
+  };
+
+  render() {
+    const { photos, isLoading } = this.state;
+
+    return (
+      <Stack padding={7} flex={1}>
+        <SafeAreaView style={{ flex: 1 }}>
+          {isLoading ? (
+            <Spinner size='lg' />
+          ) : (
+            <FlatList
+              data={photos}
+              getItemLayout={(item, index) => ({
+                length: 130,
+                offset: 130 * index,
+                index,
+              })}
+              renderItem={this.renderItem}
+              numColumns={3}
+              keyExtractor={(item, index) => String(index)}
+            />
+          )}
+
+          {!isLoading ? (
+            <Fab
+              placement='bottom-right'
+              renderInPortal={false}
+              icon={<Icon as={Ionicons} name='md-camera' />}
+              onPress={() => {
+                this.pickImage();
+              }}
+            />
+          ) : (
+            <View />
+          )}
+        </SafeAreaView>
+        <ActionButton
+          onPress={() => this.storePhotos()}
+          isDisabled={photos.length <= 0}
+        >
+          Concluído
+        </ActionButton>
+      </Stack>
+    );
+  }
 }
 
 class OptionItem extends Component {
@@ -217,16 +236,17 @@ class OptionItem extends Component {
   }
 
   render() {
-    const { source } = this.props;
+    const { source, index } = this.props;
 
     return (
-      <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-          <Image style={{ justifyContent: 'center',
-              alignItems: 'center',
-              height: 130,
-              maxWidth:100
-          }} source={{ uri: source }} />
-      </View>
+      <Box flex={1} m={1}>
+        <Image
+          height={130}
+          width={100}
+          source={{ uri: source }}
+          alt={`imagem #${index}`}
+        />
+      </Box>
     );
   }
 }
@@ -234,9 +254,9 @@ class OptionItem extends Component {
 const mapStateToProps = (state: ApplicationState) => ({
   plantaAtiva: state.plantaReducer.plantaAtiva,
   programacoesRealizadas: state.programacoesReducer.programacoesRealizadas,
-})
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(ProgramacoesActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(FotosItemScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(FotosItemScreen);

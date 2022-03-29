@@ -1,29 +1,15 @@
-import React, { Component } from 'react';
-import {
-  Button,
-  Card,
-  CardItem,
-  Container,
-  Content,
-  Text,
-  Left,
-  Body,
-  Toast,
-} from 'native-base';
+import React from 'react';
+import { Box, Divider, HStack, Stack, Text, Toast } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import HeaderNav from '../../../components/HeaderNav';
 import { ApplicationState } from '../../../store';
 import * as RDOActions from '../../../store/ducks/rdo/actions';
 import { ManutencaoRDO } from '../../../store/ducks/rdo/types';
 import { Alert, ScrollView, ActivityIndicator } from 'react-native';
-import { iso2ddmmaaaa } from '../../../utils/utils';
-import {
-  uploadInfosRDO,
-  uploadFotos,
-  uploadFotosRDO,
-} from '../../../services/api';
+import { uploadInfosRDO, uploadFotosRDO } from '../../../services/api';
+import ActionButton from '../../../components/ActionButton';
+import brandColors from '../../../theme/brandColors';
 
 interface StateProps {
   rdos: ManutencaoRDO[];
@@ -36,94 +22,72 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-interface State {}
-
 const CardRDO = ({ rdo, sincronizarRDO }) => {
-  const {
-    id,
-    errorSync,
-    dadosEnviados,
-    fotosEnviadas,
-    fotos,
-    dataHoraEntrada,
-    dataHoraSaida,
-    loading,
-  } = rdo;
+  const { id, errorSync, dadosEnviados, fotosEnviadas, fotos, loading } = rdo;
 
   return (
-    <Card key={rdo.id}>
-      <CardItem header bordered>
+    <Stack
+      space={2}
+      key={rdo.id}
+      borderColor='transparent'
+      borderWidth='1'
+      shadow={1}
+      padding={4}
+      mb={2}
+    >
+      <HStack space={2}>
         {loading && <ActivityIndicator color='blue' />}
-        <Text> RDO Planta #{id}</Text>
-      </CardItem>
-      <CardItem>
-        <Left>
-          <Body>
-            {/* <Text>Entrada:</Text>
-          <Text note>{iso2ddmmaaaa(dataHoraEntrada)}</Text>
-          <Text>Saída:</Text>
-          <Text note>{iso2ddmmaaaa(dataHoraSaida)}</Text> */}
+        <Text bold color={brandColors.primary}>
+          RDO Planta #{id}
+        </Text>
+      </HStack>
+      <Divider />
+      <Box>
+        <Text bold>Sincronização</Text>
 
-            <Text style={{ marginVertical: 7, fontWeight: 'bold' }}>
-              Sincronização
-            </Text>
-
-            <Text>
-              Informações:{' '}
-              {errorSync
-                ? 'reenvio pendente'
-                : dadosEnviados
-                ? 'sincronizadas'
-                : 'pendente'}
-            </Text>
-            <Text>
-              Fotos: {fotos.length} fotos{' '}
-              {fotosEnviadas ? 'sincronizadas' : 'pendentes'}
-            </Text>
-
-            <Button
-              full
-              style={{ marginTop: 12 }}
-              onPress={() => sincronizarRDO(rdo)}
-            >
-              {loading ? (
-                <ActivityIndicator color='white' />
-              ) : (
-                <Text>Sincronizar</Text>
-              )}
-            </Button>
-          </Body>
-        </Left>
-      </CardItem>
+        <Text>
+          Informações:{' '}
+          {errorSync
+            ? 'reenvio pendente'
+            : dadosEnviados
+            ? 'sincronizadas'
+            : 'pendente'}
+        </Text>
+        <Text>
+          Fotos: {fotos.length} fotos{' '}
+          {fotosEnviadas ? 'sincronizadas' : 'pendentes'}
+        </Text>
+      </Box>
+      <ActionButton onPress={() => sincronizarRDO(rdo)} isLoading={loading}>
+        Sincronizar
+      </ActionButton>
 
       {errorSync && (
-        <CardItem footer bordered>
+        <Box>
           <Text>Ocorreu um erro ao sincronizar, tente novamente.</Text>
-        </CardItem>
+        </Box>
       )}
-    </Card>
+    </Stack>
   );
 };
-
-class SincronizacaoRDO extends Component<Props, State> {
-  limpaRDOs = async () => {
-    const { deleteRDOs } = this.props;
+const SincronizacaoRDO = (props: Props) => {
+  const limpaRDOs = async () => {
+    const { deleteRDOs } = props;
     Alert.alert(
       'Sincronizar RDOs',
       'Deseja excluir todos os RDOs cadastrados? Esta ação não poderá ser desfeita.',
       [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           onPress: () => null,
-          style: 'cancel',
         },
         { text: 'OK', onPress: () => deleteRDOs() },
       ]
     );
   };
 
-  syncRDO = async (rdo) => {
-    const { updateRDO } = this.props;
+  const syncRDO = async (rdo) => {
+    const { updateRDO } = props;
     let idRDOServer: number;
 
     updateRDO({
@@ -140,9 +104,9 @@ class SincronizacaoRDO extends Component<Props, State> {
       await updateRDO({ rdo });
 
       Toast.show({
-        text: String(res.error),
-        buttonText: 'Ok',
-        type: 'danger',
+        title: String(res.error),
+        isClosable: true,
+        status: 'error',
       });
     } else {
       rdo.dadosEnviados = true;
@@ -159,9 +123,9 @@ class SincronizacaoRDO extends Component<Props, State> {
         rdo.fotosEnviadas = false;
 
         Toast.show({
-          text: String(resFotos.error),
-          buttonText: 'Ok',
-          type: 'danger',
+          title: String(resFotos.error),
+          isClosable: true,
+          status: 'error',
         });
       } else {
         rdo.fotosEnviadas = true;
@@ -172,38 +136,28 @@ class SincronizacaoRDO extends Component<Props, State> {
     await updateRDO({ rdo });
   };
 
-  render() {
-    const { rdos } = this.props;
+  const { rdos } = props;
 
-    return (
-      <Container>
-        <HeaderNav title='Sincronizar RDOs' />
-
-        <Content
-          padder
-          contentContainerStyle={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <ScrollView>
-            {rdos.map((rdo) => (
-              <CardRDO
-                key={rdo.plantaSelecionadaId + rdo.dataHoraEntrada}
-                rdo={rdo}
-                sincronizarRDO={this.syncRDO}
-              />
-            ))}
-            <Button full onPress={() => this.limpaRDOs()}>
-              <Text>Limpar RDOs</Text>
-            </Button>
-          </ScrollView>
-        </Content>
-      </Container>
-    );
-  }
-}
+  return (
+    <Box
+      padding={7}
+      style={{
+        justifyContent: 'space-between',
+      }}
+    >
+      <ScrollView>
+        {rdos.map((rdo) => (
+          <CardRDO
+            key={rdo.plantaSelecionadaId + rdo.dataHoraEntrada}
+            rdo={rdo}
+            sincronizarRDO={syncRDO}
+          />
+        ))}
+        <ActionButton onPress={() => limpaRDOs()}>Limpar RDOs</ActionButton>
+      </ScrollView>
+    </Box>
+  );
+};
 
 const mapStateToProps = (state: ApplicationState) => ({
   rdos: state.manutencaoRDOReducer.rdos,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Body, Button, Header, Icon, Left, Right, Title, View } from 'native-base';
+import { Box, Button, HStack, Icon, Text, View } from 'native-base';
 import { Platform, StatusBar, StyleSheet } from 'react-native';
 import { withNavigation } from 'react-navigation';
 
@@ -20,21 +20,17 @@ class HeaderNav extends React.Component<Props> {
     const { navigation, rightContent, title } = this.props;
     return (
       <View style={styles.view}>
-        <Header>
-          <Left>
-            <Button
-              onPress={() => { navigation.goBack() }}
-            >
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
+        <HStack>
+          <Button
+            onPress={() => { navigation.goBack() }}
+          >
+            <Icon name='arrow-back' />
+          </Button>
 
-          <Body>
-            <Title>{title}</Title>
-          </Body>
+          <Text fontSize="xl">{title}</Text >
 
-          {rightContent && <Right>{rightContent}</Right>}
-        </Header>
+          {rightContent && <Box>{rightContent}</Box>}
+        </HStack>
       </View>
     );
   }
