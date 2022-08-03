@@ -31,13 +31,24 @@ class FotosItemScreen extends Component<Props> {
     isLoading: false,
   };
 
+  _isMounted = false;
+
   setPhotos = (photos) => {
     this.setState({
       photos,
     });
   };
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   pickImage = async () => {
+    if (!this._isMounted) {
+      console.log|('entrou');
+      return;
+    }
+
     const { photos } = this.state;
     const { navigation } = this.props;
     const { idItem } = navigation.state.params;
@@ -47,7 +58,6 @@ class FotosItemScreen extends Component<Props> {
     ImagePicker.launchCameraAsync({ quality: 0.2 })
       .then((img) => {
         if (!img.cancelled) {
-          this.setPhotos([...photos, img]);
 
           MediaLibrary.createAssetAsync(img.uri).then((asset) => {
             MediaLibrary.getAlbumAsync('Iluminação Item ' + idItem).then(
@@ -62,21 +72,34 @@ class FotosItemScreen extends Component<Props> {
                       console.log('Album created!');
                     })
                     .catch((error) => {
-                      alert('Erro ao criar novo album ' + error);
+                      alert('1 - Erro ao criar novo album ' + error);
+                      this.setState({ isLoading: false });
                     });
                 } else {
                   MediaLibrary.addAssetsToAlbumAsync(asset, album, false)
                     .then(() => {
-                      console.log('Asset inserted!');
+                      console.log('Asset inserted!!');
+                      this.setPhotos([...photos, img]);
                     })
                     .catch((error) => {
-                      alert('Erro ao adicionar foto no álbum ' + error);
+                      alert('2 - Erro ao adicionar foto no álbum ' + error);
                       console.log('err', error);
+                      this.setState({ isLoading: false });
                     });
                 }
-              }
-            );
-          });
+              })
+              .catch((err) => {
+                alert('3 - Erro ao IDENTIFICAR álbum! Tente novamente ' + err);
+                console.log('ERRO NA IMG', err);
+                this.setState({ isLoading: false });
+              })
+
+          })
+          .catch((err) => {
+            alert('4 - Erro ao inserir foto no álbum! ' + err);
+            console.log('ERRO NA IMG', err);
+            this.setState({ isLoading: false });
+          })
         }
 
         this.setState({ isLoading: false });
@@ -86,9 +109,11 @@ class FotosItemScreen extends Component<Props> {
         console.log('ERRO NA IMG', err);
         this.setState({ isLoading: false });
       });
+
   };
 
   componentDidMount() {
+    this._isMounted = true;
     this.getPermissionAsync();
     const { programacoesRealizadas, plantaAtiva, navigation } = this.props;
     const { idItem } = navigation.state.params;

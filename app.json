@@ -31,6 +31,14 @@
     "androidStatusBar": {
       "backgroundColor": "#1d2781",
       "barStyle": "light-content"
-    }
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ]
   }
 }
