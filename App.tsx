@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import AppLoading from 'expo-app-loading';
 import { NativeBaseProvider } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-
+import * as SplashScreen from 'expo-splash-screen';
 import AppRoutes from './src/App';
 import { store, persistor } from './src/store';
 import customTheme from './src/theme/customTheme';
@@ -26,8 +25,8 @@ const App = () => {
     carregaFontes();
   }, []);
 
-  if (!isReady) {
-    return <AppLoading />;
+  if (isReady) {
+    SplashScreen.hideAsync();
   }
 
   return (
@@ -40,5 +39,8 @@ const App = () => {
     </Provider>
   );
 };
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 export default App;

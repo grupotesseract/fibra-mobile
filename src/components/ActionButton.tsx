@@ -7,7 +7,7 @@ const ActionButton = (props) => {
   return (
     <Button
       _loading={{
-        bg: 'primary',
+        bg: 'transparent',
         opacity: '100',
         _text: {
           color: 'white',
