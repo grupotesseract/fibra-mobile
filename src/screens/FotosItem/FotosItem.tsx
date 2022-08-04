@@ -45,7 +45,6 @@ class FotosItemScreen extends Component<Props> {
 
   pickImage = async () => {
     if (!this._isMounted) {
-      console.log|('entrou');
       return;
     }
 
@@ -70,6 +69,7 @@ class FotosItemScreen extends Component<Props> {
                   )
                     .then(() => {
                       console.log('Album created!');
+                      this.setPhotos([...photos, img]);
                     })
                     .catch((error) => {
                       alert('1 - Erro ao criar novo album ' + error);
